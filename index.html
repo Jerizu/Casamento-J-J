@@ -26,24 +26,32 @@
         .grid-colunas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
         .loading { text-align: center; grid-column: 1 / -1; color: #8c7b65; font-size: 1.2rem; margin-top: 40px; font-style: italic; }
         
-        .item-lista { position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; border: 1px solid #eaeaea; background: #fff; border-radius: 8px; transition: transform 0.3s; overflow: hidden; }
+        .item-lista { position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; border: 1px solid #eaeaea; background: #fff; border-radius: 8px; transition: transform 0.3s; }
         .item-lista:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .item-lista.sumindo { opacity: 0; transform: scale(0.9); } 
         
         .vitrine-produto { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
         .vitrine-produto img { width: 90px; height: 90px; object-fit: cover; border-radius: 5px; border: 1px solid #f0f0f0; }
         
-        .info-item h3 { font-family: 'Lato', sans-serif; font-weight: 700; font-size: 1.1rem; color: #333; margin-bottom: 5px; }
+        .info-item h3 { font-family: 'Lato', sans-serif; font-weight: 700; font-size: 1.1rem; color: #333; margin-bottom: 5px; padding-right: 40px; } /* Espaço para os botões não baterem no texto */
         .valor { color: #8c7b65; font-weight: 400; font-size: 1rem; }
         
         .btn-elegante { background-color: transparent; color: #8c7b65; border: 1px solid #8c7b65; padding: 10px; border-radius: 5px; font-family: 'Lato', sans-serif; font-size: 0.9rem; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; width: 100%; font-weight: bold; }
         .btn-elegante:hover { background-color: #8c7b65; color: #fff; }
         
-        /* NOVO: Botão e Selo de Restaurar (Admin) */
         .btn-restaurar { background-color: #1976d2; color: white; border: none; padding: 10px; border-radius: 5px; font-family: 'Lato', sans-serif; font-size: 0.9rem; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; width: 100%; font-weight: bold; }
         .btn-restaurar:hover { background-color: #115293; }
-        .selo-status { position: absolute; top: 10px; left: 10px; background-color: #d32f2f; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; letter-spacing: 1px; z-index: 10;}
+        
+        /* Ajuste do Selo e dos Botões do Admin */
+        .selo-status { position: absolute; top: 12px; left: 12px; background-color: #d32f2f; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; letter-spacing: 1px; z-index: 10;}
         .selo-comprado { background-color: #388e3c; }
+
+        .botoes-admin { display: none; position: absolute; top: 12px; right: 12px; gap: 8px; z-index: 15; }
+        .btn-excluir, .btn-editar { color: white; border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .btn-excluir { background-color: #d32f2f; }
+        .btn-excluir:hover { background-color: #b71c1c; transform: scale(1.1); }
+        .btn-editar { background-color: #1976d2; }
+        .btn-editar:hover { background-color: #115293; transform: scale(1.1); }
 
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); overflow-y: auto; padding: 20px 0; }
         .modal-conteudo { background-color: #fff; margin: auto; padding: 25px 20px; width: 90%; max-width: 450px; text-align: center; position: relative; border-radius: 10px; }
@@ -61,11 +69,6 @@
         .btn-padrao { background-color: #8c7b65; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
         .btn-confirmar:disabled, .btn-padrao:disabled { background-color: #ccc; cursor: not-allowed; }
 
-        .botoes-admin { display: none; position: absolute; top: -15px; right: -15px; gap: 5px; z-index: 15; }
-        .btn-excluir, .btn-editar { color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .btn-excluir { background-color: #d32f2f; }
-        .btn-editar { background-color: #1976d2; }
-        
         .somente-admin { display: none !important; }
         .modo-admin-ativo .somente-admin { display: flex !important; }
         .modo-admin-ativo .esconder-logado { display: none !important; }
@@ -199,7 +202,6 @@
                         const statusNormalizado = p.status ? p.status.trim().toUpperCase() : "";
                         const taOculto = statusNormalizado === 'COMPRADO' || statusNormalizado === 'EXCLUIDO';
 
-                        // Se NÃO for Admin e o item estiver Comprado/Excluido, ignora e não mostra
                         if (!isAdmin && taOculto) return;
 
                         itensRenderizados++;
@@ -207,20 +209,17 @@
                         let valorLimpo = String(p.valor).replace('R$', '').trim();
                         if (!valorLimpo.includes(',')) valorLimpo = valorLimpo + ",00"; 
 
-                        // Configurações visuais caso seja Admin vendo item oculto
                         let estiloCard = "";
                         let seloHtml = "";
                         let botaoAcaoHtml = `<button class="btn-elegante" onclick="abrirModalPix('${p.id}', '${p.nome}', '${valorLimpo}')">Presentear</button>`;
 
                         if (isAdmin && taOculto) {
                             estiloCard = "opacity: 0.6; filter: grayscale(50%); border: 2px dashed #ccc;";
-                            
                             if(statusNormalizado === 'COMPRADO') {
                                 seloHtml = `<div class="selo-status selo-comprado">🎁 COMPRADO</div>`;
                             } else {
                                 seloHtml = `<div class="selo-status">🚫 EXCLUÍDO</div>`;
                             }
-                            
                             botaoAcaoHtml = `<button class="btn-restaurar" onclick="mudarStatusPresente('${p.id}', event)">🔄 Restaurar Disponibilidade</button>`;
                         }
 
@@ -240,7 +239,6 @@
                         grid.insertAdjacentHTML('beforeend', html);
                     });
 
-                    // Mensagem se a lista estiver toda comprada e não for admin
                     if (itensRenderizados === 0 && !isAdmin) {
                         grid.innerHTML = "<p class='loading'>Todos os itens da lista já foram comprados! Muito obrigado pelo carinho.</p>";
                     }
@@ -250,7 +248,7 @@
                 });
         }
 
-        // --- NOVA FUNÇÃO: RESTAURAR STATUS (Admin) ---
+        // --- RESTAURAR STATUS ---
         function mudarStatusPresente(id, evento) {
             const btn = evento.target;
             btn.innerText = "Restaurando..."; 
@@ -258,9 +256,9 @@
 
             fetch(API_URL, {
                 method: 'POST',
-                body: JSON.stringify({ action: "mudarStatus", id: id, novoStatus: "" }) // Mandando status Vazio ele volta a ficar disponível
+                body: JSON.stringify({ action: "mudarStatus", id: id, novoStatus: "" }) 
             }).then(() => {
-                carregarListaDaPlanilha(); // Recarrega a tela
+                carregarListaDaPlanilha(); 
             }).catch(() => {
                 alert("Erro ao restaurar.");
                 btn.innerText = "🔄 Restaurar Disponibilidade"; 
@@ -399,14 +397,14 @@
                 sessionStorage.setItem('logadoComoAdmin', 'sim');
                 document.getElementById('corpo-site').classList.add('modo-admin-ativo');
                 fecharModal('modal-login');
-                carregarListaDaPlanilha(); // Recarrega para mostrar os excluídos/comprados
+                carregarListaDaPlanilha(); 
             } else { alert("Senha incorreta!"); }
         }
 
         function sairAdmin() { 
             sessionStorage.removeItem('logadoComoAdmin'); 
             document.getElementById('corpo-site').classList.remove('modo-admin-ativo'); 
-            carregarListaDaPlanilha(); // Recarrega para esconder os itens de admin
+            carregarListaDaPlanilha(); 
         }
         
         function salvarNovasCredenciais() {
