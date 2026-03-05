@@ -39,19 +39,20 @@
         .btn-elegante { background-color: transparent; color: #8c7b65; border: 1px solid #8c7b65; padding: 10px; border-radius: 5px; font-family: 'Lato', sans-serif; font-size: 0.9rem; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; width: 100%; }
         .btn-elegante:hover { background-color: #8c7b65; color: #fff; }
         
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); }
-        .modal-conteudo { background-color: #fff; margin: 2% auto; padding: 30px; width: 90%; max-width: 450px; text-align: center; position: relative; border-radius: 10px; }
+        /* Ajustes no Modal para não cortar a tela e permitir rolar para baixo */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); overflow-y: auto; padding: 20px 0; }
+        .modal-conteudo { background-color: #fff; margin: auto; padding: 25px 20px; width: 90%; max-width: 450px; text-align: center; position: relative; border-radius: 10px; }
         .fechar { position: absolute; top: 10px; right: 20px; color: #999; font-size: 30px; cursor: pointer; }
         
-        .area-qrcode { display: flex; justify-content: center; margin-bottom: 15px; }
-        .area-qrcode img { max-width: 160px; border-radius: 10px; border: 2px solid #eee; }
-        .area-copia-cola input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e0e0e0; text-align: center; font-family: monospace; }
+        .area-qrcode { display: flex; justify-content: center; margin-bottom: 10px; }
+        .area-qrcode img { max-width: 130px; border-radius: 10px; border: 2px solid #eee; } /* Tamanho do QR Code reduzido */
+        .area-copia-cola input { width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #e0e0e0; text-align: center; font-family: monospace; }
         
-        .formulario-inputs { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; text-align: left; }
-        .formulario-inputs label { font-size: 0.9rem; font-weight: bold; color: #555; display: block; margin-bottom: 5px; }
-        .formulario-inputs input, .formulario-inputs textarea { padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%; }
+        .formulario-inputs { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; text-align: left; }
+        .formulario-inputs label { font-size: 0.9rem; font-weight: bold; color: #555; display: block; margin-bottom: 2px; }
+        .formulario-inputs input, .formulario-inputs textarea { padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%; font-family: 'Lato', sans-serif; }
         
-        .btn-confirmar { background-color: #4caf50; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
+        .btn-confirmar { background-color: #4caf50; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; margin-top: 5px; }
         .btn-padrao { background-color: #8c7b65; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
         .btn-confirmar:disabled, .btn-padrao:disabled { background-color: #ccc; cursor: not-allowed; }
 
@@ -98,21 +99,21 @@
     <div id="modal-pix" class="modal">
         <div class="modal-conteudo">
             <span class="fechar" onclick="fecharModal('modal-pix')">&times;</span>
-            <h2 id="modal-titulo" style="font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-top: 10px;">Nome</h2>
-            <p id="modal-valor" style="font-size: 1.3rem; color: #8c7b65; font-weight: bold; margin-bottom: 15px;">R$ 0,00</p>
+            <h2 id="modal-titulo" style="font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-top: 10px;">Nome</h2>
+            <p id="modal-valor" style="font-size: 1.2rem; color: #8c7b65; font-weight: bold; margin-bottom: 10px;">R$ 0,00</p>
             
             <div class="area-qrcode"><img src="" id="img-qr-pix-modal"></div>
             <div class="area-copia-cola">
                 <input type="text" id="codigo-pix" readonly>
-                <button class="btn-elegante" onclick="copiarPix()">Copiar Código PIX</button>
+                <button class="btn-elegante" onclick="copiarPix()" style="padding: 8px;">Copiar Código PIX</button>
             </div>
 
-            <div style="height: 1px; background-color: #eee; margin: 20px 0;"></div>
+            <div style="height: 1px; background-color: #eee; margin: 15px 0;"></div>
             
             <div class="formulario-inputs" style="margin-top: 0;">
-                <p style="text-align: center; font-size: 0.9rem; color: #666;">Já realizou o pagamento? Deixe uma mensagem para os noivos!</p>
+                <p style="text-align: center; font-size: 0.85rem; color: #666; margin-bottom: 5px;">Já realizou o pagamento? Deixe uma mensagem para os noivos!</p>
                 <input type="text" id="input-nome" placeholder="Seu nome (Como devemos agradecer?)">
-                <textarea id="input-mensagem" rows="3" placeholder="Sua mensagem de carinho..."></textarea>
+                <textarea id="input-mensagem" rows="2" placeholder="Sua mensagem de carinho..."></textarea>
                 <button class="btn-confirmar" id="btn-enviar-pix" onclick="confirmarPagamento()">Confirmar PIX e Enviar</button>
             </div>
         </div>
@@ -156,20 +157,15 @@
         let idEditando = null;
         let idComprando = null;
         let nomeComprando = null;
-        
-        // Váriavel Global para guardar o PIX vindo da Nuvem
         let dadosPixNuvem = { chave: "", qr: "" };
 
         window.onload = function() {
-            // A senha do admin CONTINUA no navegador (por segurança, não mandamos senha pra planilha)
             if (!localStorage.getItem('credenciaisAdmin')) {
                 localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: 'admin', pass: 'admin' }));
             }
-            
             if(sessionStorage.getItem('logadoComoAdmin') === 'sim') {
                 document.getElementById('corpo-site').classList.add('modo-admin-ativo');
             }
-
             carregarListaDaPlanilha();
         };
 
@@ -183,13 +179,11 @@
                 .then(dados => {
                     grid.innerHTML = ""; 
                     
-                    // 1. Salva as configurações do PIX que vieram da Nuvem
                     if(dados.pix) {
                         dadosPixNuvem.chave = dados.pix.chave || "Chave PIX não configurada";
                         dadosPixNuvem.qr = dados.pix.qr || "https://via.placeholder.com/150?text=QR+Code";
                     }
 
-                    // 2. Mostra os presentes
                     if(dados.presentes.length === 0) {
                         grid.innerHTML = "<p class='loading'>A lista está vazia ou todos os itens foram comprados!</p>";
                         return;
@@ -224,7 +218,6 @@
 
         // --- CONFIGURAÇÃO PIX (AGORA SALVA NA NUVEM) ---
         function abrirModalConfigPix() {
-            // Puxa o que está salvo na variável global que veio do Google
             document.getElementById('config-chave-pix').value = dadosPixNuvem.chave;
             document.getElementById('config-qr-pix').value = dadosPixNuvem.qr;
             abrirModal('modal-config-pix');
@@ -242,7 +235,6 @@
                 method: 'POST',
                 body: JSON.stringify({ action: "configPix", chave: novaChave, qr: novoQr })
             }).then(() => {
-                // Atualiza a variável local para não precisar recarregar a página toda
                 dadosPixNuvem.chave = novaChave;
                 dadosPixNuvem.qr = novoQr;
                 alert("PIX atualizado com sucesso na Nuvem para todos os convidados!");
@@ -318,7 +310,6 @@
             document.getElementById('modal-titulo').innerText = nome;
             document.getElementById('modal-valor').innerText = "R$ " + String(valor).replace('R$','').trim();
             
-            // Agora usa a configuração que veio da Nuvem!
             document.getElementById('img-qr-pix-modal').src = dadosPixNuvem.qr;
             document.getElementById('codigo-pix').value = dadosPixNuvem.chave;
 
