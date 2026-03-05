@@ -28,6 +28,8 @@
         
         .item-lista { position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; border: 1px solid #eaeaea; background: #fff; border-radius: 8px; transition: transform 0.3s; }
         .item-lista:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .item-lista.sumindo { opacity: 0; transform: scale(0.9); } 
+        
         .vitrine-produto { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
         .vitrine-produto img { width: 90px; height: 90px; object-fit: cover; border-radius: 5px; border: 1px solid #f0f0f0; }
         
@@ -46,7 +48,7 @@
         .area-copia-cola input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e0e0e0; text-align: center; font-family: monospace; }
         
         .formulario-inputs { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; text-align: left; }
-        .formulario-inputs label { font-size: 0.9rem; font-weight: bold; color: #555; }
+        .formulario-inputs label { font-size: 0.9rem; font-weight: bold; color: #555; display: block; margin-bottom: 5px; }
         .formulario-inputs input, .formulario-inputs textarea { padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%; }
         
         .btn-confirmar { background-color: #4caf50; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
@@ -142,21 +144,11 @@
         </div>
     </div>
 
-    <div id="modal-config-pix" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-pix')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Configurar PIX</h2><div class="formulario-inputs"><textarea id="config-chave-pix" rows="3" placeholder="Chave Copia e Cola"></textarea><input type="text" id="config-qr-pix" placeholder="Link da imagem do QR Code"><button class="btn-padrao" onclick="salvarConfigPix()">Salvar</button></div></div></div>
+    <div id="modal-config-pix" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-pix')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Configurar PIX</h2><div class="formulario-inputs"><textarea id="config-chave-pix" rows="3" placeholder="Chave Copia e Cola"></textarea><input type="text" id="config-qr-pix" placeholder="Link da imagem do QR Code"><button class="btn-padrao" id="btn-salvar-pix" onclick="salvarConfigPix()">Salvar na Nuvem</button></div></div></div>
     
     <div id="modal-login" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-login')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Acesso Restrito</h2><div class="formulario-inputs"><input type="text" id="login-user" placeholder="Usuário"><input type="password" id="login-pass" placeholder="Senha"><button class="btn-padrao" onclick="fazerLogin()">Entrar</button></div></div></div>
 
-    <div id="modal-config-admin" class="modal">
-        <div class="modal-conteudo">
-            <span class="fechar" onclick="fecharModal('modal-config-admin')">&times;</span>
-            <h2 style="font-family: 'Playfair Display', serif;">Alterar Credenciais</h2>
-            <div class="formulario-inputs">
-                <input type="text" id="novo-admin-user" placeholder="Novo nome de login">
-                <input type="password" id="novo-admin-pass" placeholder="Nova senha">
-                <button class="btn-padrao" onclick="salvarNovasCredenciais()">Atualizar Dados</button>
-            </div>
-        </div>
-    </div>
+    <div id="modal-config-admin" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-admin')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Alterar Credenciais</h2><div class="formulario-inputs"><input type="text" id="novo-admin-user" placeholder="Novo nome de login"><input type="password" id="novo-admin-pass" placeholder="Nova senha"><button class="btn-padrao" onclick="salvarNovasCredenciais()">Atualizar Dados</button></div></div></div>
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbz5Twl62Dv-f42fDtKzUl8TcL_WWkiI5ako3EOFXRS1Jt4kqOB97-ZexR2XkxUQAC2a/exec";
@@ -164,12 +156,19 @@
         let idEditando = null;
         let idComprando = null;
         let nomeComprando = null;
+        
+        // Váriavel Global para guardar o PIX vindo da Nuvem
+        let dadosPixNuvem = { chave: "", qr: "" };
 
         window.onload = function() {
-            if (!localStorage.getItem('credenciaisAdmin')) localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: 'admin', pass: 'admin' }));
-            if (!localStorage.getItem('dadosPix')) localStorage.setItem('dadosPix', JSON.stringify({ chave: 'CHAVE_AQUI', qr: 'https://via.placeholder.com/150?text=QR+Code' }));
+            // A senha do admin CONTINUA no navegador (por segurança, não mandamos senha pra planilha)
+            if (!localStorage.getItem('credenciaisAdmin')) {
+                localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: 'admin', pass: 'admin' }));
+            }
             
-            if(sessionStorage.getItem('logadoComoAdmin') === 'sim') document.getElementById('corpo-site').classList.add('modo-admin-ativo');
+            if(sessionStorage.getItem('logadoComoAdmin') === 'sim') {
+                document.getElementById('corpo-site').classList.add('modo-admin-ativo');
+            }
 
             carregarListaDaPlanilha();
         };
@@ -182,14 +181,22 @@
             fetch(API_URL)
                 .then(res => res.json())
                 .then(dados => {
-                    grid.innerHTML = ""; // Limpa o carregando
-                    if(dados.length === 0) {
+                    grid.innerHTML = ""; 
+                    
+                    // 1. Salva as configurações do PIX que vieram da Nuvem
+                    if(dados.pix) {
+                        dadosPixNuvem.chave = dados.pix.chave || "Chave PIX não configurada";
+                        dadosPixNuvem.qr = dados.pix.qr || "https://via.placeholder.com/150?text=QR+Code";
+                    }
+
+                    // 2. Mostra os presentes
+                    if(dados.presentes.length === 0) {
                         grid.innerHTML = "<p class='loading'>A lista está vazia ou todos os itens foram comprados!</p>";
                         return;
                     }
 
-                    dados.forEach(p => {
-                        if (!p.id || !p.nome) return; // Segurança contra linhas vazias
+                    dados.presentes.forEach(p => {
+                        if (!p.id || !p.nome) return; 
 
                         let valorLimpo = String(p.valor).replace('R$', '').trim();
                         if (!valorLimpo.includes(',')) valorLimpo = valorLimpo + ",00"; 
@@ -213,6 +220,34 @@
                     grid.innerHTML = "<p class='loading' style='color:red;'>Erro de conexão com o Google. Recarregue a página.</p>";
                     console.error(erro);
                 });
+        }
+
+        // --- CONFIGURAÇÃO PIX (AGORA SALVA NA NUVEM) ---
+        function abrirModalConfigPix() {
+            // Puxa o que está salvo na variável global que veio do Google
+            document.getElementById('config-chave-pix').value = dadosPixNuvem.chave;
+            document.getElementById('config-qr-pix').value = dadosPixNuvem.qr;
+            abrirModal('modal-config-pix');
+        }
+
+        function salvarConfigPix() {
+            const novaChave = document.getElementById('config-chave-pix').value;
+            const novoQr = document.getElementById('config-qr-pix').value;
+            if (!novaChave || !novoQr) return alert("Preencha a chave e a imagem!");
+
+            const btn = document.getElementById('btn-salvar-pix');
+            btn.innerText = "Salvando..."; btn.disabled = true;
+
+            fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "configPix", chave: novaChave, qr: novoQr })
+            }).then(() => {
+                // Atualiza a variável local para não precisar recarregar a página toda
+                dadosPixNuvem.chave = novaChave;
+                dadosPixNuvem.qr = novoQr;
+                alert("PIX atualizado com sucesso na Nuvem para todos os convidados!");
+                fecharModal('modal-config-pix');
+            }).finally(() => { btn.innerText = "Salvar na Nuvem"; btn.disabled = false; });
         }
 
         // --- ADICIONAR NA PLANILHA ---
@@ -283,9 +318,9 @@
             document.getElementById('modal-titulo').innerText = nome;
             document.getElementById('modal-valor').innerText = "R$ " + String(valor).replace('R$','').trim();
             
-            const pix = JSON.parse(localStorage.getItem('dadosPix'));
-            document.getElementById('img-qr-pix-modal').src = pix.qr;
-            document.getElementById('codigo-pix').value = pix.chave;
+            // Agora usa a configuração que veio da Nuvem!
+            document.getElementById('img-qr-pix-modal').src = dadosPixNuvem.qr;
+            document.getElementById('codigo-pix').value = dadosPixNuvem.chave;
 
             document.getElementById('input-nome').value = "";
             document.getElementById('input-mensagem').value = "";
@@ -314,7 +349,7 @@
             });
         }
 
-        // --- FUNÇÕES DE ADMIN LOCAIS ---
+        // --- FUNÇÕES DE ADMIN LOCAIS (SENHA) ---
         function fazerLogin() {
             const u = document.getElementById('login-user').value;
             const p = document.getElementById('login-pass').value;
@@ -331,32 +366,19 @@
             document.getElementById('corpo-site').classList.remove('modo-admin-ativo'); 
         }
         
-        // Função recolocada: salvar as novas senhas
         function salvarNovasCredenciais() {
             const newUser = document.getElementById('novo-admin-user').value;
             const newPass = document.getElementById('novo-admin-pass').value;
 
             if(newUser !== "" && newPass !== "") {
                 localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: newUser, pass: newPass }));
-                alert("Credenciais atualizadas com sucesso!");
+                alert("Credenciais atualizadas com sucesso! (Salvas no seu navegador atual)");
                 fecharModal('modal-config-admin');
                 document.getElementById('novo-admin-user').value = "";
                 document.getElementById('novo-admin-pass').value = "";
             } else { 
                 alert("Preencha ambos os campos!"); 
             }
-        }
-
-        function abrirModalConfigPix() {
-            const pix = JSON.parse(localStorage.getItem('dadosPix'));
-            document.getElementById('config-chave-pix').value = pix.chave;
-            document.getElementById('config-qr-pix').value = pix.qr;
-            abrirModal('modal-config-pix');
-        }
-
-        function salvarConfigPix() {
-            localStorage.setItem('dadosPix', JSON.stringify({ chave: document.getElementById('config-chave-pix').value, qr: document.getElementById('config-qr-pix').value }));
-            fecharModal('modal-config-pix'); alert("PIX Atualizado no seu navegador!");
         }
 
         // --- GERAIS ---
