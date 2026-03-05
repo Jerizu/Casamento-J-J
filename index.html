@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Casamento | Julia & Jessé</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #fdfdfc; color: #333; font-family: 'Lato', sans-serif; line-height: 1.6; }
+        
+        .menu-superior { background-color: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .menu-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #8c7b65; font-weight: bold; }
+        .menu-links { display: flex; gap: 15px; align-items: center; }
+        .btn-menu { background: none; border: none; font-family: 'Lato', sans-serif; font-size: 0.9rem; color: #555; cursor: pointer; padding: 5px 10px; font-weight: bold; }
+        .btn-menu:hover { color: #8c7b65; }
+        .btn-sair { color: #d32f2f; }
+        .flex-admin-menu { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
+        
+        .header-elegante { text-align: center; padding: 50px 20px 40px; }
+        .nomes { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: #2c2c2c; margin-bottom: 10px; }
+        .linha-decorativa { width: 60px; height: 1px; background-color: #d4c4a8; margin: 0 auto 20px; }
+        
+        .container-lista { max-width: 900px; margin: 0 auto; padding: 0 20px 80px; min-height: 50vh;}
+        .grid-colunas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
+        .loading { text-align: center; grid-column: 1 / -1; color: #8c7b65; font-size: 1.2rem; margin-top: 40px; font-style: italic; }
+        
+        .item-lista { position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; border: 1px solid #eaeaea; background: #fff; border-radius: 8px; transition: transform 0.3s; }
+        .item-lista:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .vitrine-produto { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .vitrine-produto img { width: 90px; height: 90px; object-fit: cover; border-radius: 5px; border: 1px solid #f0f0f0; }
+        
+        .info-item h3 { font-family: 'Lato', sans-serif; font-weight: 700; font-size: 1.1rem; color: #333; margin-bottom: 5px; }
+        .valor { color: #8c7b65; font-weight: 400; font-size: 1rem; }
+        
+        .btn-elegante { background-color: transparent; color: #8c7b65; border: 1px solid #8c7b65; padding: 10px; border-radius: 5px; font-family: 'Lato', sans-serif; font-size: 0.9rem; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; width: 100%; }
+        .btn-elegante:hover { background-color: #8c7b65; color: #fff; }
+        
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); }
+        .modal-conteudo { background-color: #fff; margin: 2% auto; padding: 30px; width: 90%; max-width: 450px; text-align: center; position: relative; border-radius: 10px; }
+        .fechar { position: absolute; top: 10px; right: 20px; color: #999; font-size: 30px; cursor: pointer; }
+        
+        .area-qrcode { display: flex; justify-content: center; margin-bottom: 15px; }
+        .area-qrcode img { max-width: 160px; border-radius: 10px; border: 2px solid #eee; }
+        .area-copia-cola input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e0e0e0; text-align: center; font-family: monospace; }
+        
+        .formulario-inputs { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; text-align: left; }
+        .formulario-inputs label { font-size: 0.9rem; font-weight: bold; color: #555; }
+        .formulario-inputs input, .formulario-inputs textarea { padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%; }
+        
+        .btn-confirmar { background-color: #4caf50; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
+        .btn-padrao { background-color: #8c7b65; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
+        .btn-confirmar:disabled, .btn-padrao:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        .botoes-admin { display: none; position: absolute; top: -15px; right: -15px; gap: 5px; }
+        .btn-excluir, .btn-editar { color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .btn-excluir { background-color: #d32f2f; }
+        .btn-editar { background-color: #1976d2; }
+        
+        .somente-admin { display: none !important; }
+        .modo-admin-ativo .somente-admin { display: flex !important; }
+        .modo-admin-ativo .esconder-logado { display: none !important; }
+
+        @media (max-width: 768px) { .grid-colunas { grid-template-columns: 1fr; } .menu-superior { flex-direction: column; gap: 10px; } }
+    </style>
+</head>
+<body id="corpo-site">
+
+    <nav class="menu-superior">
+        <div class="menu-logo">J&J</div>
+        <div class="menu-links">
+            <button class="btn-menu esconder-logado" onclick="abrirModal('modal-login')">Acesso Restrito</button>
+            <div class="somente-admin flex-admin-menu">
+                <button class="btn-menu" onclick="abrirModal('modal-adicionar')">➕ Adicionar Item</button>
+                <button class="btn-menu" onclick="abrirModalConfigPix()">💳 Configurar PIX</button>
+                <button class="btn-menu" onclick="abrirModal('modal-config-admin')">⚙️ Senha</button>
+                <button class="btn-menu btn-sair" onclick="sairAdmin()">Sair</button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="header-elegante">
+        <h1 class="nomes">Julia & Jessé</h1>
+        <p class="data">28 . 11 . 2026</p>
+        <div class="linha-decorativa"></div>
+        <p class="mensagem">Ajudem-nos a montar nossa casa! Escolha um item abaixo e contribua pelo PIX.</p>
+    </header>
+
+    <main class="container-lista">
+        <div class="grid-colunas" id="grid-presentes">
+            <div class="loading" id="mensagem-loading">⏳ Sincronizando com a base de dados...</div>
+        </div>
+    </main>
+
+    <div id="modal-pix" class="modal">
+        <div class="modal-conteudo">
+            <span class="fechar" onclick="fecharModal('modal-pix')">&times;</span>
+            <h2 id="modal-titulo" style="font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-top: 10px;">Nome</h2>
+            <p id="modal-valor" style="font-size: 1.3rem; color: #8c7b65; font-weight: bold; margin-bottom: 15px;">R$ 0,00</p>
+            
+            <div class="area-qrcode"><img src="" id="img-qr-pix-modal"></div>
+            <div class="area-copia-cola">
+                <input type="text" id="codigo-pix" readonly>
+                <button class="btn-elegante" onclick="copiarPix()">Copiar Código PIX</button>
+            </div>
+
+            <div style="height: 1px; background-color: #eee; margin: 20px 0;"></div>
+            
+            <div class="formulario-inputs" style="margin-top: 0;">
+                <p style="text-align: center; font-size: 0.9rem; color: #666;">Já realizou o pagamento? Deixe uma mensagem para os noivos!</p>
+                <input type="text" id="input-nome" placeholder="Seu nome (Como devemos agradecer?)">
+                <textarea id="input-mensagem" rows="3" placeholder="Sua mensagem de carinho..."></textarea>
+                <button class="btn-confirmar" id="btn-enviar-pix" onclick="confirmarPagamento()">Confirmar PIX e Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-adicionar" class="modal">
+        <div class="modal-conteudo">
+            <span class="fechar" onclick="fecharModal('modal-adicionar')">&times;</span>
+            <h2 style="font-family: 'Playfair Display', serif; font-size: 1.6rem;">Adicionar Presente</h2>
+            <div class="formulario-inputs">
+                <input type="text" id="novo-nome" placeholder="Nome do Produto (Ex: Batedeira)">
+                <input type="text" id="novo-valor" placeholder="Valor (Ex: 150,00)">
+                <input type="text" id="nova-imagem" placeholder="Link da Imagem (https://...)">
+                <button class="btn-padrao" id="btn-salvar-novo" onclick="salvarNovoPresente()">Salvar no Banco de Dados</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-editar" class="modal">
+        <div class="modal-conteudo">
+            <span class="fechar" onclick="fecharModal('modal-editar')">&times;</span>
+            <h2 style="font-family: 'Playfair Display', serif; font-size: 1.6rem;">Editar Presente</h2>
+            <div class="formulario-inputs">
+                <input type="text" id="edit-nome">
+                <input type="text" id="edit-valor">
+                <input type="text" id="edit-imagem">
+                <button class="btn-padrao" id="btn-salvar-edicao" onclick="salvarEdicao()">Atualizar no Banco de Dados</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-config-pix" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-pix')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Configurar PIX</h2><div class="formulario-inputs"><textarea id="config-chave-pix" rows="3" placeholder="Chave Copia e Cola"></textarea><input type="text" id="config-qr-pix" placeholder="Link da imagem do QR Code"><button class="btn-padrao" onclick="salvarConfigPix()">Salvar</button></div></div></div>
+    
+    <div id="modal-login" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-login')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Acesso Restrito</h2><div class="formulario-inputs"><input type="text" id="login-user" placeholder="Usuário"><input type="password" id="login-pass" placeholder="Senha"><button class="btn-padrao" onclick="fazerLogin()">Entrar</button></div></div></div>
+
+    <div id="modal-config-admin" class="modal">
+        <div class="modal-conteudo">
+            <span class="fechar" onclick="fecharModal('modal-config-admin')">&times;</span>
+            <h2 style="font-family: 'Playfair Display', serif;">Alterar Credenciais</h2>
+            <div class="formulario-inputs">
+                <input type="text" id="novo-admin-user" placeholder="Novo nome de login">
+                <input type="password" id="novo-admin-pass" placeholder="Nova senha">
+                <button class="btn-padrao" onclick="salvarNovasCredenciais()">Atualizar Dados</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbz5Twl62Dv-f42fDtKzUl8TcL_WWkiI5ako3EOFXRS1Jt4kqOB97-ZexR2XkxUQAC2a/exec";
+        
+        let idEditando = null;
+        let idComprando = null;
+        let nomeComprando = null;
+
+        window.onload = function() {
+            if (!localStorage.getItem('credenciaisAdmin')) localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: 'admin', pass: 'admin' }));
+            if (!localStorage.getItem('dadosPix')) localStorage.setItem('dadosPix', JSON.stringify({ chave: 'CHAVE_AQUI', qr: 'https://via.placeholder.com/150?text=QR+Code' }));
+            
+            if(sessionStorage.getItem('logadoComoAdmin') === 'sim') document.getElementById('corpo-site').classList.add('modo-admin-ativo');
+
+            carregarListaDaPlanilha();
+        };
+
+        // --- BUSCA NA PLANILHA ---
+        function carregarListaDaPlanilha() {
+            const grid = document.getElementById('grid-presentes');
+            grid.innerHTML = '<div class="loading" id="mensagem-loading">⏳ Sincronizando com a base de dados...</div>';
+
+            fetch(API_URL)
+                .then(res => res.json())
+                .then(dados => {
+                    grid.innerHTML = ""; // Limpa o carregando
+                    if(dados.length === 0) {
+                        grid.innerHTML = "<p class='loading'>A lista está vazia ou todos os itens foram comprados!</p>";
+                        return;
+                    }
+
+                    dados.forEach(p => {
+                        if (!p.id || !p.nome) return; // Segurança contra linhas vazias
+
+                        let valorLimpo = String(p.valor).replace('R$', '').trim();
+                        if (!valorLimpo.includes(',')) valorLimpo = valorLimpo + ",00"; 
+
+                        const html = `
+                        <div class="item-lista" id="${p.id}">
+                            <div class="botoes-admin somente-admin">
+                                <button class="btn-editar" onclick="abrirModalEditar('${p.id}', '${p.nome}', '${valorLimpo}', '${p.imagem}')">✏️</button>
+                                <button class="btn-excluir" onclick="excluirPresente('${p.id}')">🗑️</button>
+                            </div>
+                            <div class="vitrine-produto">
+                                <img src="${p.imagem}" alt="${p.nome}">
+                                <div class="info-item"><h3>${p.nome}</h3><span class="valor">Cota: R$ ${valorLimpo}</span></div>
+                            </div>
+                            <button class="btn-elegante" onclick="abrirModalPix('${p.id}', '${p.nome}', '${valorLimpo}')">Presentear</button>
+                        </div>`;
+                        grid.insertAdjacentHTML('beforeend', html);
+                    });
+                })
+                .catch(erro => {
+                    grid.innerHTML = "<p class='loading' style='color:red;'>Erro de conexão com o Google. Recarregue a página.</p>";
+                    console.error(erro);
+                });
+        }
+
+        // --- ADICIONAR NA PLANILHA ---
+        function salvarNovoPresente() {
+            const nome = document.getElementById('novo-nome').value;
+            let valor = document.getElementById('novo-valor').value;
+            let imagem = document.getElementById('nova-imagem').value;
+            if(!nome || !valor) return alert("Preencha nome e valor!");
+            if(!imagem) imagem = "https://via.placeholder.com/300?text=Produto";
+
+            const btn = document.getElementById('btn-salvar-novo');
+            btn.innerText = "Salvando..."; btn.disabled = true;
+
+            const idGerado = "ID-" + Date.now(); 
+
+            fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "adicionar", id: idGerado, nome: nome, valor: valor, imagem: imagem })
+            }).then(() => {
+                fecharModal('modal-adicionar');
+                carregarListaDaPlanilha(); 
+                document.getElementById('novo-nome').value = ""; document.getElementById('novo-valor').value = ""; document.getElementById('nova-imagem').value = "";
+            }).finally(() => { btn.innerText = "Salvar no Banco de Dados"; btn.disabled = false; });
+        }
+
+        // --- EDITAR NA PLANILHA ---
+        function abrirModalEditar(id, nome, valor, imagem) {
+            idEditando = id;
+            document.getElementById('edit-nome').value = nome;
+            document.getElementById('edit-valor').value = String(valor).replace('R$','').trim();
+            document.getElementById('edit-imagem').value = imagem;
+            abrirModal('modal-editar');
+        }
+
+        function salvarEdicao() {
+            const nome = document.getElementById('edit-nome').value;
+            let valor = document.getElementById('edit-valor').value;
+            let imagem = document.getElementById('edit-imagem').value;
+            if(!imagem) imagem = "https://via.placeholder.com/300?text=Produto";
+
+            const btn = document.getElementById('btn-salvar-edicao');
+            btn.innerText = "Atualizando..."; btn.disabled = true;
+
+            fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "editar", id: idEditando, nome: nome, valor: valor, imagem: imagem })
+            }).then(() => {
+                fecharModal('modal-editar');
+                carregarListaDaPlanilha();
+            }).finally(() => { btn.innerText = "Atualizar no Banco de Dados"; btn.disabled = false; });
+        }
+
+        // --- EXCLUIR DA PLANILHA ---
+        function excluirPresente(id) {
+            if(confirm("Tem certeza que deseja apagar este presente?")) {
+                document.getElementById(id).style.opacity = "0.5"; 
+                fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "excluir", id: id })
+                }).then(() => { carregarListaDaPlanilha(); });
+            }
+        }
+
+        // --- COMPRAR (MENSAGEM + PIX) ---
+        function abrirModalPix(id, nome, valor) {
+            idComprando = id;
+            nomeComprando = nome;
+            document.getElementById('modal-titulo').innerText = nome;
+            document.getElementById('modal-valor').innerText = "R$ " + String(valor).replace('R$','').trim();
+            
+            const pix = JSON.parse(localStorage.getItem('dadosPix'));
+            document.getElementById('img-qr-pix-modal').src = pix.qr;
+            document.getElementById('codigo-pix').value = pix.chave;
+
+            document.getElementById('input-nome').value = "";
+            document.getElementById('input-mensagem').value = "";
+            abrirModal('modal-pix');
+        }
+
+        function confirmarPagamento() {
+            const nomeConv = document.getElementById('input-nome').value;
+            const msg = document.getElementById('input-mensagem').value;
+            if(!nomeConv) return alert("Por favor, preencha o seu nome!");
+
+            const btn = document.getElementById('btn-enviar-pix');
+            btn.innerText = "Enviando..."; btn.disabled = true;
+
+            fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "comprar", id: idComprando, nomePresente: nomeComprando, nomeConvidado: nomeConv, mensagemTexto: msg })
+            }).then(() => {
+                alert("Mensagem enviada com sucesso! Muito obrigado.");
+                fecharModal('modal-pix');
+                carregarListaDaPlanilha();
+            }).catch(erro => {
+                alert("Erro ao enviar. Verifique a internet.");
+            }).finally(() => { 
+                btn.innerText = "Confirmar PIX e Enviar"; btn.disabled = false; 
+            });
+        }
+
+        // --- FUNÇÕES DE ADMIN LOCAIS ---
+        function fazerLogin() {
+            const u = document.getElementById('login-user').value;
+            const p = document.getElementById('login-pass').value;
+            const c = JSON.parse(localStorage.getItem('credenciaisAdmin'));
+            if(u === c.user && p === c.pass) {
+                sessionStorage.setItem('logadoComoAdmin', 'sim');
+                document.getElementById('corpo-site').classList.add('modo-admin-ativo');
+                fecharModal('modal-login');
+            } else { alert("Senha incorreta!"); }
+        }
+
+        function sairAdmin() { 
+            sessionStorage.removeItem('logadoComoAdmin'); 
+            document.getElementById('corpo-site').classList.remove('modo-admin-ativo'); 
+        }
+        
+        // Função recolocada: salvar as novas senhas
+        function salvarNovasCredenciais() {
+            const newUser = document.getElementById('novo-admin-user').value;
+            const newPass = document.getElementById('novo-admin-pass').value;
+
+            if(newUser !== "" && newPass !== "") {
+                localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: newUser, pass: newPass }));
+                alert("Credenciais atualizadas com sucesso!");
+                fecharModal('modal-config-admin');
+                document.getElementById('novo-admin-user').value = "";
+                document.getElementById('novo-admin-pass').value = "";
+            } else { 
+                alert("Preencha ambos os campos!"); 
+            }
+        }
+
+        function abrirModalConfigPix() {
+            const pix = JSON.parse(localStorage.getItem('dadosPix'));
+            document.getElementById('config-chave-pix').value = pix.chave;
+            document.getElementById('config-qr-pix').value = pix.qr;
+            abrirModal('modal-config-pix');
+        }
+
+        function salvarConfigPix() {
+            localStorage.setItem('dadosPix', JSON.stringify({ chave: document.getElementById('config-chave-pix').value, qr: document.getElementById('config-qr-pix').value }));
+            fecharModal('modal-config-pix'); alert("PIX Atualizado no seu navegador!");
+        }
+
+        // --- GERAIS ---
+        function abrirModal(id) { document.getElementById(id).style.display = "block"; }
+        function fecharModal(id) { document.getElementById(id).style.display = "none"; }
+        window.onclick = function(e) { if(e.target.classList.contains('modal')) e.target.style.display = "none"; }
+        function copiarPix() { const c = document.getElementById("codigo-pix"); c.select(); c.setSelectionRange(0, 99999); navigator.clipboard.writeText(c.value); alert("Copiado!"); }
+    </script>
+</body>
+</html>

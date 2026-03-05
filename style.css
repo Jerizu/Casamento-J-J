@@ -1,0 +1,116 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background-color: #fdfdfc;
+    color: #333;
+    font-family: 'Lato', sans-serif;
+    line-height: 1.6;
+}
+
+.header-elegante {
+    text-align: center;
+    padding: 60px 20px 40px;
+}
+
+.nomes {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    color: #2c2c2c;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+
+.data {
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    color: #8c7b65;
+    margin-bottom: 20px;
+}
+
+.linha-decorativa { width: 60px; height: 1px; background-color: #d4c4a8; margin: 0 auto 20px; }
+.mensagem { font-weight: 300; color: #666; max-width: 600px; margin: 0 auto; }
+
+.container-lista { max-width: 900px; margin: 0 auto; padding: 0 20px 80px; }
+.grid-colunas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
+
+/* Estrutura do Card de Produto */
+.item-lista {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    border: 1px solid #eaeaea;
+    background: #fff;
+    border-radius: 8px;
+    transition: all 0.5s ease;
+}
+
+.item-lista.sumindo {
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+.vitrine-produto {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.vitrine-produto img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid #f0f0f0;
+}
+
+.info-item h3 {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.valor { color: #8c7b65; font-weight: 400; font-size: 1rem; }
+
+.btn-elegante {
+    background-color: transparent; color: #8c7b65; border: 1px solid #8c7b65;
+    padding: 10px; border-radius: 5px; font-family: 'Lato', sans-serif;
+    font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
+    cursor: pointer; transition: all 0.3s ease; width: 100%;
+}
+.btn-elegante:hover { background-color: #8c7b65; color: #fff; }
+
+.modal { display: none; position: fixed; z-index: 10; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); }
+.modal-conteudo { background-color: #fff; margin: 5% auto; padding: 30px; width: 90%; max-width: 400px; text-align: center; position: relative; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.fechar { position: absolute; top: 10px; right: 20px; color: #999; font-size: 30px; font-weight: 300; cursor: pointer; }
+
+.modal-subtitulo { font-size: 0.9rem; color: #888; margin-bottom: 5px; }
+.modal-titulo-item { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #2c2c2c; }
+.valor-destaque { font-size: 1.3rem; color: #8c7b65; margin: 5px 0 20px; font-weight: bold; }
+
+.area-qrcode { display: flex; justify-content: center; margin-bottom: 20px; }
+.area-qrcode img { max-width: 180px; display: none; }
+.placeholder-elegante { width: 180px; height: 180px; background: #fcfbf9; border: 1px dashed #d4c4a8; display: flex; align-items: center; justify-content: center; color: #a9a9a9; font-size: 0.9rem; }
+
+.area-copia-cola input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; text-align: center; color: #555; font-family: monospace; }
+.mensagem-sucesso { color: #2e7d32; font-size: 0.9rem; margin-top: 10px; height: 15px; }
+
+.linha-separadora { height: 1px; background-color: #eee; margin: 25px 0 15px; }
+.instrucao-final { font-size: 0.9rem; color: #666; margin-bottom: 10px; }
+
+/* Botão de confirmação de pagamento */
+.btn-confirmar {
+    background-color: #4caf50; color: white; border: none; padding: 12px;
+    border-radius: 5px; font-family: 'Lato', sans-serif; font-size: 0.9rem;
+    font-weight: bold; text-transform: uppercase; cursor: pointer; width: 100%;
+    transition: background 0.3s;
+}
+.btn-confirmar:hover { background-color: #388e3c; }
+
+@media (max-width: 768px) {
+    .grid-colunas { grid-template-columns: 1fr; }
+    .nomes { font-size: 2.5rem; }
+}
