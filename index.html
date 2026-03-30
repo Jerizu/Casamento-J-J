@@ -33,42 +33,33 @@
         .vitrine-produto { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
         .vitrine-produto img { width: 90px; height: 90px; object-fit: cover; border-radius: 5px; border: 1px solid #f0f0f0; }
         
-        .info-item h3 { font-family: 'Lato', sans-serif; font-weight: 700; font-size: 1.1rem; color: #333; margin-bottom: 5px; padding-right: 40px; } /* Espaço para os botões não baterem no texto */
+        .info-item h3 { font-family: 'Lato', sans-serif; font-weight: 700; font-size: 1.1rem; color: #333; margin-bottom: 5px; }
         .valor { color: #8c7b65; font-weight: 400; font-size: 1rem; }
         
-        .btn-elegante { background-color: transparent; color: #8c7b65; border: 1px solid #8c7b65; padding: 10px; border-radius: 5px; font-family: 'Lato', sans-serif; font-size: 0.9rem; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; width: 100%; font-weight: bold; }
+        .btn-elegante { background-color: transparent; color: #8c7b65; border: 1px solid #8c7b65; padding: 10px; border-radius: 5px; font-family: 'Lato', sans-serif; font-size: 0.9rem; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; width: 100%; }
         .btn-elegante:hover { background-color: #8c7b65; color: #fff; }
         
-        .btn-restaurar { background-color: #1976d2; color: white; border: none; padding: 10px; border-radius: 5px; font-family: 'Lato', sans-serif; font-size: 0.9rem; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; width: 100%; font-weight: bold; }
-        .btn-restaurar:hover { background-color: #115293; }
-        
-        /* Ajuste do Selo e dos Botões do Admin */
-        .selo-status { position: absolute; top: 12px; left: 12px; background-color: #d32f2f; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; letter-spacing: 1px; z-index: 10;}
-        .selo-comprado { background-color: #388e3c; }
-
-        .botoes-admin { display: none; position: absolute; top: 12px; right: 12px; gap: 8px; z-index: 15; }
-        .btn-excluir, .btn-editar { color: white; border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        .btn-excluir { background-color: #d32f2f; }
-        .btn-excluir:hover { background-color: #b71c1c; transform: scale(1.1); }
-        .btn-editar { background-color: #1976d2; }
-        .btn-editar:hover { background-color: #115293; transform: scale(1.1); }
-
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); overflow-y: auto; padding: 20px 0; }
-        .modal-conteudo { background-color: #fff; margin: auto; padding: 25px 20px; width: 90%; max-width: 450px; text-align: center; position: relative; border-radius: 10px; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); }
+        .modal-conteudo { background-color: #fff; margin: 2% auto; padding: 30px; width: 90%; max-width: 450px; text-align: center; position: relative; border-radius: 10px; }
         .fechar { position: absolute; top: 10px; right: 20px; color: #999; font-size: 30px; cursor: pointer; }
         
-        .area-qrcode { display: flex; justify-content: center; margin-bottom: 10px; }
-        .area-qrcode img { max-width: 130px; border-radius: 10px; border: 2px solid #eee; } 
-        .area-copia-cola input { width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #e0e0e0; text-align: center; font-family: monospace; }
+        .area-qrcode { display: flex; justify-content: center; margin-bottom: 15px; }
+        .area-qrcode img { max-width: 160px; border-radius: 10px; border: 2px solid #eee; }
+        .area-copia-cola input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e0e0e0; text-align: center; font-family: monospace; }
         
-        .formulario-inputs { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; text-align: left; }
-        .formulario-inputs label { font-size: 0.9rem; font-weight: bold; color: #555; display: block; margin-bottom: 2px; }
-        .formulario-inputs input, .formulario-inputs textarea { padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%; font-family: 'Lato', sans-serif; }
+        .formulario-inputs { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; text-align: left; }
+        .formulario-inputs label { font-size: 0.9rem; font-weight: bold; color: #555; display: block; margin-bottom: 5px; }
+        .formulario-inputs input, .formulario-inputs textarea { padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%; }
         
-        .btn-confirmar { background-color: #4caf50; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; margin-top: 5px; }
+        .btn-confirmar { background-color: #4caf50; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
         .btn-padrao { background-color: #8c7b65; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
         .btn-confirmar:disabled, .btn-padrao:disabled { background-color: #ccc; cursor: not-allowed; }
 
+        .botoes-admin { display: none; position: absolute; top: -15px; right: -15px; gap: 5px; }
+        .btn-excluir, .btn-editar { color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .btn-excluir { background-color: #d32f2f; }
+        .btn-editar { background-color: #1976d2; }
+        
         .somente-admin { display: none !important; }
         .modo-admin-ativo .somente-admin { display: flex !important; }
         .modo-admin-ativo .esconder-logado { display: none !important; }
@@ -107,21 +98,21 @@
     <div id="modal-pix" class="modal">
         <div class="modal-conteudo">
             <span class="fechar" onclick="fecharModal('modal-pix')">&times;</span>
-            <h2 id="modal-titulo" style="font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-top: 10px;">Nome</h2>
-            <p id="modal-valor" style="font-size: 1.2rem; color: #8c7b65; font-weight: bold; margin-bottom: 10px;">R$ 0,00</p>
+            <h2 id="modal-titulo" style="font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-top: 10px;">Nome</h2>
+            <p id="modal-valor" style="font-size: 1.3rem; color: #8c7b65; font-weight: bold; margin-bottom: 15px;">R$ 0,00</p>
             
             <div class="area-qrcode"><img src="" id="img-qr-pix-modal"></div>
             <div class="area-copia-cola">
                 <input type="text" id="codigo-pix" readonly>
-                <button class="btn-elegante" onclick="copiarPix()" style="padding: 8px;">Copiar Código PIX</button>
+                <button class="btn-elegante" onclick="copiarPix()">Copiar Código PIX</button>
             </div>
 
-            <div style="height: 1px; background-color: #eee; margin: 15px 0;"></div>
+            <div style="height: 1px; background-color: #eee; margin: 20px 0;"></div>
             
             <div class="formulario-inputs" style="margin-top: 0;">
-                <p style="text-align: center; font-size: 0.85rem; color: #666; margin-bottom: 5px;">Já realizou o pagamento? Deixe uma mensagem para os noivos!</p>
+                <p style="text-align: center; font-size: 0.9rem; color: #666;">Já realizou o pagamento? Deixe uma mensagem para os noivos!</p>
                 <input type="text" id="input-nome" placeholder="Seu nome (Como devemos agradecer?)">
-                <textarea id="input-mensagem" rows="2" placeholder="Sua mensagem de carinho..."></textarea>
+                <textarea id="input-mensagem" rows="3" placeholder="Sua mensagem de carinho..."></textarea>
                 <button class="btn-confirmar" id="btn-enviar-pix" onclick="confirmarPagamento()">Confirmar PIX e Enviar</button>
             </div>
         </div>
@@ -165,11 +156,20 @@
         let idEditando = null;
         let idComprando = null;
         let nomeComprando = null;
+        
+        // Váriavel Global para guardar o PIX vindo da Nuvem
         let dadosPixNuvem = { chave: "", qr: "" };
 
         window.onload = function() {
-            if (!localStorage.getItem('credenciaisAdmin')) localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: 'admin', pass: 'admin' }));
-            if(sessionStorage.getItem('logadoComoAdmin') === 'sim') document.getElementById('corpo-site').classList.add('modo-admin-ativo');
+            // A senha do admin CONTINUA no navegador (por segurança, não mandamos senha pra planilha)
+            if (!localStorage.getItem('credenciaisAdmin')) {
+                localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: 'admin', pass: 'admin' }));
+            }
+            
+            if(sessionStorage.getItem('logadoComoAdmin') === 'sim') {
+                document.getElementById('corpo-site').classList.add('modo-admin-ativo');
+            }
+
             carregarListaDaPlanilha();
         };
 
@@ -182,92 +182,49 @@
                 .then(res => res.json())
                 .then(dados => {
                     grid.innerHTML = ""; 
-                    const isAdmin = sessionStorage.getItem('logadoComoAdmin') === 'sim';
                     
+                    // 1. Salva as configurações do PIX que vieram da Nuvem
                     if(dados.pix) {
-                        dadosPixNuvem.chave = dados.pix.chave || "";
-                        dadosPixNuvem.qr = dados.pix.qr || "";
+                        dadosPixNuvem.chave = dados.pix.chave || "Chave PIX não configurada";
+                        dadosPixNuvem.qr = dados.pix.qr || "https://via.placeholder.com/150?text=QR+Code";
                     }
 
+                    // 2. Mostra os presentes
                     if(dados.presentes.length === 0) {
-                        grid.innerHTML = "<p class='loading'>A lista está vazia!</p>";
+                        grid.innerHTML = "<p class='loading'>A lista está vazia ou todos os itens foram comprados!</p>";
                         return;
                     }
-
-                    let itensRenderizados = 0;
 
                     dados.presentes.forEach(p => {
                         if (!p.id || !p.nome) return; 
 
-                        const statusNormalizado = p.status ? p.status.trim().toUpperCase() : "";
-                        const taOculto = statusNormalizado === 'COMPRADO' || statusNormalizado === 'EXCLUIDO';
-
-                        if (!isAdmin && taOculto) return;
-
-                        itensRenderizados++;
-
                         let valorLimpo = String(p.valor).replace('R$', '').trim();
                         if (!valorLimpo.includes(',')) valorLimpo = valorLimpo + ",00"; 
 
-                        let estiloCard = "";
-                        let seloHtml = "";
-                        let botaoAcaoHtml = `<button class="btn-elegante" onclick="abrirModalPix('${p.id}', '${p.nome}', '${valorLimpo}')">Presentear</button>`;
-
-                        if (isAdmin && taOculto) {
-                            estiloCard = "opacity: 0.6; filter: grayscale(50%); border: 2px dashed #ccc;";
-                            if(statusNormalizado === 'COMPRADO') {
-                                seloHtml = `<div class="selo-status selo-comprado">🎁 COMPRADO</div>`;
-                            } else {
-                                seloHtml = `<div class="selo-status">🚫 EXCLUÍDO</div>`;
-                            }
-                            botaoAcaoHtml = `<button class="btn-restaurar" onclick="mudarStatusPresente('${p.id}', event)">🔄 Restaurar Disponibilidade</button>`;
-                        }
-
                         const html = `
-                        <div class="item-lista" id="${p.id}" style="${estiloCard}">
-                            ${seloHtml}
+                        <div class="item-lista" id="${p.id}">
                             <div class="botoes-admin somente-admin">
                                 <button class="btn-editar" onclick="abrirModalEditar('${p.id}', '${p.nome}', '${valorLimpo}', '${p.imagem}')">✏️</button>
-                                <button class="btn-excluir" onclick="excluirPresente('${p.id}', event)">🗑️</button>
+                                <button class="btn-excluir" onclick="excluirPresente('${p.id}')">🗑️</button>
                             </div>
                             <div class="vitrine-produto">
                                 <img src="${p.imagem}" alt="${p.nome}">
                                 <div class="info-item"><h3>${p.nome}</h3><span class="valor">Cota: R$ ${valorLimpo}</span></div>
                             </div>
-                            ${botaoAcaoHtml}
+                            <button class="btn-elegante" onclick="abrirModalPix('${p.id}', '${p.nome}', '${valorLimpo}')">Presentear</button>
                         </div>`;
                         grid.insertAdjacentHTML('beforeend', html);
                     });
-
-                    if (itensRenderizados === 0 && !isAdmin) {
-                        grid.innerHTML = "<p class='loading'>Todos os itens da lista já foram comprados! Muito obrigado pelo carinho.</p>";
-                    }
                 })
                 .catch(erro => {
                     grid.innerHTML = "<p class='loading' style='color:red;'>Erro de conexão com o Google. Recarregue a página.</p>";
+                    console.error(erro);
                 });
         }
 
-        // --- RESTAURAR STATUS ---
-        function mudarStatusPresente(id, evento) {
-            const btn = evento.target;
-            btn.innerText = "Restaurando..."; 
-            btn.disabled = true;
-
-            fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: "mudarStatus", id: id, novoStatus: "" }) 
-            }).then(() => {
-                carregarListaDaPlanilha(); 
-            }).catch(() => {
-                alert("Erro ao restaurar.");
-                btn.innerText = "🔄 Restaurar Disponibilidade"; 
-                btn.disabled = false;
-            });
-        }
-
-        // --- CONFIGURAÇÃO PIX ---
+        // --- CONFIGURAÇÃO PIX (AGORA SALVA NA NUVEM) ---
         function abrirModalConfigPix() {
+            // Puxa o que está salvo na variável global que veio do Google
             document.getElementById('config-chave-pix').value = dadosPixNuvem.chave;
             document.getElementById('config-qr-pix').value = dadosPixNuvem.qr;
             abrirModal('modal-config-pix');
@@ -285,6 +242,7 @@
                 method: 'POST',
                 body: JSON.stringify({ action: "configPix", chave: novaChave, qr: novoQr })
             }).then(() => {
+                // Atualiza a variável local para não precisar recarregar a página toda
                 dadosPixNuvem.chave = novaChave;
                 dadosPixNuvem.qr = novoQr;
                 alert("PIX atualizado com sucesso na Nuvem para todos os convidados!");
@@ -292,7 +250,7 @@
             }).finally(() => { btn.innerText = "Salvar na Nuvem"; btn.disabled = false; });
         }
 
-        // --- ADICIONAR E EDITAR ---
+        // --- ADICIONAR NA PLANILHA ---
         function salvarNovoPresente() {
             const nome = document.getElementById('novo-nome').value;
             let valor = document.getElementById('novo-valor').value;
@@ -315,6 +273,7 @@
             }).finally(() => { btn.innerText = "Salvar no Banco de Dados"; btn.disabled = false; });
         }
 
+        // --- EDITAR NA PLANILHA ---
         function abrirModalEditar(id, nome, valor, imagem) {
             idEditando = id;
             document.getElementById('edit-nome').value = nome;
@@ -341,9 +300,10 @@
             }).finally(() => { btn.innerText = "Atualizar no Banco de Dados"; btn.disabled = false; });
         }
 
-        function excluirPresente(id, evento) {
-            if(confirm("Tem certeza que deseja apagar este presente? Ele não ficará mais disponível para os convidados.")) {
-                evento.target.innerText = "⏳";
+        // --- EXCLUIR DA PLANILHA ---
+        function excluirPresente(id) {
+            if(confirm("Tem certeza que deseja apagar este presente?")) {
+                document.getElementById(id).style.opacity = "0.5"; 
                 fetch(API_URL, {
                     method: 'POST',
                     body: JSON.stringify({ action: "excluir", id: id })
@@ -358,6 +318,7 @@
             document.getElementById('modal-titulo').innerText = nome;
             document.getElementById('modal-valor').innerText = "R$ " + String(valor).replace('R$','').trim();
             
+            // Agora usa a configuração que veio da Nuvem!
             document.getElementById('img-qr-pix-modal').src = dadosPixNuvem.qr;
             document.getElementById('codigo-pix').value = dadosPixNuvem.chave;
 
@@ -397,14 +358,12 @@
                 sessionStorage.setItem('logadoComoAdmin', 'sim');
                 document.getElementById('corpo-site').classList.add('modo-admin-ativo');
                 fecharModal('modal-login');
-                carregarListaDaPlanilha(); 
             } else { alert("Senha incorreta!"); }
         }
 
         function sairAdmin() { 
             sessionStorage.removeItem('logadoComoAdmin'); 
             document.getElementById('corpo-site').classList.remove('modo-admin-ativo'); 
-            carregarListaDaPlanilha(); 
         }
         
         function salvarNovasCredenciais() {
@@ -413,7 +372,7 @@
 
             if(newUser !== "" && newPass !== "") {
                 localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: newUser, pass: newPass }));
-                alert("Credenciais atualizadas com sucesso!");
+                alert("Credenciais atualizadas com sucesso! (Salvas no seu navegador atual)");
                 fecharModal('modal-config-admin');
                 document.getElementById('novo-admin-user').value = "";
                 document.getElementById('novo-admin-pass').value = "";
