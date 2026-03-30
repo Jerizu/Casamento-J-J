@@ -7,75 +7,106 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background-color: #fdfdfc; color: #333; font-family: 'Lato', sans-serif; line-height: 1.6; }
         
-        .menu-superior { background-color: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
-        .menu-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #8c7b65; font-weight: bold; }
-        .menu-links { display: flex; gap: 15px; align-items: center; }
-        .btn-menu { background: none; border: none; font-family: 'Lato', sans-serif; font-size: 0.9rem; color: #555; cursor: pointer; padding: 5px 10px; font-weight: bold; }
+        /* Menu Superior */
+        .menu-superior { background-color: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
+        .menu-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #8c7b65; font-weight: bold; text-decoration: none;}
+        .menu-links { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; justify-content: center; }
+        .btn-menu { background: none; border: none; font-family: 'Lato', sans-serif; font-size: 0.9rem; color: #555; cursor: pointer; padding: 5px 10px; font-weight: bold; text-decoration: none; transition: color 0.3s; }
         .btn-menu:hover { color: #8c7b65; }
         .btn-sair { color: #d32f2f; }
-        .flex-admin-menu { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
+        .flex-admin-menu { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; align-items: center; }
         
-        .header-elegante { text-align: center; padding: 50px 20px 40px; }
-        .nomes { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: #2c2c2c; margin-bottom: 10px; }
-        .linha-decorativa { width: 60px; height: 1px; background-color: #d4c4a8; margin: 0 auto 20px; }
+        /* Seções Gerais */
+        .secao-site { padding: 60px 20px; max-width: 900px; margin: 0 auto; border-bottom: 1px solid #f0f0f0; }
+        .secao-site:last-child { border-bottom: none; }
+        .titulo-secao { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #2c2c2c; margin-bottom: 15px; text-align: center; }
+        .linha-decorativa { width: 60px; height: 1px; background-color: #d4c4a8; margin: 0 auto 30px; }
+        .texto-centralizado { text-align: center; color: #666; max-width: 700px; margin: 0 auto 40px; font-weight: 300; }
         
-        .container-lista { max-width: 900px; margin: 0 auto; padding: 0 20px 80px; min-height: 50vh;}
+        /* Cabeçalho Home */
+        .header-elegante { text-align: center; padding: 80px 20px 60px; background-color: #faf8f5; }
+        .nomes { font-family: 'Playfair Display', serif; font-size: 4rem; color: #2c2c2c; margin-bottom: 10px; }
+        .data { font-size: 1.2rem; letter-spacing: 4px; color: #8c7b65; font-weight: bold; }
+        
+        /* Grid de Presentes */
         .grid-colunas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
-        .loading { text-align: center; grid-column: 1 / -1; color: #8c7b65; font-size: 1.2rem; margin-top: 40px; font-style: italic; }
+        .loading { text-align: center; grid-column: 1 / -1; color: #8c7b65; font-size: 1.2rem; padding: 40px; font-style: italic; }
         
-        .item-lista { position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; border: 1px solid #eaeaea; background: #fff; border-radius: 8px; transition: transform 0.3s; }
+        .item-lista { position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; border: 1px solid #eaeaea; background: #fff; border-radius: 8px; transition: transform 0.3s; overflow: hidden; }
         .item-lista:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .item-lista.sumindo { opacity: 0; transform: scale(0.9); } 
         
         .vitrine-produto { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
         .vitrine-produto img { width: 90px; height: 90px; object-fit: cover; border-radius: 5px; border: 1px solid #f0f0f0; }
-        
-        .info-item h3 { font-family: 'Lato', sans-serif; font-weight: 700; font-size: 1.1rem; color: #333; margin-bottom: 5px; }
+        .info-item h3 { font-family: 'Lato', sans-serif; font-weight: 700; font-size: 1.1rem; color: #333; margin-bottom: 5px; padding-right: 40px;}
         .valor { color: #8c7b65; font-weight: 400; font-size: 1rem; }
         
-        .btn-elegante { background-color: transparent; color: #8c7b65; border: 1px solid #8c7b65; padding: 10px; border-radius: 5px; font-family: 'Lato', sans-serif; font-size: 0.9rem; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; width: 100%; }
+        .btn-elegante { background-color: transparent; color: #8c7b65; border: 1px solid #8c7b65; padding: 10px; border-radius: 5px; font-family: 'Lato', sans-serif; font-size: 0.9rem; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; width: 100%; font-weight: bold; }
         .btn-elegante:hover { background-color: #8c7b65; color: #fff; }
+        .btn-restaurar { background-color: #1976d2; color: white; border: none; padding: 10px; border-radius: 5px; width: 100%; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.9rem; }
         
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); }
-        .modal-conteudo { background-color: #fff; margin: 2% auto; padding: 30px; width: 90%; max-width: 450px; text-align: center; position: relative; border-radius: 10px; }
-        .fechar { position: absolute; top: 10px; right: 20px; color: #999; font-size: 30px; cursor: pointer; }
-        
-        .area-qrcode { display: flex; justify-content: center; margin-bottom: 15px; }
-        .area-qrcode img { max-width: 160px; border-radius: 10px; border: 2px solid #eee; }
-        .area-copia-cola input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e0e0e0; text-align: center; font-family: monospace; }
-        
-        .formulario-inputs { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; text-align: left; }
-        .formulario-inputs label { font-size: 0.9rem; font-weight: bold; color: #555; display: block; margin-bottom: 5px; }
-        .formulario-inputs input, .formulario-inputs textarea { padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%; }
-        
-        .btn-confirmar { background-color: #4caf50; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
-        .btn-padrao { background-color: #8c7b65; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
-        .btn-confirmar:disabled, .btn-padrao:disabled { background-color: #ccc; cursor: not-allowed; }
-
-        .botoes-admin { display: none; position: absolute; top: -15px; right: -15px; gap: 5px; }
-        .btn-excluir, .btn-editar { color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        /* Selos e Botoes Admin */
+        .selo-status { position: absolute; top: 12px; left: 12px; background-color: #d32f2f; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; z-index: 10;}
+        .selo-comprado { background-color: #388e3c; }
+        .botoes-admin { display: none; position: absolute; top: 12px; right: 12px; gap: 8px; z-index: 15; }
+        .btn-excluir, .btn-editar { color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .btn-excluir { background-color: #d32f2f; }
         .btn-editar { background-color: #1976d2; }
         
+        /* Formulários e Modais */
+        .formulario-bloco { background: #fff; padding: 30px; border-radius: 8px; border: 1px solid #eaeaea; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .formulario-inputs { display: flex; flex-direction: column; gap: 10px; text-align: left; }
+        .formulario-inputs label { font-size: 0.9rem; font-weight: bold; color: #555; }
+        .formulario-inputs input, .formulario-inputs textarea, .formulario-inputs select { padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-family: 'Lato', sans-serif; width: 100%; }
+        
+        .btn-padrao { background-color: #8c7b65; color: white; border: none; padding: 14px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; margin-top: 10px; text-transform: uppercase; font-size: 0.9rem; }
+        .btn-padrao:hover { background-color: #6b5c49; }
+        .btn-padrao:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); overflow-y: auto; padding: 20px 0; }
+        .modal-conteudo { background-color: #fff; margin: auto; padding: 25px 20px; width: 90%; max-width: 450px; text-align: center; position: relative; border-radius: 10px; }
+        .fechar { position: absolute; top: 10px; right: 20px; color: #999; font-size: 30px; cursor: pointer; }
+
+        .area-qrcode { display: flex; justify-content: center; margin-bottom: 10px; }
+        .area-qrcode img { max-width: 130px; border-radius: 10px; border: 2px solid #eee; } 
+        .area-copia-cola input { width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #e0e0e0; text-align: center; font-family: monospace; }
+        
+        /* Detalhes do Local */
+        .info-local { text-align: center; font-size: 1.1rem; color: #444; }
+        .info-local h4 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #8c7b65; margin: 15px 0 5px; }
+        .mapa-container { margin-top: 30px; background: #eee; height: 300px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #888; border: 1px solid #ddd; }
+
         .somente-admin { display: none !important; }
         .modo-admin-ativo .somente-admin { display: flex !important; }
         .modo-admin-ativo .esconder-logado { display: none !important; }
 
-        @media (max-width: 768px) { .grid-colunas { grid-template-columns: 1fr; } .menu-superior { flex-direction: column; gap: 10px; } }
+        @media (max-width: 768px) { 
+            .grid-colunas { grid-template-columns: 1fr; } 
+            .menu-superior { flex-direction: column; gap: 15px; padding: 15px; } 
+            .nomes { font-size: 2.8rem; }
+        }
     </style>
 </head>
 <body id="corpo-site">
 
     <nav class="menu-superior">
-        <div class="menu-logo">J&J</div>
+        <a href="#" class="menu-logo">J&J</a>
+        
         <div class="menu-links">
+            <a href="#presentes" class="btn-menu">Presentes</a>
+            <a href="#presenca" class="btn-menu">Confirmação</a>
+            <a href="#local" class="btn-menu">Local</a>
+            
+            <span style="color: #ddd; margin: 0 5px;">|</span>
+            
             <button class="btn-menu esconder-logado" onclick="abrirModal('modal-login')">Acesso Restrito</button>
+
             <div class="somente-admin flex-admin-menu">
-                <button class="btn-menu" onclick="abrirModal('modal-adicionar')">➕ Adicionar Item</button>
-                <button class="btn-menu" onclick="abrirModalConfigPix()">💳 Configurar PIX</button>
+                <button class="btn-menu" onclick="abrirModal('modal-adicionar')">➕ Add Item</button>
+                <button class="btn-menu" onclick="abrirModalConfigPix()">💳 Config PIX</button>
                 <button class="btn-menu" onclick="abrirModal('modal-config-admin')">⚙️ Senha</button>
                 <button class="btn-menu btn-sair" onclick="sairAdmin()">Sair</button>
             </div>
@@ -84,92 +115,109 @@
 
     <header class="header-elegante">
         <h1 class="nomes">Julia & Jessé</h1>
-        <p class="data">28 . 11 . 2026</p>
-        <div class="linha-decorativa"></div>
-        <p class="mensagem">Ajudem-nos a montar nossa casa! Escolha um item abaixo e contribua pelo PIX.</p>
+        <p class="data">28 DE NOVEMBRO DE 2026</p>
     </header>
 
-    <main class="container-lista">
+    <section id="presentes" class="secao-site">
+        <h2 class="titulo-secao">Lista de Presentes</h2>
+        <div class="linha-decorativa"></div>
+        <p class="texto-centralizado">Ajudem-nos a montar nossa casa! Escolha um item abaixo e contribua de forma segura via PIX direto para a nossa conta.</p>
+        
         <div class="grid-colunas" id="grid-presentes">
             <div class="loading" id="mensagem-loading">⏳ Sincronizando com a base de dados...</div>
         </div>
-    </main>
+    </section>
+
+    <section id="presenca" class="secao-site" style="background-color: #faf8f5;">
+        <h2 class="titulo-secao">Confirmação de Presença</h2>
+        <div class="linha-decorativa"></div>
+        <p class="texto-centralizado">Por favor, confirme sua presença até o dia 01 de novembro de 2026 para podermos organizar tudo com muito carinho.</p>
+        
+        <div class="formulario-bloco" style="max-width: 600px; margin: 0 auto;">
+            <div class="formulario-inputs">
+                <label>Nome Completo do Responsável</label>
+                <input type="text" id="rsvp-nome" placeholder="Digite seu nome">
+                
+                <label>Telefone (WhatsApp)</label>
+                <input type="text" id="rsvp-telefone" placeholder="(11) 99999-9999">
+                
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <label>Qtd. Adultos</label>
+                        <select id="rsvp-adultos">
+                            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1;">
+                        <label>Crianças (até 10 anos)</label>
+                        <select id="rsvp-criancas">
+                            <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn-padrao" id="btn-enviar-rsvp" onclick="enviarRSVP()">Confirmar Minha Presença</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="local" class="secao-site">
+        <h2 class="titulo-secao">Sobre o Local</h2>
+        <div class="linha-decorativa"></div>
+        <p class="texto-centralizado">Estamos preparando uma festa inesquecível para celebrarmos juntos este momento tão especial.</p>
+        
+        <div class="info-local">
+            <p>A nossa cerimônia e recepção serão realizadas no</p>
+            <h4>Espaço Malavazzi</h4>
+            <p style="color: #777; font-size: 0.9rem; margin-top: 5px;">Aguardamos vocês lá para brindarmos ao nosso amor!</p>
+            
+            <div class="mapa-container">
+                [ Área reservada para o Mapa do Local ]
+            </div>
+        </div>
+    </section>
+
 
     <div id="modal-pix" class="modal">
         <div class="modal-conteudo">
             <span class="fechar" onclick="fecharModal('modal-pix')">&times;</span>
-            <h2 id="modal-titulo" style="font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-top: 10px;">Nome</h2>
-            <p id="modal-valor" style="font-size: 1.3rem; color: #8c7b65; font-weight: bold; margin-bottom: 15px;">R$ 0,00</p>
-            
+            <h2 id="modal-titulo" style="font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-top: 10px;">Nome</h2>
+            <p id="modal-valor" style="font-size: 1.2rem; color: #8c7b65; font-weight: bold; margin-bottom: 10px;">R$ 0,00</p>
             <div class="area-qrcode"><img src="" id="img-qr-pix-modal"></div>
             <div class="area-copia-cola">
                 <input type="text" id="codigo-pix" readonly>
-                <button class="btn-elegante" onclick="copiarPix()">Copiar Código PIX</button>
+                <button class="btn-elegante" onclick="copiarPix()" style="padding: 8px;">Copiar Código PIX</button>
             </div>
-
-            <div style="height: 1px; background-color: #eee; margin: 20px 0;"></div>
-            
+            <div style="height: 1px; background-color: #eee; margin: 15px 0;"></div>
             <div class="formulario-inputs" style="margin-top: 0;">
-                <p style="text-align: center; font-size: 0.9rem; color: #666;">Já realizou o pagamento? Deixe uma mensagem para os noivos!</p>
-                <input type="text" id="input-nome" placeholder="Seu nome (Como devemos agradecer?)">
-                <textarea id="input-mensagem" rows="3" placeholder="Sua mensagem de carinho..."></textarea>
-                <button class="btn-confirmar" id="btn-enviar-pix" onclick="confirmarPagamento()">Confirmar PIX e Enviar</button>
+                <p style="text-align: center; font-size: 0.85rem; color: #666; margin-bottom: 5px;">Deixe uma mensagem para os noivos!</p>
+                <input type="text" id="input-nome-pix" placeholder="Seu nome">
+                <textarea id="input-mensagem-pix" rows="2" placeholder="Sua mensagem de carinho..."></textarea>
+                <button class="btn-padrao" id="btn-enviar-pix" onclick="confirmarPagamentoPix()">Confirmar PIX e Enviar</button>
             </div>
         </div>
     </div>
 
-    <div id="modal-adicionar" class="modal">
-        <div class="modal-conteudo">
-            <span class="fechar" onclick="fecharModal('modal-adicionar')">&times;</span>
-            <h2 style="font-family: 'Playfair Display', serif; font-size: 1.6rem;">Adicionar Presente</h2>
-            <div class="formulario-inputs">
-                <input type="text" id="novo-nome" placeholder="Nome do Produto (Ex: Batedeira)">
-                <input type="text" id="novo-valor" placeholder="Valor (Ex: 150,00)">
-                <input type="text" id="nova-imagem" placeholder="Link da Imagem (https://...)">
-                <button class="btn-padrao" id="btn-salvar-novo" onclick="salvarNovoPresente()">Salvar no Banco de Dados</button>
-            </div>
-        </div>
-    </div>
+    <div id="modal-adicionar" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-adicionar')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Adicionar Presente</h2><div class="formulario-inputs"><input type="text" id="novo-nome" placeholder="Nome (Ex: Batedeira)"><input type="text" id="novo-valor" placeholder="Valor (Ex: 150,00)"><input type="text" id="nova-imagem" placeholder="Link da Imagem"><button class="btn-padrao" id="btn-salvar-novo" onclick="salvarNovoPresente()">Salvar Item</button></div></div></div>
 
-    <div id="modal-editar" class="modal">
-        <div class="modal-conteudo">
-            <span class="fechar" onclick="fecharModal('modal-editar')">&times;</span>
-            <h2 style="font-family: 'Playfair Display', serif; font-size: 1.6rem;">Editar Presente</h2>
-            <div class="formulario-inputs">
-                <input type="text" id="edit-nome">
-                <input type="text" id="edit-valor">
-                <input type="text" id="edit-imagem">
-                <button class="btn-padrao" id="btn-salvar-edicao" onclick="salvarEdicao()">Atualizar no Banco de Dados</button>
-            </div>
-        </div>
-    </div>
+    <div id="modal-editar" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-editar')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Editar Presente</h2><div class="formulario-inputs"><input type="text" id="edit-nome"><input type="text" id="edit-valor"><input type="text" id="edit-imagem"><button class="btn-padrao" id="btn-salvar-edicao" onclick="salvarEdicao()">Atualizar Item</button></div></div></div>
 
-    <div id="modal-config-pix" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-pix')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Configurar PIX</h2><div class="formulario-inputs"><textarea id="config-chave-pix" rows="3" placeholder="Chave Copia e Cola"></textarea><input type="text" id="config-qr-pix" placeholder="Link da imagem do QR Code"><button class="btn-padrao" id="btn-salvar-pix" onclick="salvarConfigPix()">Salvar na Nuvem</button></div></div></div>
+    <div id="modal-config-pix" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-pix')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Configurar PIX</h2><div class="formulario-inputs"><textarea id="config-chave-pix" rows="3" placeholder="Chave Copia e Cola"></textarea><input type="text" id="config-qr-pix" placeholder="Link do QR Code"><button class="btn-padrao" id="btn-salvar-pix" onclick="salvarConfigPix()">Salvar na Nuvem</button></div></div></div>
     
     <div id="modal-login" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-login')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Acesso Restrito</h2><div class="formulario-inputs"><input type="text" id="login-user" placeholder="Usuário"><input type="password" id="login-pass" placeholder="Senha"><button class="btn-padrao" onclick="fazerLogin()">Entrar</button></div></div></div>
 
-    <div id="modal-config-admin" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-admin')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Alterar Credenciais</h2><div class="formulario-inputs"><input type="text" id="novo-admin-user" placeholder="Novo nome de login"><input type="password" id="novo-admin-pass" placeholder="Nova senha"><button class="btn-padrao" onclick="salvarNovasCredenciais()">Atualizar Dados</button></div></div></div>
+    <div id="modal-config-admin" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-admin')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Alterar Credenciais</h2><div class="formulario-inputs"><input type="text" id="novo-admin-user" placeholder="Novo usuário"><input type="password" id="novo-admin-pass" placeholder="Nova senha"><button class="btn-padrao" onclick="salvarNovasCredenciais()">Atualizar</button></div></div></div>
+
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbz5Twl62Dv-f42fDtKzUl8TcL_WWkiI5ako3EOFXRS1Jt4kqOB97-ZexR2XkxUQAC2a/exec";
         
-        let idEditando = null;
-        let idComprando = null;
-        let nomeComprando = null;
-        
-        // Váriavel Global para guardar o PIX vindo da Nuvem
+        let idEditando = null; let idComprando = null; let nomeComprando = null;
         let dadosPixNuvem = { chave: "", qr: "" };
 
         window.onload = function() {
-            // A senha do admin CONTINUA no navegador (por segurança, não mandamos senha pra planilha)
-            if (!localStorage.getItem('credenciaisAdmin')) {
-                localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: 'admin', pass: 'admin' }));
-            }
-            
-            if(sessionStorage.getItem('logadoComoAdmin') === 'sim') {
-                document.getElementById('corpo-site').classList.add('modo-admin-ativo');
-            }
-
+            if (!localStorage.getItem('credenciaisAdmin')) localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: 'admin', pass: 'admin' }));
+            if(sessionStorage.getItem('logadoComoAdmin') === 'sim') document.getElementById('corpo-site').classList.add('modo-admin-ativo');
             carregarListaDaPlanilha();
         };
 
@@ -178,210 +226,152 @@
             const grid = document.getElementById('grid-presentes');
             grid.innerHTML = '<div class="loading" id="mensagem-loading">⏳ Sincronizando com a base de dados...</div>';
 
-            fetch(API_URL)
-                .then(res => res.json())
-                .then(dados => {
-                    grid.innerHTML = ""; 
-                    
-                    // 1. Salva as configurações do PIX que vieram da Nuvem
-                    if(dados.pix) {
-                        dadosPixNuvem.chave = dados.pix.chave || "Chave PIX não configurada";
-                        dadosPixNuvem.qr = dados.pix.qr || "https://via.placeholder.com/150?text=QR+Code";
+            fetch(API_URL).then(res => res.json()).then(dados => {
+                grid.innerHTML = ""; 
+                const isAdmin = sessionStorage.getItem('logadoComoAdmin') === 'sim';
+                
+                if(dados.pix) { dadosPixNuvem.chave = dados.pix.chave || ""; dadosPixNuvem.qr = dados.pix.qr || ""; }
+
+                if(dados.presentes.length === 0) { grid.innerHTML = "<p class='loading'>A lista está vazia!</p>"; return; }
+
+                let itensRenderizados = 0;
+
+                dados.presentes.forEach(p => {
+                    if (!p.id || !p.nome) return; 
+
+                    const statusNorm = p.status ? p.status.trim().toUpperCase() : "";
+                    const taOculto = statusNorm === 'COMPRADO' || statusNorm === 'EXCLUIDO';
+                    if (!isAdmin && taOculto) return;
+
+                    itensRenderizados++;
+
+                    let valorLimpo = String(p.valor).replace('R$', '').trim();
+                    if (!valorLimpo.includes(',')) valorLimpo = valorLimpo + ",00"; 
+
+                    let estiloCard = ""; let seloHtml = "";
+                    let botaoAcaoHtml = `<button class="btn-elegante" onclick="abrirModalPix('${p.id}', '${p.nome}', '${valorLimpo}')">Presentear</button>`;
+
+                    if (isAdmin && taOculto) {
+                        estiloCard = "opacity: 0.6; filter: grayscale(50%); border: 2px dashed #ccc;";
+                        if(statusNorm === 'COMPRADO') seloHtml = `<div class="selo-status selo-comprado">🎁 COMPRADO</div>`;
+                        else seloHtml = `<div class="selo-status">🚫 EXCLUÍDO</div>`;
+                        botaoAcaoHtml = `<button class="btn-restaurar" onclick="mudarStatusPresente('${p.id}', event)">🔄 Restaurar</button>`;
                     }
 
-                    // 2. Mostra os presentes
-                    if(dados.presentes.length === 0) {
-                        grid.innerHTML = "<p class='loading'>A lista está vazia ou todos os itens foram comprados!</p>";
-                        return;
-                    }
-
-                    dados.presentes.forEach(p => {
-                        if (!p.id || !p.nome) return; 
-
-                        let valorLimpo = String(p.valor).replace('R$', '').trim();
-                        if (!valorLimpo.includes(',')) valorLimpo = valorLimpo + ",00"; 
-
-                        const html = `
-                        <div class="item-lista" id="${p.id}">
-                            <div class="botoes-admin somente-admin">
-                                <button class="btn-editar" onclick="abrirModalEditar('${p.id}', '${p.nome}', '${valorLimpo}', '${p.imagem}')">✏️</button>
-                                <button class="btn-excluir" onclick="excluirPresente('${p.id}')">🗑️</button>
-                            </div>
-                            <div class="vitrine-produto">
-                                <img src="${p.imagem}" alt="${p.nome}">
-                                <div class="info-item"><h3>${p.nome}</h3><span class="valor">Cota: R$ ${valorLimpo}</span></div>
-                            </div>
-                            <button class="btn-elegante" onclick="abrirModalPix('${p.id}', '${p.nome}', '${valorLimpo}')">Presentear</button>
-                        </div>`;
-                        grid.insertAdjacentHTML('beforeend', html);
-                    });
-                })
-                .catch(erro => {
-                    grid.innerHTML = "<p class='loading' style='color:red;'>Erro de conexão com o Google. Recarregue a página.</p>";
-                    console.error(erro);
+                    const html = `
+                    <div class="item-lista" id="${p.id}" style="${estiloCard}">
+                        ${seloHtml}
+                        <div class="botoes-admin somente-admin">
+                            <button class="btn-editar" onclick="abrirModalEditar('${p.id}', '${p.nome}', '${valorLimpo}', '${p.imagem}')">✏️</button>
+                            <button class="btn-excluir" onclick="excluirPresente('${p.id}', event)">🗑️</button>
+                        </div>
+                        <div class="vitrine-produto">
+                            <img src="${p.imagem}" alt="${p.nome}">
+                            <div class="info-item"><h3>${p.nome}</h3><span class="valor">Cota: R$ ${valorLimpo}</span></div>
+                        </div>
+                        ${botaoAcaoHtml}
+                    </div>`;
+                    grid.insertAdjacentHTML('beforeend', html);
                 });
+
+                if (itensRenderizados === 0 && !isAdmin) grid.innerHTML = "<p class='loading'>Todos os itens da lista já foram comprados! Muito obrigado.</p>";
+            }).catch(erro => { grid.innerHTML = "<p class='loading' style='color:red;'>Erro de conexão com o Google. Recarregue.</p>"; });
         }
 
-        // --- CONFIGURAÇÃO PIX (AGORA SALVA NA NUVEM) ---
-        function abrirModalConfigPix() {
-            // Puxa o que está salvo na variável global que veio do Google
-            document.getElementById('config-chave-pix').value = dadosPixNuvem.chave;
-            document.getElementById('config-qr-pix').value = dadosPixNuvem.qr;
-            abrirModal('modal-config-pix');
-        }
+        // --- ENVIAR CONFIRMAÇÃO DE PRESENÇA (RSVP) ---
+        function enviarRSVP() {
+            const nome = document.getElementById('rsvp-nome').value;
+            const tel = document.getElementById('rsvp-telefone').value;
+            const adultos = document.getElementById('rsvp-adultos').value;
+            const criancas = document.getElementById('rsvp-criancas').value;
 
-        function salvarConfigPix() {
-            const novaChave = document.getElementById('config-chave-pix').value;
-            const novoQr = document.getElementById('config-qr-pix').value;
-            if (!novaChave || !novoQr) return alert("Preencha a chave e a imagem!");
+            if(!nome || !tel) return alert("Por favor, preencha o seu nome e telefone!");
 
-            const btn = document.getElementById('btn-salvar-pix');
-            btn.innerText = "Salvando..."; btn.disabled = true;
-
-            fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: "configPix", chave: novaChave, qr: novoQr })
-            }).then(() => {
-                // Atualiza a variável local para não precisar recarregar a página toda
-                dadosPixNuvem.chave = novaChave;
-                dadosPixNuvem.qr = novoQr;
-                alert("PIX atualizado com sucesso na Nuvem para todos os convidados!");
-                fecharModal('modal-config-pix');
-            }).finally(() => { btn.innerText = "Salvar na Nuvem"; btn.disabled = false; });
-        }
-
-        // --- ADICIONAR NA PLANILHA ---
-        function salvarNovoPresente() {
-            const nome = document.getElementById('novo-nome').value;
-            let valor = document.getElementById('novo-valor').value;
-            let imagem = document.getElementById('nova-imagem').value;
-            if(!nome || !valor) return alert("Preencha nome e valor!");
-            if(!imagem) imagem = "https://via.placeholder.com/300?text=Produto";
-
-            const btn = document.getElementById('btn-salvar-novo');
-            btn.innerText = "Salvando..."; btn.disabled = true;
-
-            const idGerado = "ID-" + Date.now(); 
-
-            fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: "adicionar", id: idGerado, nome: nome, valor: valor, imagem: imagem })
-            }).then(() => {
-                fecharModal('modal-adicionar');
-                carregarListaDaPlanilha(); 
-                document.getElementById('novo-nome').value = ""; document.getElementById('novo-valor').value = ""; document.getElementById('nova-imagem').value = "";
-            }).finally(() => { btn.innerText = "Salvar no Banco de Dados"; btn.disabled = false; });
-        }
-
-        // --- EDITAR NA PLANILHA ---
-        function abrirModalEditar(id, nome, valor, imagem) {
-            idEditando = id;
-            document.getElementById('edit-nome').value = nome;
-            document.getElementById('edit-valor').value = String(valor).replace('R$','').trim();
-            document.getElementById('edit-imagem').value = imagem;
-            abrirModal('modal-editar');
-        }
-
-        function salvarEdicao() {
-            const nome = document.getElementById('edit-nome').value;
-            let valor = document.getElementById('edit-valor').value;
-            let imagem = document.getElementById('edit-imagem').value;
-            if(!imagem) imagem = "https://via.placeholder.com/300?text=Produto";
-
-            const btn = document.getElementById('btn-salvar-edicao');
-            btn.innerText = "Atualizando..."; btn.disabled = true;
-
-            fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: "editar", id: idEditando, nome: nome, valor: valor, imagem: imagem })
-            }).then(() => {
-                fecharModal('modal-editar');
-                carregarListaDaPlanilha();
-            }).finally(() => { btn.innerText = "Atualizar no Banco de Dados"; btn.disabled = false; });
-        }
-
-        // --- EXCLUIR DA PLANILHA ---
-        function excluirPresente(id) {
-            if(confirm("Tem certeza que deseja apagar este presente?")) {
-                document.getElementById(id).style.opacity = "0.5"; 
-                fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "excluir", id: id })
-                }).then(() => { carregarListaDaPlanilha(); });
-            }
-        }
-
-        // --- COMPRAR (MENSAGEM + PIX) ---
-        function abrirModalPix(id, nome, valor) {
-            idComprando = id;
-            nomeComprando = nome;
-            document.getElementById('modal-titulo').innerText = nome;
-            document.getElementById('modal-valor').innerText = "R$ " + String(valor).replace('R$','').trim();
-            
-            // Agora usa a configuração que veio da Nuvem!
-            document.getElementById('img-qr-pix-modal').src = dadosPixNuvem.qr;
-            document.getElementById('codigo-pix').value = dadosPixNuvem.chave;
-
-            document.getElementById('input-nome').value = "";
-            document.getElementById('input-mensagem').value = "";
-            abrirModal('modal-pix');
-        }
-
-        function confirmarPagamento() {
-            const nomeConv = document.getElementById('input-nome').value;
-            const msg = document.getElementById('input-mensagem').value;
-            if(!nomeConv) return alert("Por favor, preencha o seu nome!");
-
-            const btn = document.getElementById('btn-enviar-pix');
+            const btn = document.getElementById('btn-enviar-rsvp');
             btn.innerText = "Enviando..."; btn.disabled = true;
 
             fetch(API_URL, {
                 method: 'POST',
-                body: JSON.stringify({ action: "comprar", id: idComprando, nomePresente: nomeComprando, nomeConvidado: nomeConv, mensagemTexto: msg })
+                body: JSON.stringify({ action: "rsvp", nome: nome, telefone: tel, adultos: adultos, criancas: criancas })
             }).then(() => {
-                alert("Mensagem enviada com sucesso! Muito obrigado.");
-                fecharModal('modal-pix');
-                carregarListaDaPlanilha();
-            }).catch(erro => {
-                alert("Erro ao enviar. Verifique a internet.");
-            }).finally(() => { 
-                btn.innerText = "Confirmar PIX e Enviar"; btn.disabled = false; 
-            });
+                alert("Presença confirmada com sucesso! Os noivos agradecem.");
+                document.getElementById('rsvp-nome').value = ""; document.getElementById('rsvp-telefone').value = "";
+            }).catch(erro => alert("Erro ao enviar. Tente novamente."))
+            .finally(() => { btn.innerText = "Confirmar Minha Presença"; btn.disabled = false; });
         }
 
-        // --- FUNÇÕES DE ADMIN LOCAIS (SENHA) ---
+        // --- FUNÇÕES GERAIS ADMIN E PIX ---
+        function mudarStatusPresente(id, e) {
+            e.target.innerText = "Restaurando..."; e.target.disabled = true;
+            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "mudarStatus", id: id, novoStatus: "" }) }).then(() => carregarListaDaPlanilha());
+        }
+
+        function abrirModalConfigPix() {
+            document.getElementById('config-chave-pix').value = dadosPixNuvem.chave; document.getElementById('config-qr-pix').value = dadosPixNuvem.qr;
+            abrirModal('modal-config-pix');
+        }
+
+        function salvarConfigPix() {
+            const novaChave = document.getElementById('config-chave-pix').value; const novoQr = document.getElementById('config-qr-pix').value;
+            if (!novaChave || !novoQr) return alert("Preencha chave e imagem!");
+            const btn = document.getElementById('btn-salvar-pix'); btn.innerText = "Salvando..."; btn.disabled = true;
+            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "configPix", chave: novaChave, qr: novoQr }) }).then(() => {
+                dadosPixNuvem.chave = novaChave; dadosPixNuvem.qr = novoQr; alert("PIX atualizado!"); fecharModal('modal-config-pix');
+            }).finally(() => { btn.innerText = "Salvar na Nuvem"; btn.disabled = false; });
+        }
+
+        function salvarNovoPresente() {
+            const nome = document.getElementById('novo-nome').value; let valor = document.getElementById('novo-valor').value; let imagem = document.getElementById('nova-imagem').value;
+            if(!nome || !valor) return alert("Preencha nome e valor!"); if(!imagem) imagem = "https://via.placeholder.com/300?text=Produto";
+            const btn = document.getElementById('btn-salvar-novo'); btn.innerText = "Salvando..."; btn.disabled = true;
+            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "adicionar", id: "ID-" + Date.now(), nome: nome, valor: valor, imagem: imagem }) }).then(() => {
+                fecharModal('modal-adicionar'); carregarListaDaPlanilha(); document.getElementById('novo-nome').value = ""; document.getElementById('novo-valor').value = ""; document.getElementById('nova-imagem').value = "";
+            }).finally(() => { btn.innerText = "Salvar Item"; btn.disabled = false; });
+        }
+
+        function abrirModalEditar(id, nome, valor, imagem) {
+            idEditando = id; document.getElementById('edit-nome').value = nome; document.getElementById('edit-valor').value = String(valor).replace('R$','').trim(); document.getElementById('edit-imagem').value = imagem; abrirModal('modal-editar');
+        }
+
+        function salvarEdicao() {
+            const nome = document.getElementById('edit-nome').value; let valor = document.getElementById('edit-valor').value; let imagem = document.getElementById('edit-imagem').value;
+            if(!imagem) imagem = "https://via.placeholder.com/300?text=Produto";
+            const btn = document.getElementById('btn-salvar-edicao'); btn.innerText = "Atualizando..."; btn.disabled = true;
+            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "editar", id: idEditando, nome: nome, valor: valor, imagem: imagem }) }).then(() => {
+                fecharModal('modal-editar'); carregarListaDaPlanilha();
+            }).finally(() => { btn.innerText = "Atualizar Item"; btn.disabled = false; });
+        }
+
+        function excluirPresente(id, e) {
+            if(confirm("Deseja ocultar este presente?")) { e.target.innerText = "⏳"; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "excluir", id: id }) }).then(() => carregarListaDaPlanilha()); }
+        }
+
+        function abrirModalPix(id, nome, valor) {
+            idComprando = id; nomeComprando = nome;
+            document.getElementById('modal-titulo').innerText = nome; document.getElementById('modal-valor').innerText = "R$ " + String(valor).replace('R$','').trim();
+            document.getElementById('img-qr-pix-modal').src = dadosPixNuvem.qr; document.getElementById('codigo-pix').value = dadosPixNuvem.chave;
+            document.getElementById('input-nome-pix').value = ""; document.getElementById('input-mensagem-pix').value = ""; abrirModal('modal-pix');
+        }
+
+        function confirmarPagamentoPix() {
+            const nomeConv = document.getElementById('input-nome-pix').value; const msg = document.getElementById('input-mensagem-pix').value;
+            if(!nomeConv) return alert("Por favor, preencha o seu nome!");
+            const btn = document.getElementById('btn-enviar-pix'); btn.innerText = "Enviando..."; btn.disabled = true;
+            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "comprar", id: idComprando, nomePresente: nomeComprando, nomeConvidado: nomeConv, mensagemTexto: msg }) }).then(() => {
+                alert("Mensagem enviada com sucesso!"); fecharModal('modal-pix'); carregarListaDaPlanilha();
+            }).finally(() => { btn.innerText = "Confirmar PIX e Enviar"; btn.disabled = false; });
+        }
+
         function fazerLogin() {
-            const u = document.getElementById('login-user').value;
-            const p = document.getElementById('login-pass').value;
-            const c = JSON.parse(localStorage.getItem('credenciaisAdmin'));
-            if(u === c.user && p === c.pass) {
-                sessionStorage.setItem('logadoComoAdmin', 'sim');
-                document.getElementById('corpo-site').classList.add('modo-admin-ativo');
-                fecharModal('modal-login');
-            } else { alert("Senha incorreta!"); }
+            const u = document.getElementById('login-user').value; const p = document.getElementById('login-pass').value; const c = JSON.parse(localStorage.getItem('credenciaisAdmin'));
+            if(u === c.user && p === c.pass) { sessionStorage.setItem('logadoComoAdmin', 'sim'); document.getElementById('corpo-site').classList.add('modo-admin-ativo'); fecharModal('modal-login'); carregarListaDaPlanilha(); } else { alert("Senha incorreta!"); }
         }
-
-        function sairAdmin() { 
-            sessionStorage.removeItem('logadoComoAdmin'); 
-            document.getElementById('corpo-site').classList.remove('modo-admin-ativo'); 
-        }
-        
+        function sairAdmin() { sessionStorage.removeItem('logadoComoAdmin'); document.getElementById('corpo-site').classList.remove('modo-admin-ativo'); carregarListaDaPlanilha(); }
         function salvarNovasCredenciais() {
-            const newUser = document.getElementById('novo-admin-user').value;
-            const newPass = document.getElementById('novo-admin-pass').value;
-
-            if(newUser !== "" && newPass !== "") {
-                localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: newUser, pass: newPass }));
-                alert("Credenciais atualizadas com sucesso! (Salvas no seu navegador atual)");
-                fecharModal('modal-config-admin');
-                document.getElementById('novo-admin-user').value = "";
-                document.getElementById('novo-admin-pass').value = "";
-            } else { 
-                alert("Preencha ambos os campos!"); 
-            }
+            const u = document.getElementById('novo-admin-user').value; const p = document.getElementById('novo-admin-pass').value;
+            if(u && p) { localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: u, pass: p })); alert("Atualizado!"); fecharModal('modal-config-admin'); } else alert("Preencha tudo!");
         }
 
-        // --- GERAIS ---
         function abrirModal(id) { document.getElementById(id).style.display = "block"; }
         function fecharModal(id) { document.getElementById(id).style.display = "none"; }
         window.onclick = function(e) { if(e.target.classList.contains('modal')) e.target.style.display = "none"; }
