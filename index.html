@@ -79,12 +79,19 @@
         .info-local h4 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #8c7b65; margin: 15px 0 5px; }
         .mapa-container { margin-top: 30px; background: #eee; height: 300px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #888; border: 1px solid #ddd; }
 
-        /* Dashboard Styles */
+        /* Dashboard Styles & Tabs */
         .dash-card { background: #fdfdfc; border: 1px solid #e0e0e0; padding: 15px; border-radius: 8px; flex: 1; min-width: 130px; text-align: center; }
         .dash-card h3 { font-size: 2rem; color: #8c7b65; font-family: 'Playfair Display', serif; margin-bottom: 5px; }
         .dash-card p { font-size: 0.85rem; color: #666; text-transform: uppercase; font-weight: bold; }
+        
+        .tab-container { display: flex; gap: 15px; margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 5px; justify-content: center; }
+        .tab-btn { background: none; border: none; font-family: 'Lato', sans-serif; font-size: 1.05rem; color: #888; cursor: pointer; padding: 8px 15px; font-weight: bold; transition: 0.3s; }
+        .tab-btn:hover { color: #555; }
+        .tab-btn.ativo { color: #8c7b65; border-bottom: 3px solid #8c7b65; margin-bottom: -7px; }
+        .tab-content { display: none; }
+        .tab-content.ativo { display: block; animation: fadein 0.4s; }
+        @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Etiquetas Especiais */
         .tag-categoria { font-size: 0.7rem; color: #8c7b65; font-weight: bold; background: #f4f1eb; padding: 3px 8px; border-radius: 12px; margin-left: 8px; font-family: 'Lato', sans-serif; text-transform: uppercase; letter-spacing: 0.5px;}
 
         .somente-admin { display: none !important; }
@@ -175,39 +182,58 @@
     <div id="modal-relatorio" class="modal">
         <div class="modal-conteudo modal-conteudo-largo">
             <span class="fechar" onclick="fecharModal('modal-relatorio')">&times;</span>
-            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 20px; color:#2c2c2c;">Dashboard de Convidados</h2>
+            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 10px; color:#2c2c2c;">Dashboard do Evento</h2>
             
-            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
-                <div class="dash-card">
-                    <h3 id="dash-total-lista">0</h3><p>Total na Lista</p>
-                    <div style="font-size:0.8rem; color:#888; margin-top:5px;">Pagantes Est.: <strong id="dash-total-pagantes-lista">0</strong></div>
+            <div class="tab-container">
+                <button class="tab-btn ativo" onclick="mudarAbaDash('dash-confirmados', this)">✅ Confirmações</button>
+                <button class="tab-btn" onclick="mudarAbaDash('dash-lista-geral', this)">👥 Lista Oficial</button>
+            </div>
+
+            <div id="dash-confirmados" class="tab-content ativo">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                    <div class="dash-card">
+                        <h3 id="dash-total-confirmados" style="color: #388e3c;">0</h3><p>Confirmados Geral</p>
+                        <div style="font-size:0.8rem; color:#888; margin-top:5px;">Pagantes Conf.: <strong id="dash-pagantes-confirmados" style="color:#2e7d32;">0</strong></div>
+                    </div>
+                    <div class="dash-card">
+                        <h3 id="dash-isentos" style="color: #1976d2;">0</h3><p>Isentos (Até 5 anos)</p>
+                    </div>
+                    <div class="dash-card" style="position: relative;">
+                        <h3 id="dash-grupos-pendentes" style="color: #d32f2f;">0</h3><p>Grupos Pendentes</p>
+                        <button onclick="togglePendentes()" style="background:#d32f2f; color:#fff; border:none; border-radius:50%; width:26px; height:26px; font-weight:bold; cursor:pointer; position:absolute; top:10px; right:10px; font-size:1.2rem; display:flex; align-items:center; justify-content:center; transition:0.3s;" title="Ver Pendentes">+</button>
+                    </div>
                 </div>
-                <div class="dash-card">
-                    <h3 id="dash-total-confirmados" style="color: #388e3c;">0</h3><p>Confirmados Geral</p>
-                    <div style="font-size:0.8rem; color:#888; margin-top:5px;">Pagantes Conf.: <strong id="dash-pagantes-confirmados" style="color:#2e7d32;">0</strong></div>
+
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+                    <div class="dash-card"><h3 id="dash-adultos">0</h3><p>Adultos (> 9 anos)</p></div>
+                    <div class="dash-card"><h3 id="dash-criancas">0</h3><p>Crianças (≤ 9 anos)</p></div>
                 </div>
-                <div class="dash-card">
-                    <h3 id="dash-isentos" style="color: #1976d2;">0</h3><p>Isentos (Até 5 anos)</p>
+
+                <div id="area-pendentes" style="display:none; text-align: left; background: #fffaf0; padding: 15px; border-radius: 8px; border: 1px solid #f5e6d3; margin-bottom:20px; max-height: 250px; overflow-y: auto;">
+                    <h4 style="margin-bottom: 10px; color: #d32f2f; border-bottom: 1px solid #f0d8d8; padding-bottom:5px;">Famílias Pendentes</h4>
+                    <div id="lista-grupos-pendentes"></div>
+                </div>
+
+                <div style="text-align: left; background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
+                    <h4 style="margin-bottom: 10px; color: #555;">Crianças por Idade (Confirmadas)</h4>
+                    <ul id="lista-idades-criancas" style="list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.95rem; color: #444;"></ul>
                 </div>
             </div>
 
-            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
-                <div class="dash-card"><h3 id="dash-adultos">0</h3><p>Adultos (> 9 anos)</p></div>
-                <div class="dash-card"><h3 id="dash-criancas">0</h3><p>Crianças (≤ 9 anos)</p></div>
-                <div class="dash-card" style="position: relative;">
-                    <h3 id="dash-grupos-pendentes" style="color: #d32f2f;">0</h3><p>Grupos Pendentes</p>
-                    <button onclick="togglePendentes()" style="background:#d32f2f; color:#fff; border:none; border-radius:50%; width:26px; height:26px; font-weight:bold; cursor:pointer; position:absolute; top:10px; right:10px; font-size:1.2rem; display:flex; align-items:center; justify-content:center; transition:0.3s;" title="Ver Pendentes">+</button>
+            <div id="dash-lista-geral" class="tab-content">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                    <div class="dash-card">
+                        <h3 id="dash-geral-total">0</h3><p>Total na Lista</p>
+                        <div style="font-size:0.8rem; color:#888; margin-top:5px;">Pagantes Est.: <strong id="dash-total-pagantes-lista">0</strong></div>
+                    </div>
+                    <div class="dash-card">
+                        <h3 id="dash-geral-grupos">0</h3><p>Total de Famílias/Grupos</p>
+                    </div>
                 </div>
-            </div>
-
-            <div id="area-pendentes" style="display:none; text-align: left; background: #fffaf0; padding: 15px; border-radius: 8px; border: 1px solid #f5e6d3; margin-bottom:20px; max-height: 250px; overflow-y: auto;">
-                <h4 style="margin-bottom: 10px; color: #d32f2f; border-bottom: 1px solid #f0d8d8; padding-bottom:5px;">Famílias Pendentes</h4>
-                <div id="lista-grupos-pendentes"></div>
-            </div>
-
-            <div style="text-align: left; background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-                <h4 style="margin-bottom: 10px; color: #555;">Crianças por Idade (Confirmadas)</h4>
-                <ul id="lista-idades-criancas" style="list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.95rem; color: #444;"></ul>
+                <div style="text-align: left; background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
+                    <h4 style="margin-bottom: 10px; color: #555;">Divisão por Categorias na Lista (Estimada)</h4>
+                    <ul id="lista-categorias-geral" style="list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.95rem; color: #444;"></ul>
+                </div>
             </div>
         </div>
     </div>
@@ -229,10 +255,7 @@
                 <label>Nome do Grupo ou Família:</label>
                 <input type="text" id="novo-grupo-nome" placeholder="Ex: Família Rute (Tia do Noivo)">
                 <div style="margin-top: 10px; margin-bottom: 5px;"><label>Membros do Grupo:</label></div>
-                
-                <div id="container-novos-membros" style="max-height: 35vh; overflow-y: auto; padding-right: 5px; margin-bottom: 10px;">
-                    </div>
-                
+                <div id="container-novos-membros" style="max-height: 35vh; overflow-y: auto; padding-right: 5px; margin-bottom: 10px;"></div>
                 <button onclick="adicionarLinhaMembro()" style="background: #f9f9f9; border: 1px dashed #ccc; padding: 10px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; width: 100%; color: #555; font-weight: bold; transition:0.3s;">+ Adicionar outra pessoa ao grupo</button>
                 <button class="btn-padrao" id="btn-salvar-novo-convidado" onclick="salvarNovoConvidado()">Salvar na Planilha Oficial</button>
             </div>
@@ -249,13 +272,31 @@
                 <div style="margin-top: 10px; margin-bottom: 5px;"><label>Membros do Grupo:</label></div>
                 <div id="container-edit-membros" style="max-height: 35vh; overflow-y: auto; padding-right: 5px; margin-bottom: 10px;"></div>
                 <button onclick="adicionarLinhaMembroEdit()" style="background: #f9f9f9; border: 1px dashed #ccc; padding: 10px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; width: 100%; color: #555; font-weight: bold; transition:0.3s;">+ Adicionar outra pessoa ao grupo</button>
-                <button class="btn-padrao" id="btn-salvar-edicao-grupo" onclick="salvarEdicaoGrupo()">Salvar Alterações</button>
+                
+                <div style="display:flex; gap: 10px; margin-top: 10px;">
+                    <button class="btn-padrao" id="btn-voltar-grupo" onclick="fecharModal('modal-editar-grupo'); abrirModalListaConvidados();" style="background: #999; flex: 1; margin-top: 0;">⬅ Voltar</button>
+                    <button class="btn-padrao" id="btn-salvar-edicao-grupo" onclick="salvarEdicaoGrupo()" style="flex: 2; margin-top: 0;">Salvar Alterações</button>
+                </div>
             </div>
         </div>
     </div>
 
     <div id="modal-lista-presenca" class="modal"><div class="modal-conteudo modal-conteudo-largo"><span class="fechar" onclick="fecharModal('modal-lista-presenca')">&times;</span><h2 style="font-family: 'Playfair Display', serif; margin-bottom: 15px;">Famílias Confirmadas</h2><div id="conteudo-lista-presenca" style="margin-top: 20px; text-align: left; max-height: 65vh; overflow-y: auto; padding-right: 10px;"></div></div></div>
-    <div id="modal-editar-presenca" class="modal" style="z-index: 1050;"> <div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-editar-presenca')">&times;</span><h2 style="font-family: 'Playfair Display', serif; margin-bottom: 10px;">Editar Confirmação</h2><p id="edit-rsvp-grupo" style="font-size: 0.9rem; color: #888; margin-bottom: 15px; font-style: italic;"></p><div id="edit-rsvp-membros" style="text-align: left; margin-bottom: 15px; max-height: 40vh; overflow-y: auto;"></div><button class="btn-padrao" id="btn-salvar-edicao-rsvp" onclick="salvarEdicaoRSVP()">Salvar Alterações</button></div></div>
+    
+    <div id="modal-editar-presenca" class="modal" style="z-index: 1050;"> 
+        <div class="modal-conteudo">
+            <span class="fechar" onclick="fecharModal('modal-editar-presenca')">&times;</span>
+            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 10px;">Editar Confirmação</h2>
+            <p id="edit-rsvp-grupo" style="font-size: 0.9rem; color: #888; margin-bottom: 15px; font-style: italic;"></p>
+            <div id="edit-rsvp-membros" style="text-align: left; margin-bottom: 15px; max-height: 40vh; overflow-y: auto;"></div>
+            
+            <div style="display:flex; gap: 10px; margin-top: 10px;">
+                <button class="btn-padrao" id="btn-voltar-rsvp" onclick="fecharModal('modal-editar-presenca'); abrirModalPresenca();" style="background: #999; flex: 1; margin-top: 0;">⬅ Voltar</button>
+                <button class="btn-padrao" id="btn-salvar-edicao-rsvp" onclick="salvarEdicaoRSVP()" style="flex: 2; margin-top: 0;">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+
     <div id="modal-adicionar" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-adicionar')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Adicionar Presente</h2><div class="formulario-inputs"><input type="text" id="novo-nome" placeholder="Nome (Ex: Batedeira)"><input type="text" id="novo-valor" placeholder="Valor (Ex: 150,00)"><input type="text" id="nova-imagem" placeholder="Link da Imagem"><button class="btn-padrao" id="btn-salvar-novo" onclick="salvarNovoPresente()">Salvar Item</button></div></div></div>
     <div id="modal-editar" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-editar')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Editar Presente</h2><div class="formulario-inputs"><input type="text" id="edit-nome"><input type="text" id="edit-valor"><input type="text" id="edit-imagem"><button class="btn-padrao" id="btn-salvar-edicao" onclick="salvarEdicao()">Atualizar Item</button></div></div></div>
     <div id="modal-config-pix" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-pix')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Configurar PIX</h2><div class="formulario-inputs"><textarea id="config-chave-pix" rows="3" placeholder="Chave Copia e Cola"></textarea><input type="text" id="config-qr-pix" placeholder="Link do QR Code"><button class="btn-padrao" id="btn-salvar-pix" onclick="salvarConfigPix()">Salvar na Nuvem</button></div></div></div>
@@ -281,53 +322,55 @@
             carregarListaDaPlanilha();
         };
 
-        function carregarListaDaPlanilha() {
+        // Função isolada que apenas renderiza dados em tela para ser rápida
+        function processarDadosPlanilha(dados) {
             const grid = document.getElementById('grid-presentes');
-            grid.innerHTML = '<div class="loading" id="mensagem-loading">⏳ Sincronizando com a base de dados...</div>';
+            grid.innerHTML = ""; 
+            const isAdmin = sessionStorage.getItem('logadoComoAdmin') === 'sim';
+            
+            if(dados.pix) { dadosPixNuvem.chave = dados.pix.chave || ""; dadosPixNuvem.qr = dados.pix.qr || ""; }
+            if(dados.presencas) window.listaPresencasGlobais = dados.presencas;
+            if(dados.estatisticas) window.estatisticasGlobais = dados.estatisticas;
 
-            fetch(API_URL).then(res => res.json()).then(dados => {
-                grid.innerHTML = ""; 
-                const isAdmin = sessionStorage.getItem('logadoComoAdmin') === 'sim';
-                
-                if(dados.pix) { dadosPixNuvem.chave = dados.pix.chave || ""; dadosPixNuvem.qr = dados.pix.qr || ""; }
-                if(dados.presencas) window.listaPresencasGlobais = dados.presencas;
-                if(dados.estatisticas) window.estatisticasGlobais = dados.estatisticas;
+            if(dados.presentes.length === 0) { grid.innerHTML = "<p class='loading'>A lista está vazia!</p>"; return; }
 
-                if(dados.presentes.length === 0) { grid.innerHTML = "<p class='loading'>A lista está vazia!</p>"; return; }
+            let itensRenderizados = 0;
+            dados.presentes.forEach(p => {
+                if (!p.id || !p.nome) return; 
+                const statusNorm = p.status ? p.status.trim().toUpperCase() : "";
+                const taOculto = statusNorm === 'COMPRADO' || statusNorm === 'EXCLUIDO';
+                if (!isAdmin && taOculto) return;
+                itensRenderizados++;
 
-                let itensRenderizados = 0;
-                dados.presentes.forEach(p => {
-                    if (!p.id || !p.nome) return; 
-                    const statusNorm = p.status ? p.status.trim().toUpperCase() : "";
-                    const taOculto = statusNorm === 'COMPRADO' || statusNorm === 'EXCLUIDO';
-                    if (!isAdmin && taOculto) return;
-                    itensRenderizados++;
+                let valorLimpo = String(p.valor).replace('R$', '').trim();
+                if (!valorLimpo.includes(',')) valorLimpo = valorLimpo + ",00"; 
 
-                    let valorLimpo = String(p.valor).replace('R$', '').trim();
-                    if (!valorLimpo.includes(',')) valorLimpo = valorLimpo + ",00"; 
+                let estiloCard = ""; let seloHtml = "";
+                let botaoAcaoHtml = `<button class="btn-elegante" onclick="abrirModalPix('${p.id}', '${p.nome}', '${valorLimpo}')">Presentear</button>`;
 
-                    let estiloCard = ""; let seloHtml = "";
-                    let botaoAcaoHtml = `<button class="btn-elegante" onclick="abrirModalPix('${p.id}', '${p.nome}', '${valorLimpo}')">Presentear</button>`;
+                if (isAdmin && taOculto) {
+                    estiloCard = "opacity: 0.6; filter: grayscale(50%); border: 2px dashed #ccc;";
+                    if(statusNorm === 'COMPRADO') seloHtml = `<div class="selo-status selo-comprado">🎁 COMPRADO</div>`;
+                    else seloHtml = `<div class="selo-status">🚫 EXCLUÍDO</div>`;
+                    botaoAcaoHtml = `<button class="btn-restaurar" onclick="mudarStatusPresente('${p.id}', event)">🔄 Restaurar</button>`;
+                }
 
-                    if (isAdmin && taOculto) {
-                        estiloCard = "opacity: 0.6; filter: grayscale(50%); border: 2px dashed #ccc;";
-                        if(statusNorm === 'COMPRADO') seloHtml = `<div class="selo-status selo-comprado">🎁 COMPRADO</div>`;
-                        else seloHtml = `<div class="selo-status">🚫 EXCLUÍDO</div>`;
-                        botaoAcaoHtml = `<button class="btn-restaurar" onclick="mudarStatusPresente('${p.id}', event)">🔄 Restaurar</button>`;
-                    }
-
-                    grid.insertAdjacentHTML('beforeend', `
-                    <div class="item-lista" id="${p.id}" style="${estiloCard}">
-                        ${seloHtml}
-                        <div class="botoes-admin somente-admin"><button class="btn-editar" onclick="abrirModalEditar('${p.id}', '${p.nome}', '${valorLimpo}', '${p.imagem}')">✏️</button><button class="btn-excluir" onclick="excluirPresente('${p.id}', event)">🗑️</button></div>
-                        <div class="vitrine-produto"><img src="${p.imagem}" alt="${p.nome}"><div class="info-item"><h3>${p.nome}</h3><span class="valor">Cota: R$ ${valorLimpo}</span></div></div>
-                        ${botaoAcaoHtml}
-                    </div>`);
-                });
-                if (itensRenderizados === 0 && !isAdmin) grid.innerHTML = "<p class='loading'>Todos os itens da lista já foram comprados! Muito obrigado.</p>";
-            }).catch(erro => { grid.innerHTML = "<p class='loading' style='color:red;'>Erro de conexão com o Google. Recarregue.</p>"; });
+                grid.insertAdjacentHTML('beforeend', `
+                <div class="item-lista" id="${p.id}" style="${estiloCard}">
+                    ${seloHtml}
+                    <div class="botoes-admin somente-admin"><button class="btn-editar" onclick="abrirModalEditar('${p.id}', '${p.nome}', '${valorLimpo}', '${p.imagem}')">✏️</button><button class="btn-excluir" onclick="excluirPresente('${p.id}', event)">🗑️</button></div>
+                    <div class="vitrine-produto"><img src="${p.imagem}" alt="${p.nome}"><div class="info-item"><h3>${p.nome}</h3><span class="valor">Cota: R$ ${valorLimpo}</span></div></div>
+                    ${botaoAcaoHtml}
+                </div>`);
+            });
+            if (itensRenderizados === 0 && !isAdmin) grid.innerHTML = "<p class='loading'>Todos os itens da lista já foram comprados! Muito obrigado.</p>";
         }
 
+        function carregarListaDaPlanilha() {
+            document.getElementById('grid-presentes').innerHTML = '<div class="loading" id="mensagem-loading">⏳ Sincronizando com a base de dados...</div>';
+            fetch(API_URL).then(res => res.json()).then(dados => processarDadosPlanilha(dados))
+            .catch(erro => { document.getElementById('grid-presentes').innerHTML = "<p class='loading' style='color:red;'>Erro de conexão com o Google. Recarregue.</p>"; });
+        }
 
         // --- SISTEMA ADMIN: GERENCIAR LISTA DE CONVIDADOS ---
         function abrirModalListaConvidados() {
@@ -339,20 +382,16 @@
             } else {
                 window.estatisticasGlobais.listaOficial.forEach((g, indexOriginalArray) => {
                     let membrosLidos = [];
-                    if (g.categoriasStr && g.categoriasStr.startsWith("[")) {
-                        try { membrosLidos = JSON.parse(g.categoriasStr); } catch(e) {}
-                    }
+                    if (g.categoriasStr && g.categoriasStr.startsWith("[")) { try { membrosLidos = JSON.parse(g.categoriasStr); } catch(e) {} }
                     
                     let membrosHtml = "";
                     if(membrosLidos.length > 0) {
                         membrosLidos.forEach(m => {
                             let tag = m.categoria !== "Convidado" ? `<span class="tag-categoria">${m.categoria}</span>` : "";
-                            let tagIdade = m.tipo === "Criança" ? `<span style="font-size:0.75rem; color:#1976d2;">(👶 ${m.idade||'0'} anos)</span>` : "";
+                            let tagIdade = m.tipo === "Criança" ? `<span style="font-size:0.75rem; color:#1976d2;">(👶 ${m.idade||'0'} a.)</span>` : "";
                             membrosHtml += `<span style="display:inline-block; margin-right:10px; margin-bottom:5px;">${m.nome} ${tag} ${tagIdade}</span>`;
                         });
-                    } else {
-                        membrosHtml = g.membros; 
-                    }
+                    } else { membrosHtml = g.membros; }
 
                     const html = `
                     <div style="border: 1px solid #e0e0e0; padding: 15px; border-radius: 6px; margin-bottom: 15px; position: relative; background: #fff;">
@@ -367,11 +406,13 @@
             abrirModal('modal-lista-convidados');
         }
 
+        // Ações que não fecham a tela de lista ao excluir
         function excluirGrupoDaLista(linha, btn) {
             if(confirm("ATENÇÃO: Deseja apagar este grupo permanentemente da sua lista oficial?")) {
                 btn.innerText = "..."; btn.disabled = true;
                 fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "excluirGrupoConvidado", linha: linha }) })
-                .then(() => { alert("Grupo apagado!"); fecharModal('modal-lista-convidados'); carregarListaDaPlanilha(); })
+                .then(() => fetch(API_URL)).then(r => r.json())
+                .then(dados => { processarDadosPlanilha(dados); abrirModalListaConvidados(); }) // Recarrega a lista aberta
                 .catch(() => { alert("Erro."); btn.disabled = false; });
             }
         }
@@ -382,36 +423,12 @@
         }
 
         function adicionarLinhaMembro() {
-            const html = `
-            <div class="linha-novo-membro" style="display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;">
-                <input type="text" class="input-nome-membro" placeholder="Nome" style="flex: 2; min-width: 120px; padding: 8px;">
-                <select class="select-cat-membro" style="flex: 1.5; padding: 8px; min-width: 100px;">
-                    <option value="Convidado">Convidado</option><option value="Padrinho">Padrinho</option><option value="Madrinha">Madrinha</option>
-                    <option value="Noivinho">Noivinho</option><option value="Noivinha">Noivinha</option><option value="Florista">Florista</option><option value="Pajem">Pajem</option>
-                </select>
-                <select class="select-tipo-membro" onchange="toggleIdadeAdmin(this)" style="flex: 1; padding: 8px; min-width: 90px;">
-                    <option value="Adulto">Adulto</option><option value="Criança">Criança</option>
-                </select>
-                <input type="number" class="input-idade-membro" placeholder="Idade" min="0" max="17" style="display: none; flex: 0.8; padding: 8px; min-width: 60px;">
-                <button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button>
-            </div>`;
+            const html = `<div class="linha-novo-membro" style="display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;"><input type="text" class="input-nome-membro" placeholder="Nome" style="flex: 2; min-width: 120px; padding: 8px;"><select class="select-cat-membro" style="flex: 1.5; padding: 8px; min-width: 100px;"><option value="Convidado">Convidado</option><option value="Padrinho">Padrinho</option><option value="Madrinha">Madrinha</option><option value="Noivinho">Noivinho</option><option value="Noivinha">Noivinha</option><option value="Florista">Florista</option><option value="Pajem">Pajem</option></select><select class="select-tipo-membro" onchange="toggleIdadeAdmin(this)" style="flex: 1; padding: 8px; min-width: 90px;"><option value="Adulto">Adulto</option><option value="Criança">Criança</option></select><input type="number" class="input-idade-membro" placeholder="Idade" min="0" max="17" style="display: none; flex: 0.8; padding: 8px; min-width: 60px;"><button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button></div>`;
             document.getElementById('container-novos-membros').insertAdjacentHTML('beforeend', html);
         }
 
         function adicionarLinhaMembroEdit() {
-            const html = `
-            <div class="linha-edit-membro" style="display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;">
-                <input type="text" class="input-nome-membro" placeholder="Nome" style="flex: 2; min-width: 120px; padding: 8px;">
-                <select class="select-cat-membro" style="flex: 1.5; padding: 8px; min-width: 100px;">
-                    <option value="Convidado">Convidado</option><option value="Padrinho">Padrinho</option><option value="Madrinha">Madrinha</option>
-                    <option value="Noivinho">Noivinho</option><option value="Noivinha">Noivinha</option><option value="Florista">Florista</option><option value="Pajem">Pajem</option>
-                </select>
-                <select class="select-tipo-membro" onchange="toggleIdadeAdmin(this)" style="flex: 1; padding: 8px; min-width: 90px;">
-                    <option value="Adulto">Adulto</option><option value="Criança">Criança</option>
-                </select>
-                <input type="number" class="input-idade-membro" placeholder="Idade" min="0" max="17" style="display: none; flex: 0.8; padding: 8px; min-width: 60px;">
-                <button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button>
-            </div>`;
+            const html = `<div class="linha-edit-membro" style="display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;"><input type="text" class="input-nome-membro" placeholder="Nome" style="flex: 2; min-width: 120px; padding: 8px;"><select class="select-cat-membro" style="flex: 1.5; padding: 8px; min-width: 100px;"><option value="Convidado">Convidado</option><option value="Padrinho">Padrinho</option><option value="Madrinha">Madrinha</option><option value="Noivinho">Noivinho</option><option value="Noivinha">Noivinha</option><option value="Florista">Florista</option><option value="Pajem">Pajem</option></select><select class="select-tipo-membro" onchange="toggleIdadeAdmin(this)" style="flex: 1; padding: 8px; min-width: 90px;"><option value="Adulto">Adulto</option><option value="Criança">Criança</option></select><input type="number" class="input-idade-membro" placeholder="Idade" min="0" max="17" style="display: none; flex: 0.8; padding: 8px; min-width: 60px;"><button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button></div>`;
             document.getElementById('container-edit-membros').insertAdjacentHTML('beforeend', html);
         }
         function removerLinhaMembro(btn) { btn.parentElement.remove(); }
@@ -422,19 +439,19 @@
             const linhas = document.querySelectorAll('.linha-novo-membro');
             let membros = []; let temErro = false;
             linhas.forEach(l => {
-                const n = l.querySelector('.input-nome-membro').value.trim(); 
-                const c = l.querySelector('.select-cat-membro').value;
-                const t = l.querySelector('.select-tipo-membro').value;
-                const i = l.querySelector('.input-idade-membro').value;
-                if(!n || (t === 'Criança' && !i)) temErro = true; 
-                else membros.push({ nome: n, categoria: c, tipo: t, idade: i });
+                const n = l.querySelector('.input-nome-membro').value.trim(); const c = l.querySelector('.select-cat-membro').value; const t = l.querySelector('.select-tipo-membro').value; const i = l.querySelector('.input-idade-membro').value;
+                if(!n || (t === 'Criança' && !i)) temErro = true; else membros.push({ nome: n, categoria: c, tipo: t, idade: i });
             });
             if(temErro || membros.length === 0) return alert("Preencha o nome e idade (se criança) de todos!");
             
             const btn = document.getElementById('btn-salvar-novo-convidado'); btn.innerText = "Salvando..."; btn.disabled = true;
             fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "adicionarConvidado", grupo: grupo, membros: membros }) })
-            .then(() => { alert("Grupo adicionado!"); fecharModal('modal-adicionar-convidado'); document.getElementById('novo-grupo-nome').value = ""; document.getElementById('container-novos-membros').innerHTML = ""; carregarListaDaPlanilha(); })
-            .catch(() => alert("Erro.")).finally(() => { btn.innerText = "Salvar na Planilha Oficial"; btn.disabled = false; });
+            .then(() => fetch(API_URL)).then(r => r.json())
+            .then(dados => { 
+                processarDadosPlanilha(dados);
+                alert("Grupo adicionado!"); fecharModal('modal-adicionar-convidado'); 
+                document.getElementById('novo-grupo-nome').value = ""; document.getElementById('container-novos-membros').innerHTML = ""; 
+            }).catch(() => alert("Erro.")).finally(() => { btn.innerText = "Salvar na Planilha Oficial"; btn.disabled = false; });
         }
 
         function prepararEdicaoGrupo(index) {
@@ -473,8 +490,7 @@
                         <option value="Pajem" ${m.categoria==='Pajem'?'selected':''}>Pajem</option>
                     </select>
                     <select class="select-tipo-membro" onchange="toggleIdadeAdmin(this)" style="flex: 1; padding: 8px; min-width: 90px;">
-                        <option value="Adulto" ${selAd}>Adulto</option>
-                        <option value="Criança" ${selCr}>Criança</option>
+                        <option value="Adulto" ${selAd}>Adulto</option><option value="Criança" ${selCr}>Criança</option>
                     </select>
                     <input type="number" class="input-idade-membro" placeholder="Idade" min="0" max="17" value="${valIdade}" style="display: ${dispId}; flex: 0.8; padding: 8px; min-width: 60px;">
                     <button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button>
@@ -485,35 +501,53 @@
             abrirModal('modal-editar-grupo');
         }
 
+        // NOVO: Salva a Edição, mostra alerta e permite voltar!
         function salvarEdicaoGrupo() {
             const grupo = document.getElementById('edit-lista-grupo-nome').value.trim();
             if(!grupo) return alert("Digite o nome do grupo!");
             const linhas = document.querySelectorAll('.linha-edit-membro');
             let membros = []; let temErro = false;
             linhas.forEach(l => {
-                const n = l.querySelector('.input-nome-membro').value.trim(); 
-                const c = l.querySelector('.select-cat-membro').value;
-                const t = l.querySelector('.select-tipo-membro').value;
-                const i = l.querySelector('.input-idade-membro').value;
-                if(!n || (t === 'Criança' && !i)) temErro = true; 
-                else membros.push({ nome: n, categoria: c, tipo: t, idade: i });
+                const n = l.querySelector('.input-nome-membro').value.trim(); const c = l.querySelector('.select-cat-membro').value; const t = l.querySelector('.select-tipo-membro').value; const i = l.querySelector('.input-idade-membro').value;
+                if(!n || (t === 'Criança' && !i)) temErro = true; else membros.push({ nome: n, categoria: c, tipo: t, idade: i });
             });
             if(temErro || membros.length === 0) return alert("Preencha o nome e idade (se criança) de todos!");
             
-            const btn = document.getElementById('btn-salvar-edicao-grupo'); btn.innerText = "Atualizando..."; btn.disabled = true;
+            const btn = document.getElementById('btn-salvar-edicao-grupo'); 
+            btn.innerText = "Atualizando..."; btn.disabled = true;
+            document.getElementById('btn-voltar-grupo').disabled = true; // Trava o voltar até terminar
+
             fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "editarGrupoConvidado", linha: linhaGrupoEditando, grupo: grupo, membros: membros }) })
-            .then(() => { alert("Grupo atualizado!"); fecharModal('modal-editar-grupo'); carregarListaDaPlanilha(); })
-            .catch(() => alert("Erro.")).finally(() => { btn.innerText = "Salvar Alterações"; btn.disabled = false; });
+            .then(() => fetch(API_URL)).then(r => r.json())
+            .then(dados => {
+                processarDadosPlanilha(dados);
+                alert("Grupo atualizado com sucesso! \nVocê pode fechar esta janela no 'Voltar' ou fazer mais edições."); 
+            })
+            .catch(() => alert("Erro ao salvar."))
+            .finally(() => { 
+                btn.innerText = "Salvar Alterações"; btn.disabled = false; 
+                document.getElementById('btn-voltar-grupo').disabled = false;
+            });
         }
 
 
-        // --- SISTEMA DE RELATÓRIO E CONTAS ---
+        // --- SISTEMA DE RELATÓRIO E CONTAS (COM ABAS) ---
+        function mudarAbaDash(abaId, btnSelecionado) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('ativo'));
+            btnSelecionado.classList.add('ativo');
+            document.getElementById(abaId).classList.add('ativo');
+        }
+
         function abrirModalRelatorio() {
+            // Volta sempre pra primeira aba
+            mudarAbaDash('dash-confirmados', document.querySelector('.tab-btn'));
+
             let totalAdultos = 0; let totalCriancas = 0; let isentosTotal = 0;
             let contagemIdades = {}; 
             let arrayGruposConfirmados = [];
 
-            // Faz a leitura profunda das idades (0 a 5 anos = isento, > 9 = Adulto)
+            // Ler aba de Confirmações (aba 1)
             window.listaPresencasGlobais.forEach(p => {
                 arrayGruposConfirmados.push(p.grupo); 
                 
@@ -525,35 +559,32 @@
                                 if(m.tipo === 'Criança') {
                                     let numIdade = parseInt(m.idade);
                                     if(!isNaN(numIdade)) {
-                                        if(numIdade > 9) {
-                                            totalAdultos++; // Acima de 9 é Adulto matemático
-                                        } else {
-                                            totalCriancas++; // Até 9 é Criança
-                                            if(numIdade <= 5) isentosTotal++;
-                                        }
-                                        let label = `${numIdade} anos`;
-                                        contagemIdades[label] = (contagemIdades[label] || 0) + 1;
+                                        if(numIdade > 9) totalAdultos++; else { totalCriancas++; if(numIdade <= 5) isentosTotal++; }
+                                        let label = `${numIdade} anos`; contagemIdades[label] = (contagemIdades[label] || 0) + 1;
                                     } else { totalCriancas++; }
                                 } else { totalAdultos++; }
                             }
                         });
                     } catch(e) { }
                 } else {
-                    // Fallback antigo
-                    totalAdultos += Number(p.adultos) || 0;
-                    totalCriancas += Number(p.criancas) || 0;
+                    totalAdultos += Number(p.adultos) || 0; totalCriancas += Number(p.criancas) || 0;
                 }
             });
 
-            // Lê a lista oficial para os totais
+            // Ler a Lista Oficial Geral (Aba 2)
             let listaConvidadosTotal = 0;
             let listaConvidadosIsentos = 0;
+            let contagemCategorias = {};
+
             window.estatisticasGlobais.listaOficial.forEach(g => {
                 if (g.categoriasStr && g.categoriasStr.startsWith("[")) {
                     try {
                         let membros = JSON.parse(g.categoriasStr);
                         membros.forEach(m => {
                             listaConvidadosTotal++;
+                            let cat = m.categoria || "Convidado";
+                            contagemCategorias[cat] = (contagemCategorias[cat] || 0) + 1;
+
                             if(m.tipo === 'Criança') {
                                 let idNum = parseInt(m.idade);
                                 if(!isNaN(idNum) && idNum <= 5) listaConvidadosIsentos++;
@@ -563,6 +594,7 @@
                 } else {
                     let nomes = g.membros.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0);
                     listaConvidadosTotal += nomes.length;
+                    contagemCategorias["Convidado"] = (contagemCategorias["Convidado"] || 0) + nomes.length;
                 }
             });
 
@@ -570,19 +602,23 @@
             let confirmadosPagantes = totalConfirmadosGeral - isentosTotal;
             let pagantesEstimadoLista = listaConvidadosTotal - listaConvidadosIsentos; 
 
-            document.getElementById('dash-total-lista').innerText = listaConvidadosTotal;
-            document.getElementById('dash-total-pagantes-lista').innerText = pagantesEstimadoLista;
+            // Textos da Aba 1 (Confirmados)
             document.getElementById('dash-total-confirmados').innerText = totalConfirmadosGeral;
             document.getElementById('dash-pagantes-confirmados').innerText = confirmadosPagantes;
             document.getElementById('dash-isentos').innerText = isentosTotal;
             document.getElementById('dash-adultos').innerText = totalAdultos;
             document.getElementById('dash-criancas').innerText = totalCriancas;
 
+            // Textos da Aba 2 (Lista Oficial)
+            document.getElementById('dash-total-lista').innerText = listaConvidadosTotal;
+            document.getElementById('dash-total-pagantes-lista').innerText = pagantesEstimadoLista;
+            document.getElementById('dash-geral-total').innerText = listaConvidadosTotal;
+            document.getElementById('dash-geral-grupos').innerText = window.estatisticasGlobais.listaOficial.length;
+
             let listaPendentes = [];
             window.estatisticasGlobais.listaOficial.forEach(g => {
                 if(!arrayGruposConfirmados.includes(g.identificacao)) listaPendentes.push(g);
             });
-
             document.getElementById('dash-grupos-pendentes').innerText = listaPendentes.length;
             
             let pendentesHtml = "";
@@ -595,10 +631,18 @@
             document.getElementById('lista-grupos-pendentes').innerHTML = pendentesHtml;
             document.getElementById('area-pendentes').style.display = "none";
 
+            // Print Idades
             let ulIdades = document.getElementById('lista-idades-criancas');
             ulIdades.innerHTML = "";
-            if(Object.keys(contagemIdades).length === 0) { ulIdades.innerHTML = "<li>Nenhuma criança confirmada ainda.</li>"; } 
+            if(Object.keys(contagemIdades).length === 0) { ulIdades.innerHTML = "<li>Nenhuma criança confirmada.</li>"; } 
             else { for (const [idade, qtd] of Object.entries(contagemIdades)) { ulIdades.innerHTML += `<li>👶 ${idade}: <strong>${qtd}</strong></li>`; } }
+
+            // Print Categorias (Aba 2)
+            let ulCats = document.getElementById('lista-categorias-geral');
+            ulCats.innerHTML = "";
+            for (const [cat, qtd] of Object.entries(contagemCategorias)) {
+                ulCats.innerHTML += `<li>🏷️ ${cat}: <strong style="color:#1976d2;">${qtd}</strong></li>`;
+            }
 
             abrirModal('modal-relatorio');
         }
@@ -608,7 +652,8 @@
             area.style.display = area.style.display === "none" ? "block" : "none";
         }
 
-        // --- SISTEMA ADMIN DE PRESENÇAS (Ver e Cancelar) ---
+
+        // --- SISTEMA ADMIN DE PRESENÇAS (Ver, Editar e Cancelar) ---
         function abrirModalPresenca() {
             const container = document.getElementById('conteudo-lista-presenca');
             container.innerHTML = "";
@@ -645,12 +690,12 @@
             if(confirm("Tem certeza que deseja apagar essa confirmação da planilha?")) {
                 btn.innerText = "Apagando..."; btn.disabled = true;
                 fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "cancelarRSVP", linha: linha }) })
-                .then(() => { alert("Apagado!"); fecharModal('modal-lista-presenca'); carregarListaDaPlanilha(); })
+                .then(() => fetch(API_URL)).then(r => r.json())
+                .then(dados => { processarDadosPlanilha(dados); abrirModalPresenca(); })
                 .catch(() => { alert("Erro."); btn.innerText = "🗑️ Apagar"; btn.disabled = false; });
             }
         }
 
-        // --- SISTEMA ADMIN DE EDITAR RSVP ---
         function prepararEdicaoRsvp(indexArrayGlobal) {
             const rsvp = window.listaPresencasGlobais[indexArrayGlobal];
             linhaRsvpEditando = rsvp.linha;
@@ -678,15 +723,16 @@
                         <div id="edit-opcoes-membro-${idx}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; opacity: ${m.status ? '1' : '0.3'}; pointer-events: ${m.status ? 'auto' : 'none'};">
                             <select class="edit-tipo-membro" onchange="toggleIdadeEdit(this, ${idx})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
                                 <option value="Adulto" ${selectAdulto}>É Adulto</option>
-                                <option value="Criança" ${selectCrianca}>É Criança</option>
+                                <option value="Criança" ${selectCrianca}>É Criança (até 9 anos)</option>
                             </select>
                             <input type="number" id="edit-idade-crianca-${idx}" class="edit-idade-membro" placeholder="Idade" min="0" max="17" value="${m.idade}" style="display: ${displayIdade}; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;">
                         </div>
                     </div>`;
                     containerMembros.insertAdjacentHTML('beforeend', html);
                 });
+                fecharModal('modal-lista-presenca');
                 abrirModal('modal-editar-presenca');
-            } catch(e) { alert("Não é possível editar este registro antigo. Delete e faça de novo."); }
+            } catch(e) { alert("Não é possível editar este registro antigo."); }
         }
 
         function toggleMembroEdit(cb, idx) {
@@ -699,6 +745,7 @@
             if(sel.value === "Criança") { c.style.display = "block"; } else { c.style.display = "none"; c.value = ""; }
         }
 
+        // NOVO: Salva a Edição do RSVP, mostra alerta e permite voltar!
         function salvarEdicaoRSVP() {
             let totalA = 0; let totalC = 0; let confArray = []; let naoConfArray = []; let temErro = false; let novaMemoriaJson = [];
             const blocos = document.querySelectorAll('#edit-rsvp-membros .membro-rsvp-item');
@@ -713,11 +760,8 @@
                         if(idade === "") temErro = true; 
                         else {
                             let idNum = parseInt(idade);
-                            if(idNum > 9) {
-                                totalA++; confArray.push(`${nome} (Criança: ${idade} anos - Cont. Adulto)`); 
-                            } else {
-                                totalC++; confArray.push(`${nome} (Criança: ${idade} anos)`);
-                            }
+                            if(idNum > 9) { totalA++; confArray.push(`${nome} (Criança: ${idade} anos - Cont. Adulto)`); } 
+                            else { totalC++; confArray.push(`${nome} (Criança: ${idade} anos)`); }
                             novaMemoriaJson.push({nome: nome, status: true, tipo: "Criança", idade: idade}); 
                         }
                     }
@@ -730,6 +774,7 @@
             if(totalA === 0 && totalC === 0) return alert("Se ninguém vai, use o botão de Apagar no painel anterior.");
 
             const btn = document.getElementById('btn-salvar-edicao-rsvp'); btn.innerText = "Atualizando..."; btn.disabled = true;
+            document.getElementById('btn-voltar-rsvp').disabled = true;
 
             fetch(API_URL, {
                 method: 'POST',
@@ -737,14 +782,18 @@
                     action: "editarRSVP", linha: linhaRsvpEditando, confirmados: confArray.join(" | "), naoConfirmados: naoConfArray.join(" | "), 
                     adultos: totalA, criancas: totalC, jsonRaw: JSON.stringify(novaMemoriaJson)
                 })
-            }).then(() => {
-                alert("Alteração salva na nuvem!"); 
-                fecharModal('modal-editar-presenca'); fecharModal('modal-lista-presenca'); carregarListaDaPlanilha(); 
-            }).finally(() => { btn.innerText = "Salvar Alterações"; btn.disabled = false; });
+            }).then(() => fetch(API_URL)).then(r => r.json())
+            .then(dados => {
+                processarDadosPlanilha(dados);
+                alert("Alteração de Presença salva na nuvem! \nVocê pode fechar esta janela no 'Voltar' ou continuar editando."); 
+            }).finally(() => { 
+                btn.innerText = "Salvar Alterações"; btn.disabled = false; 
+                document.getElementById('btn-voltar-rsvp').disabled = false;
+            });
         }
 
 
-        // --- SISTEMA DE RSVP PÚBLICO ---
+        // --- SISTEMA DE RSVP PÚBLICO (AGORA LÊ AS CATEGORIAS) ---
         function buscarConvidado() {
             const nomeDigitado = document.getElementById('rsvp-busca').value; const btn = document.getElementById('btn-buscar-convite'); const msg = document.getElementById('msg-busca');
             if(!nomeDigitado || nomeDigitado.length < 3) return alert("Digite pelo menos 3 letras.");
