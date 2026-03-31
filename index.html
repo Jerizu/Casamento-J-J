@@ -53,12 +53,15 @@
         .formulario-bloco { background: #fff; padding: 30px; border-radius: 8px; border: 1px solid #eaeaea; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .formulario-inputs { display: flex; flex-direction: column; gap: 10px; text-align: left; }
         .formulario-inputs label { font-size: 0.9rem; font-weight: bold; color: #555; }
-        .formulario-inputs input, .formulario-inputs textarea, .formulario-inputs select { padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-family: 'Lato', sans-serif; width: 100%; }
+        .formulario-inputs input[type="text"], .formulario-inputs textarea, .formulario-inputs select, .formulario-inputs input[type="number"] { padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-family: 'Lato', sans-serif; width: 100%; }
         
-        .caixa-convite-encontrado { background-color: #f0f7f0; border: 1px solid #c8e6c9; padding: 15px; border-radius: 5px; margin-bottom: 10px; display: none; }
-        .caixa-convite-encontrado p { color: #2e7d32; font-size: 0.9rem; margin-bottom: 5px; }
-        .caixa-convite-encontrado strong { color: #1b5e20; font-size: 1.1rem; display: block; font-family: 'Playfair Display', serif; }
-        .identificacao-grupo { font-size: 0.8rem; color: #555; font-style: italic; display: block; margin-top: 5px; }
+        .caixa-convite-encontrado { background-color: #f9f9f9; border: 1px solid #e0e0e0; padding: 20px; border-radius: 5px; margin-bottom: 10px; display: none; }
+        .caixa-convite-encontrado p.aviso-grupo { color: #2c2c2c; font-size: 1rem; margin-bottom: 5px; font-weight: bold;}
+        .identificacao-grupo { font-size: 0.9rem; color: #8c7b65; font-style: italic; display: block; margin-bottom: 15px; font-family: 'Playfair Display', serif; }
+        
+        /* Novos estilos para os membros da família */
+        .membro-rsvp-item { background: #fff; border: 1px solid #e0e0e0; padding: 15px; border-radius: 6px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); transition: opacity 0.3s; }
+        .membro-rsvp-item.inativo { opacity: 0.5; background: #f5f5f5; }
 
         .btn-padrao { background-color: #8c7b65; color: white; border: none; padding: 14px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; margin-top: 10px; text-transform: uppercase; font-size: 0.9rem; }
         .btn-padrao:hover { background-color: #6b5c49; }
@@ -123,44 +126,33 @@
     <section id="presenca" class="secao-site" style="background-color: #faf8f5;">
         <h2 class="titulo-secao">Confirmação de Presença</h2>
         <div class="linha-decorativa"></div>
-        <p class="texto-centralizado">Para confirmar sua presença, digite o seu nome (ou de alguém do seu grupo) para localizarmos o seu convite na nossa lista.</p>
+        <p class="texto-centralizado">Para confirmar sua presença, digite o seu nome para localizarmos o seu convite e o do seu grupo.</p>
         
         <div class="formulario-bloco" style="max-width: 600px; margin: 0 auto;">
             <div class="formulario-inputs" id="bloco-busca">
-                <label>Seu Nome ou Sobrenome:</label>
+                <label>Seu Primeiro Nome ou Sobrenome:</label>
                 <div style="display: flex; gap: 10px;">
-                    <input type="text" id="rsvp-busca" placeholder="Ex: Zoraide">
+                    <input type="text" id="rsvp-busca" placeholder="Ex: Zoraide ou Zulian">
                     <button class="btn-padrao" id="btn-buscar-convite" onclick="buscarConvidado()" style="width: auto; margin-top: 0; padding: 0 20px;">Buscar</button>
                 </div>
                 <p id="msg-busca" style="font-size: 0.85rem; margin-top: 5px;"></p>
             </div>
 
             <div class="caixa-convite-encontrado" id="caixa-grupo">
-                <p>✅ Convite localizado para:</p>
-                <strong id="rsvp-nomes-grupo">Carregando...</strong>
+                <p class="aviso-grupo">✅ Convite localizado para:</p>
                 <span class="identificacao-grupo" id="rsvp-identificacao"></span>
+                
+                <p style="font-size: 0.95rem; margin-bottom: 15px; color: #555;">Quem estará presente na festa? (Desmarque quem não puder ir)</p>
+                
+                <div id="lista-checkbox-membros"></div>
             </div>
 
-            <div class="formulario-inputs" id="bloco-formulario" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
-                <label>Telefone (WhatsApp) para contato:</label>
+            <div class="formulario-inputs" id="bloco-formulario" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                
+                <label>Telefone (WhatsApp) principal para contato do grupo:</label>
                 <input type="text" id="rsvp-telefone" placeholder="(11) 99999-9999">
                 
-                <div style="display: flex; gap: 15px;">
-                    <div style="flex: 1;">
-                        <label>Qtd. Adultos Presentes:</label>
-                        <select id="rsvp-adultos">
-                            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
-                        </select>
-                    </div>
-                    <div style="flex: 1;">
-                        <label>Crianças (até 10 anos):</label>
-                        <select id="rsvp-criancas">
-                            <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button class="btn-padrao" id="btn-enviar-rsvp" onclick="enviarRSVP()" style="margin-top: 20px;">Confirmar Nossa Presença</button>
+                <button class="btn-padrao" id="btn-enviar-rsvp" onclick="enviarRSVP()" style="margin-top: 10px;">Confirmar Nossa Presença</button>
             </div>
         </div>
     </section>
@@ -179,27 +171,7 @@
         </div>
     </section>
 
-
-    <div id="modal-pix" class="modal">
-        <div class="modal-conteudo">
-            <span class="fechar" onclick="fecharModal('modal-pix')">&times;</span>
-            <h2 id="modal-titulo" style="font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-top: 10px;">Nome</h2>
-            <p id="modal-valor" style="font-size: 1.2rem; color: #8c7b65; font-weight: bold; margin-bottom: 10px;">R$ 0,00</p>
-            <div class="area-qrcode"><img src="" id="img-qr-pix-modal"></div>
-            <div class="area-copia-cola">
-                <input type="text" id="codigo-pix" readonly>
-                <button class="btn-elegante" onclick="copiarPix()" style="padding: 8px;">Copiar Código PIX</button>
-            </div>
-            <div style="height: 1px; background-color: #eee; margin: 15px 0;"></div>
-            <div class="formulario-inputs" style="margin-top: 0;">
-                <p style="text-align: center; font-size: 0.85rem; color: #666; margin-bottom: 5px;">Deixe uma mensagem para os noivos!</p>
-                <input type="text" id="input-nome-pix" placeholder="Seu nome">
-                <textarea id="input-mensagem-pix" rows="2" placeholder="Sua mensagem de carinho..."></textarea>
-                <button class="btn-padrao" id="btn-enviar-pix" onclick="confirmarPagamentoPix()">Confirmar PIX e Enviar</button>
-            </div>
-        </div>
-    </div>
-
+    <div id="modal-pix" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-pix')">&times;</span><h2 id="modal-titulo" style="font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-top: 10px;">Nome</h2><p id="modal-valor" style="font-size: 1.2rem; color: #8c7b65; font-weight: bold; margin-bottom: 10px;">R$ 0,00</p><div class="area-qrcode"><img src="" id="img-qr-pix-modal"></div><div class="area-copia-cola"><input type="text" id="codigo-pix" readonly><button class="btn-elegante" onclick="copiarPix()" style="padding: 8px;">Copiar Código PIX</button></div><div style="height: 1px; background-color: #eee; margin: 15px 0;"></div><div class="formulario-inputs" style="margin-top: 0;"><p style="text-align: center; font-size: 0.85rem; color: #666; margin-bottom: 5px;">Deixe uma mensagem para os noivos!</p><input type="text" id="input-nome-pix" placeholder="Seu nome"><textarea id="input-mensagem-pix" rows="2" placeholder="Sua mensagem de carinho..."></textarea><button class="btn-padrao" id="btn-enviar-pix" onclick="confirmarPagamentoPix()">Confirmar PIX e Enviar</button></div></div></div>
     <div id="modal-adicionar" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-adicionar')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Adicionar Presente</h2><div class="formulario-inputs"><input type="text" id="novo-nome" placeholder="Nome (Ex: Batedeira)"><input type="text" id="novo-valor" placeholder="Valor (Ex: 150,00)"><input type="text" id="nova-imagem" placeholder="Link da Imagem"><button class="btn-padrao" id="btn-salvar-novo" onclick="salvarNovoPresente()">Salvar Item</button></div></div></div>
     <div id="modal-editar" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-editar')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Editar Presente</h2><div class="formulario-inputs"><input type="text" id="edit-nome"><input type="text" id="edit-valor"><input type="text" id="edit-imagem"><button class="btn-padrao" id="btn-salvar-edicao" onclick="salvarEdicao()">Atualizar Item</button></div></div></div>
     <div id="modal-config-pix" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-pix')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Configurar PIX</h2><div class="formulario-inputs"><textarea id="config-chave-pix" rows="3" placeholder="Chave Copia e Cola"></textarea><input type="text" id="config-qr-pix" placeholder="Link do QR Code"><button class="btn-padrao" id="btn-salvar-pix" onclick="salvarConfigPix()">Salvar na Nuvem</button></div></div></div>
@@ -211,7 +183,7 @@
         
         let idEditando = null; let idComprando = null; let nomeComprando = null;
         let dadosPixNuvem = { chave: "", qr: "" };
-        let grupoRSVP = { nomes: "", identificacao: "" }; // Salva temporariamente os dados do grupo achado
+        let grupoRSVP = { nomes: "", identificacao: "" };
 
         window.onload = function() {
             if (!localStorage.getItem('credenciaisAdmin')) localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: 'admin', pass: 'admin' }));
@@ -229,7 +201,6 @@
                 const isAdmin = sessionStorage.getItem('logadoComoAdmin') === 'sim';
                 
                 if(dados.pix) { dadosPixNuvem.chave = dados.pix.chave || ""; dadosPixNuvem.qr = dados.pix.qr || ""; }
-
                 if(dados.presentes.length === 0) { grid.innerHTML = "<p class='loading'>A lista está vazia!</p>"; return; }
 
                 let itensRenderizados = 0;
@@ -276,134 +247,162 @@
             }).catch(erro => { grid.innerHTML = "<p class='loading' style='color:red;'>Erro de conexão com o Google. Recarregue.</p>"; });
         }
 
-        // --- SISTEMA DE RSVP (CONFIRMAR CONVIDADO) ---
+        // --- SISTEMA DE RSVP INTELIGENTE (INDIVIDUAL) ---
         function buscarConvidado() {
             const nomeDigitado = document.getElementById('rsvp-busca').value;
             const btn = document.getElementById('btn-buscar-convite');
             const msg = document.getElementById('msg-busca');
 
-            if(!nomeDigitado || nomeDigitado.length < 3) return alert("Digite pelo menos 3 letras do seu nome.");
+            if(!nomeDigitado || nomeDigitado.length < 3) return alert("Digite pelo menos 3 letras.");
 
-            btn.innerText = "⏳ Buscando..."; btn.disabled = true;
+            btn.innerText = "⏳"; btn.disabled = true;
 
-            fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: "verificarNome", nome: nomeDigitado })
-            })
+            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "verificarNome", nome: nomeDigitado }) })
             .then(res => res.json())
             .then(dados => {
                 if(dados.encontrado) {
-                    grupoRSVP = dados.grupo; // Salva o grupo para enviar depois
-                    
+                    grupoRSVP = dados.grupo;
                     document.getElementById('bloco-busca').style.display = "none";
                     document.getElementById('caixa-grupo').style.display = "block";
-                    document.getElementById('bloco-formulario').style.display = "flex";
+                    document.getElementById('bloco-formulario').style.display = "block"; 
                     
-                    document.getElementById('rsvp-nomes-grupo').innerText = dados.grupo.nomes;
-                    document.getElementById('rsvp-identificacao').innerText = "(" + (dados.grupo.identificacao || "Convite Localizado") + ")";
+                    document.getElementById('rsvp-identificacao').innerText = grupoRSVP.identificacao ? "Grupo: " + grupoRSVP.identificacao : "Convite Localizado";
+                    
+                    let containerCheckboxes = document.getElementById('lista-checkbox-membros');
+                    containerCheckboxes.innerHTML = ""; 
+                    
+                    // Quebra a string de nomes pela vírgula ou pela letra "e"
+                    let arrayNomes = grupoRSVP.nomes.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0);
+                    
+                    // Desenha o painel de cada membro
+                    arrayNomes.forEach((nomeMembro, index) => {
+                        const html = `
+                        <div class="membro-rsvp-item" id="bloco-membro-${index}">
+                            <label style="display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: #333;">
+                                <input type="checkbox" class="cb-membro" value="${nomeMembro.trim()}" checked onchange="toggleMembro(this, ${index})" style="width: 20px; height: 20px; accent-color: #8c7b65;"> 
+                                ${nomeMembro.trim()}
+                            </label>
+                            
+                            <div id="opcoes-membro-${index}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <select class="tipo-membro" onchange="toggleIdade(this, ${index})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Lato', sans-serif; background: #fff;">
+                                    <option value="Adulto">É Adulto</option>
+                                    <option value="Criança">É Criança (até 10 anos)</option>
+                                </select>
+                                
+                                <input type="number" id="idade-crianca-${index}" class="idade-membro" placeholder="Idade" min="0" max="10" style="display: none; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px; font-family: 'Lato', sans-serif;">
+                            </div>
+                        </div>`;
+                        containerCheckboxes.insertAdjacentHTML('beforeend', html);
+                    });
+
                 } else {
-                    msg.innerText = "❌ Nome não localizado. Tente digitar apenas o seu primeiro nome ou sobrenome.";
+                    msg.innerText = "❌ Nome não localizado. Tente digitar apenas o seu primeiro nome.";
                     msg.style.color = "#d32f2f";
                 }
             })
-            .catch(() => msg.innerText = "Erro ao conectar. Tente novamente.")
+            .catch(() => msg.innerText = "Erro na busca.")
             .finally(() => { btn.innerText = "Buscar"; btn.disabled = false; });
         }
 
+        // Funções para animar a janelinha de cada membro
+        function toggleMembro(checkbox, index) {
+            const bloco = document.getElementById(`bloco-membro-${index}`);
+            const opcoes = document.getElementById(`opcoes-membro-${index}`);
+            if(checkbox.checked) {
+                bloco.classList.remove('inativo');
+                opcoes.style.opacity = "1";
+                opcoes.style.pointerEvents = "auto";
+            } else {
+                bloco.classList.add('inativo');
+                opcoes.style.opacity = "0.3";
+                opcoes.style.pointerEvents = "none";
+            }
+        }
+
+        function toggleIdade(selectEle, index) {
+            const campoIdade = document.getElementById(`idade-crianca-${index}`);
+            if(selectEle.value === "Criança") {
+                campoIdade.style.display = "block";
+                campoIdade.required = true;
+            } else {
+                campoIdade.style.display = "none";
+                campoIdade.value = "";
+                campoIdade.required = false;
+            }
+        }
+
+        // Enviar os dados compilados
         function enviarRSVP() {
             const tel = document.getElementById('rsvp-telefone').value;
-            const adultos = document.getElementById('rsvp-adultos').value;
-            const criancas = document.getElementById('rsvp-criancas').value;
+            if(!tel) return alert("Por favor, informe o telefone de contato principal do grupo!");
 
-            if(!tel) return alert("Por favor, informe seu telefone!");
+            let totalAdultos = 0;
+            let totalCriancas = 0;
+            let confirmadosArray = [];
+            let temErroIdade = false;
+
+            // Vasculha todos os blocos gerados na tela
+            const blocos = document.querySelectorAll('.membro-rsvp-item');
+            
+            blocos.forEach(bloco => {
+                const cb = bloco.querySelector('.cb-membro');
+                if(cb.checked) {
+                    const nome = cb.value;
+                    const tipo = bloco.querySelector('.tipo-membro').value;
+                    
+                    if(tipo === 'Adulto') {
+                        totalAdultos++;
+                        confirmadosArray.push(`${nome} (Adulto)`);
+                    } else {
+                        totalCriancas++;
+                        const idade = bloco.querySelector('.idade-membro').value;
+                        if(idade === "") {
+                            temErroIdade = true; // Impede o envio se não colocou a idade
+                        } else {
+                            confirmadosArray.push(`${nome} (Criança: ${idade} anos)`);
+                        }
+                    }
+                }
+            });
+
+            if(temErroIdade) return alert("Por favor, preencha a idade das crianças selecionadas.");
+            if(totalAdultos === 0 && totalCriancas === 0) return alert("Você precisa selecionar pelo menos uma pessoa para confirmar presença.");
+
+            const confirmadosStr = confirmadosArray.join(" | "); // Junta tudo num texto bonitinho
 
             const btn = document.getElementById('btn-enviar-rsvp');
             btn.innerText = "Enviando..."; btn.disabled = true;
 
             fetch(API_URL, {
                 method: 'POST',
-                // Manda o grupo completo (ex: João e Zoraide) e a identificacao (Pais do Noivo)
-                body: JSON.stringify({ action: "rsvp", nomes: grupoRSVP.nomes, grupo: grupoRSVP.identificacao, telefone: tel, adultos: adultos, criancas: criancas })
+                body: JSON.stringify({ 
+                    action: "rsvp", 
+                    grupo: grupoRSVP.identificacao, 
+                    confirmados: confirmadosStr, 
+                    telefone: tel, 
+                    adultos: totalAdultos, 
+                    criancas: totalCriancas 
+                })
             }).then(() => {
-                alert("Presença confirmada com sucesso! Nós agradecemos muito.");
-                location.reload(); // Recarrega a página para limpar
+                alert("Presença confirmada com sucesso! Agradecemos o seu carinho.");
+                location.reload(); 
             }).catch(() => alert("Erro ao enviar. Tente novamente."))
             .finally(() => { btn.innerText = "Confirmar Nossa Presença"; btn.disabled = false; });
         }
 
-
-        // --- FUNÇÕES GERAIS ADMIN E PIX ---
-        function mudarStatusPresente(id, e) {
-            e.target.innerText = "Restaurando..."; e.target.disabled = true;
-            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "mudarStatus", id: id, novoStatus: "" }) }).then(() => carregarListaDaPlanilha());
-        }
-
-        function abrirModalConfigPix() {
-            document.getElementById('config-chave-pix').value = dadosPixNuvem.chave; document.getElementById('config-qr-pix').value = dadosPixNuvem.qr;
-            abrirModal('modal-config-pix');
-        }
-
-        function salvarConfigPix() {
-            const novaChave = document.getElementById('config-chave-pix').value; const novoQr = document.getElementById('config-qr-pix').value;
-            if (!novaChave || !novoQr) return alert("Preencha chave e imagem!");
-            const btn = document.getElementById('btn-salvar-pix'); btn.innerText = "Salvando..."; btn.disabled = true;
-            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "configPix", chave: novaChave, qr: novoQr }) }).then(() => {
-                dadosPixNuvem.chave = novaChave; dadosPixNuvem.qr = novoQr; alert("PIX atualizado!"); fecharModal('modal-config-pix');
-            }).finally(() => { btn.innerText = "Salvar na Nuvem"; btn.disabled = false; });
-        }
-
-        function salvarNovoPresente() {
-            const nome = document.getElementById('novo-nome').value; let valor = document.getElementById('novo-valor').value; let imagem = document.getElementById('nova-imagem').value;
-            if(!nome || !valor) return alert("Preencha nome e valor!"); if(!imagem) imagem = "https://via.placeholder.com/300?text=Produto";
-            const btn = document.getElementById('btn-salvar-novo'); btn.innerText = "Salvando..."; btn.disabled = true;
-            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "adicionar", id: "ID-" + Date.now(), nome: nome, valor: valor, imagem: imagem }) }).then(() => {
-                fecharModal('modal-adicionar'); carregarListaDaPlanilha(); document.getElementById('novo-nome').value = ""; document.getElementById('novo-valor').value = ""; document.getElementById('nova-imagem').value = "";
-            }).finally(() => { btn.innerText = "Salvar Item"; btn.disabled = false; });
-        }
-
-        function abrirModalEditar(id, nome, valor, imagem) {
-            idEditando = id; document.getElementById('edit-nome').value = nome; document.getElementById('edit-valor').value = String(valor).replace('R$','').trim(); document.getElementById('edit-imagem').value = imagem; abrirModal('modal-editar');
-        }
-
-        function salvarEdicao() {
-            const nome = document.getElementById('edit-nome').value; let valor = document.getElementById('edit-valor').value; let imagem = document.getElementById('edit-imagem').value;
-            if(!imagem) imagem = "https://via.placeholder.com/300?text=Produto";
-            const btn = document.getElementById('btn-salvar-edicao'); btn.innerText = "Atualizando..."; btn.disabled = true;
-            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "editar", id: idEditando, nome: nome, valor: valor, imagem: imagem }) }).then(() => {
-                fecharModal('modal-editar'); carregarListaDaPlanilha();
-            }).finally(() => { btn.innerText = "Atualizar Item"; btn.disabled = false; });
-        }
-
-        function excluirPresente(id, e) {
-            if(confirm("Deseja ocultar este presente?")) { e.target.innerText = "⏳"; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "excluir", id: id }) }).then(() => carregarListaDaPlanilha()); }
-        }
-
-        function abrirModalPix(id, nome, valor) {
-            idComprando = id; nomeComprando = nome;
-            document.getElementById('modal-titulo').innerText = nome; document.getElementById('modal-valor').innerText = "R$ " + String(valor).replace('R$','').trim();
-            document.getElementById('img-qr-pix-modal').src = dadosPixNuvem.qr; document.getElementById('codigo-pix').value = dadosPixNuvem.chave;
-            document.getElementById('input-nome-pix').value = ""; document.getElementById('input-mensagem-pix').value = ""; abrirModal('modal-pix');
-        }
-
-        function confirmarPagamentoPix() {
-            const nomeConv = document.getElementById('input-nome-pix').value; const msg = document.getElementById('input-mensagem-pix').value;
-            if(!nomeConv) return alert("Por favor, preencha o seu nome!");
-            const btn = document.getElementById('btn-enviar-pix'); btn.innerText = "Enviando..."; btn.disabled = true;
-            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "comprar", id: idComprando, nomePresente: nomeComprando, nomeConvidado: nomeConv, mensagemTexto: msg }) }).then(() => {
-                alert("Mensagem enviada com sucesso!"); fecharModal('modal-pix'); carregarListaDaPlanilha();
-            }).finally(() => { btn.innerText = "Confirmar PIX e Enviar"; btn.disabled = false; });
-        }
-
-        function fazerLogin() {
-            const u = document.getElementById('login-user').value; const p = document.getElementById('login-pass').value; const c = JSON.parse(localStorage.getItem('credenciaisAdmin'));
-            if(u === c.user && p === c.pass) { sessionStorage.setItem('logadoComoAdmin', 'sim'); document.getElementById('corpo-site').classList.add('modo-admin-ativo'); fecharModal('modal-login'); carregarListaDaPlanilha(); } else { alert("Senha incorreta!"); }
-        }
+        // --- DEMAIS FUNÇÕES DO SITE ---
+        function mudarStatusPresente(id, e) { e.target.innerText = "⏳"; e.target.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "mudarStatus", id: id, novoStatus: "" }) }).then(() => carregarListaDaPlanilha()); }
+        function abrirModalConfigPix() { document.getElementById('config-chave-pix').value = dadosPixNuvem.chave; document.getElementById('config-qr-pix').value = dadosPixNuvem.qr; abrirModal('modal-config-pix'); }
+        function salvarConfigPix() { const k = document.getElementById('config-chave-pix').value; const q = document.getElementById('config-qr-pix').value; if (!k || !q) return alert("Preencha!"); const b = document.getElementById('btn-salvar-pix'); b.innerText = "⏳"; b.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "configPix", chave: k, qr: q }) }).then(() => { dadosPixNuvem.chave = k; dadosPixNuvem.qr = q; alert("PIX atualizado!"); fecharModal('modal-config-pix'); }).finally(() => { b.innerText = "Salvar na Nuvem"; b.disabled = false; }); }
+        function salvarNovoPresente() { const n = document.getElementById('novo-nome').value; let v = document.getElementById('novo-valor').value; let img = document.getElementById('nova-imagem').value; if(!n || !v) return; if(!img) img = "https://via.placeholder.com/300"; const b = document.getElementById('btn-salvar-novo'); b.innerText = "⏳"; b.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "adicionar", id: "ID-"+Date.now(), nome: n, valor: v, imagem: img }) }).then(() => { fecharModal('modal-adicionar'); carregarListaDaPlanilha(); document.getElementById('novo-nome').value=""; document.getElementById('novo-valor').value=""; document.getElementById('nova-imagem').value=""; }).finally(() => { b.innerText = "Salvar"; b.disabled = false; }); }
+        function abrirModalEditar(id, n, v, img) { idEditando = id; document.getElementById('edit-nome').value = n; document.getElementById('edit-valor').value = String(v).replace('R$','').trim(); document.getElementById('edit-imagem').value = img; abrirModal('modal-editar'); }
+        function salvarEdicao() { const n = document.getElementById('edit-nome').value; let v = document.getElementById('edit-valor').value; let img = document.getElementById('edit-imagem').value; if(!img) img="https://via.placeholder.com/300"; const b = document.getElementById('btn-salvar-edicao'); b.innerText="⏳"; b.disabled=true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "editar", id: idEditando, nome: n, valor: v, imagem: img }) }).then(() => { fecharModal('modal-editar'); carregarListaDaPlanilha(); }).finally(() => { b.innerText="Atualizar"; b.disabled=false; }); }
+        function excluirPresente(id, e) { if(confirm("Ocultar item?")) { e.target.innerText="⏳"; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "excluir", id: id }) }).then(() => carregarListaDaPlanilha()); } }
+        function abrirModalPix(id, n, v) { idComprando=id; nomeComprando=n; document.getElementById('modal-titulo').innerText=n; document.getElementById('modal-valor').innerText="R$ "+String(v).replace('R$','').trim(); document.getElementById('img-qr-pix-modal').src=dadosPixNuvem.qr; document.getElementById('codigo-pix').value=dadosPixNuvem.chave; document.getElementById('input-nome-pix').value=""; document.getElementById('input-mensagem-pix').value=""; abrirModal('modal-pix'); }
+        function confirmarPagamentoPix() { const n = document.getElementById('input-nome-pix').value; const m = document.getElementById('input-mensagem-pix').value; if(!n) return alert("Seu nome!"); const b = document.getElementById('btn-enviar-pix'); b.innerText="⏳"; b.disabled=true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "comprar", id: idComprando, nomePresente: nomeComprando, nomeConvidado: n, mensagemTexto: m }) }).then(() => { alert("Mensagem enviada!"); fecharModal('modal-pix'); carregarListaDaPlanilha(); }).finally(() => { b.innerText="Confirmar"; b.disabled=false; }); }
+        function fazerLogin() { const u = document.getElementById('login-user').value; const p = document.getElementById('login-pass').value; const c = JSON.parse(localStorage.getItem('credenciaisAdmin')); if(u === c.user && p === c.pass) { sessionStorage.setItem('logadoComoAdmin', 'sim'); document.getElementById('corpo-site').classList.add('modo-admin-ativo'); fecharModal('modal-login'); carregarListaDaPlanilha(); } else alert("Senha incorreta!"); }
         function sairAdmin() { sessionStorage.removeItem('logadoComoAdmin'); document.getElementById('corpo-site').classList.remove('modo-admin-ativo'); carregarListaDaPlanilha(); }
-        function salvarNovasCredenciais() {
-            const u = document.getElementById('novo-admin-user').value; const p = document.getElementById('novo-admin-pass').value;
-            if(u && p) { localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: u, pass: p })); alert("Atualizado!"); fecharModal('modal-config-admin'); } else alert("Preencha tudo!");
-        }
-
+        function salvarNovasCredenciais() { const u = document.getElementById('novo-admin-user').value; const p = document.getElementById('novo-admin-pass').value; if(u && p) { localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: u, pass: p })); alert("Atualizado!"); fecharModal('modal-config-admin'); } else alert("Preencha tudo!"); }
         function abrirModal(id) { document.getElementById(id).style.display = "block"; }
         function fecharModal(id) { document.getElementById(id).style.display = "none"; }
         window.onclick = function(e) { if(e.target.classList.contains('modal')) e.target.style.display = "none"; }
