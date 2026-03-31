@@ -68,7 +68,7 @@
 
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); overflow-y: auto; padding: 20px 0; }
         .modal-conteudo { background-color: #fff; margin: auto; padding: 25px 20px; width: 90%; max-width: 450px; text-align: center; position: relative; border-radius: 10px; }
-        .modal-conteudo-largo { max-width: 700px; } 
+        .modal-conteudo-largo { max-width: 750px; } 
         .fechar { position: absolute; top: 10px; right: 20px; color: #999; font-size: 30px; cursor: pointer; }
 
         .area-qrcode { display: flex; justify-content: center; margin-bottom: 10px; }
@@ -192,8 +192,8 @@
             </div>
 
             <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
-                <div class="dash-card"><h3 id="dash-adultos">0</h3><p>Adultos</p></div>
-                <div class="dash-card"><h3 id="dash-criancas">0</h3><p>Crianças (Total)</p></div>
+                <div class="dash-card"><h3 id="dash-adultos">0</h3><p>Adultos (> 9 anos)</p></div>
+                <div class="dash-card"><h3 id="dash-criancas">0</h3><p>Crianças (≤ 9 anos)</p></div>
                 <div class="dash-card" style="position: relative;">
                     <h3 id="dash-grupos-pendentes" style="color: #d32f2f;">0</h3><p>Grupos Pendentes</p>
                     <button onclick="togglePendentes()" style="background:#d32f2f; color:#fff; border:none; border-radius:50%; width:26px; height:26px; font-weight:bold; cursor:pointer; position:absolute; top:10px; right:10px; font-size:1.2rem; display:flex; align-items:center; justify-content:center; transition:0.3s;" title="Ver Pendentes">+</button>
@@ -216,7 +216,7 @@
         <div class="modal-conteudo modal-conteudo-largo">
             <span class="fechar" onclick="fecharModal('modal-lista-convidados')">&times;</span>
             <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 15px;">Gerenciar Convidados</h2>
-            <button onclick="fecharModal('modal-lista-convidados'); abrirModal('modal-adicionar-convidado')" class="btn-padrao" style="margin-bottom: 15px; background: #1976d2;">➕ Adicionar Novo Grupo</button>
+            <button onclick="fecharModal('modal-lista-convidados'); abrirModal('modal-adicionar-convidado'); adicionarLinhaMembro();" class="btn-padrao" style="margin-bottom: 15px; background: #1976d2;">➕ Adicionar Novo Grupo</button>
             <div id="conteudo-lista-convidados" style="text-align: left; max-height: 60vh; overflow-y: auto; padding-right: 10px;"></div>
         </div>
     </div>
@@ -229,13 +229,10 @@
                 <label>Nome do Grupo ou Família:</label>
                 <input type="text" id="novo-grupo-nome" placeholder="Ex: Família Rute (Tia do Noivo)">
                 <div style="margin-top: 10px; margin-bottom: 5px;"><label>Membros do Grupo:</label></div>
+                
                 <div id="container-novos-membros" style="max-height: 35vh; overflow-y: auto; padding-right: 5px; margin-bottom: 10px;">
-                    <div class="linha-novo-membro" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
-                        <input type="text" class="input-nome-membro" placeholder="Nome do Convidado" style="flex: 2;">
-                        <select class="select-cat-membro" style="flex: 1.5; padding: 10px;"><option value="Convidado">Convidado</option><option value="Padrinho">Padrinho</option><option value="Madrinha">Madrinha</option><option value="Noivinho">Noivinho</option><option value="Noivinha">Noivinha</option><option value="Florista">Florista</option><option value="Pajem">Pajem</option></select>
-                        <button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button>
                     </div>
-                </div>
+                
                 <button onclick="adicionarLinhaMembro()" style="background: #f9f9f9; border: 1px dashed #ccc; padding: 10px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; width: 100%; color: #555; font-weight: bold; transition:0.3s;">+ Adicionar outra pessoa ao grupo</button>
                 <button class="btn-padrao" id="btn-salvar-novo-convidado" onclick="salvarNovoConvidado()">Salvar na Planilha Oficial</button>
             </div>
@@ -276,7 +273,7 @@
         window.estatisticasGlobais = { totalConvidados: 0, totalGrupos: 0, listaOficial: [] };
         
         let linhaRsvpEditando = null;
-        let linhaGrupoEditando = null; // Para edição da lista oficial
+        let linhaGrupoEditando = null;
 
         window.onload = function() {
             if (!localStorage.getItem('credenciaisAdmin')) localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: 'admin', pass: 'admin' }));
@@ -341,7 +338,6 @@
                 container.innerHTML = "<p style='text-align:center; color:#888;'>A sua lista oficial de convidados está vazia.</p>";
             } else {
                 window.estatisticasGlobais.listaOficial.forEach((g, indexOriginalArray) => {
-                    // Prepara visualização bonita das tags
                     let membrosLidos = [];
                     if (g.categoriasStr && g.categoriasStr.startsWith("[")) {
                         try { membrosLidos = JSON.parse(g.categoriasStr); } catch(e) {}
@@ -351,10 +347,11 @@
                     if(membrosLidos.length > 0) {
                         membrosLidos.forEach(m => {
                             let tag = m.categoria !== "Convidado" ? `<span class="tag-categoria">${m.categoria}</span>` : "";
-                            membrosHtml += `<span style="display:inline-block; margin-right:10px; margin-bottom:5px;">${m.nome} ${tag}</span>`;
+                            let tagIdade = m.tipo === "Criança" ? `<span style="font-size:0.75rem; color:#1976d2;">(👶 ${m.idade||'0'} anos)</span>` : "";
+                            membrosHtml += `<span style="display:inline-block; margin-right:10px; margin-bottom:5px;">${m.nome} ${tag} ${tagIdade}</span>`;
                         });
                     } else {
-                        membrosHtml = g.membros; // Formato antigo sem categoria
+                        membrosHtml = g.membros; 
                     }
 
                     const html = `
@@ -371,7 +368,7 @@
         }
 
         function excluirGrupoDaLista(linha, btn) {
-            if(confirm("ATENÇÃO: Deseja apagar este grupo permanentemente da sua lista oficial? (Isso não apaga o RSVP se eles já tiverem confirmado)")) {
+            if(confirm("ATENÇÃO: Deseja apagar este grupo permanentemente da sua lista oficial?")) {
                 btn.innerText = "..."; btn.disabled = true;
                 fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "excluirGrupoConvidado", linha: linha }) })
                 .then(() => { alert("Grupo apagado!"); fecharModal('modal-lista-convidados'); carregarListaDaPlanilha(); })
@@ -379,12 +376,42 @@
             }
         }
 
+        function toggleIdadeAdmin(sel) {
+            const inputIdade = sel.parentElement.querySelector('.input-idade-membro');
+            if(sel.value === 'Criança') { inputIdade.style.display = 'block'; } else { inputIdade.style.display = 'none'; inputIdade.value = ''; }
+        }
+
         function adicionarLinhaMembro() {
-            const html = `<div class="linha-novo-membro" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;"><input type="text" class="input-nome-membro" placeholder="Nome do Convidado" style="flex: 2;"><select class="select-cat-membro" style="flex: 1.5; padding: 10px;"><option value="Convidado">Convidado</option><option value="Padrinho">Padrinho</option><option value="Madrinha">Madrinha</option><option value="Noivinho">Noivinho</option><option value="Noivinha">Noivinha</option><option value="Florista">Florista</option><option value="Pajem">Pajem</option></select><button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button></div>`;
+            const html = `
+            <div class="linha-novo-membro" style="display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;">
+                <input type="text" class="input-nome-membro" placeholder="Nome" style="flex: 2; min-width: 120px; padding: 8px;">
+                <select class="select-cat-membro" style="flex: 1.5; padding: 8px; min-width: 100px;">
+                    <option value="Convidado">Convidado</option><option value="Padrinho">Padrinho</option><option value="Madrinha">Madrinha</option>
+                    <option value="Noivinho">Noivinho</option><option value="Noivinha">Noivinha</option><option value="Florista">Florista</option><option value="Pajem">Pajem</option>
+                </select>
+                <select class="select-tipo-membro" onchange="toggleIdadeAdmin(this)" style="flex: 1; padding: 8px; min-width: 90px;">
+                    <option value="Adulto">Adulto</option><option value="Criança">Criança</option>
+                </select>
+                <input type="number" class="input-idade-membro" placeholder="Idade" min="0" max="17" style="display: none; flex: 0.8; padding: 8px; min-width: 60px;">
+                <button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button>
+            </div>`;
             document.getElementById('container-novos-membros').insertAdjacentHTML('beforeend', html);
         }
+
         function adicionarLinhaMembroEdit() {
-            const html = `<div class="linha-edit-membro" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;"><input type="text" class="input-nome-membro" placeholder="Nome do Convidado" style="flex: 2;"><select class="select-cat-membro" style="flex: 1.5; padding: 10px;"><option value="Convidado">Convidado</option><option value="Padrinho">Padrinho</option><option value="Madrinha">Madrinha</option><option value="Noivinho">Noivinho</option><option value="Noivinha">Noivinha</option><option value="Florista">Florista</option><option value="Pajem">Pajem</option></select><button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button></div>`;
+            const html = `
+            <div class="linha-edit-membro" style="display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;">
+                <input type="text" class="input-nome-membro" placeholder="Nome" style="flex: 2; min-width: 120px; padding: 8px;">
+                <select class="select-cat-membro" style="flex: 1.5; padding: 8px; min-width: 100px;">
+                    <option value="Convidado">Convidado</option><option value="Padrinho">Padrinho</option><option value="Madrinha">Madrinha</option>
+                    <option value="Noivinho">Noivinho</option><option value="Noivinha">Noivinha</option><option value="Florista">Florista</option><option value="Pajem">Pajem</option>
+                </select>
+                <select class="select-tipo-membro" onchange="toggleIdadeAdmin(this)" style="flex: 1; padding: 8px; min-width: 90px;">
+                    <option value="Adulto">Adulto</option><option value="Criança">Criança</option>
+                </select>
+                <input type="number" class="input-idade-membro" placeholder="Idade" min="0" max="17" style="display: none; flex: 0.8; padding: 8px; min-width: 60px;">
+                <button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button>
+            </div>`;
             document.getElementById('container-edit-membros').insertAdjacentHTML('beforeend', html);
         }
         function removerLinhaMembro(btn) { btn.parentElement.remove(); }
@@ -395,14 +422,18 @@
             const linhas = document.querySelectorAll('.linha-novo-membro');
             let membros = []; let temErro = false;
             linhas.forEach(l => {
-                const n = l.querySelector('.input-nome-membro').value.trim(); const c = l.querySelector('.select-cat-membro').value;
-                if(!n) temErro = true; else membros.push({ nome: n, categoria: c });
+                const n = l.querySelector('.input-nome-membro').value.trim(); 
+                const c = l.querySelector('.select-cat-membro').value;
+                const t = l.querySelector('.select-tipo-membro').value;
+                const i = l.querySelector('.input-idade-membro').value;
+                if(!n || (t === 'Criança' && !i)) temErro = true; 
+                else membros.push({ nome: n, categoria: c, tipo: t, idade: i });
             });
-            if(temErro || membros.length === 0) return alert("Preencha o nome de todos!");
+            if(temErro || membros.length === 0) return alert("Preencha o nome e idade (se criança) de todos!");
             
             const btn = document.getElementById('btn-salvar-novo-convidado'); btn.innerText = "Salvando..."; btn.disabled = true;
             fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "adicionarConvidado", grupo: grupo, membros: membros }) })
-            .then(() => { alert("Grupo adicionado!"); fecharModal('modal-adicionar-convidado'); document.getElementById('novo-grupo-nome').value = ""; document.getElementById('container-novos-membros').innerHTML = ""; adicionarLinhaMembro(); carregarListaDaPlanilha(); })
+            .then(() => { alert("Grupo adicionado!"); fecharModal('modal-adicionar-convidado'); document.getElementById('novo-grupo-nome').value = ""; document.getElementById('container-novos-membros').innerHTML = ""; carregarListaDaPlanilha(); })
             .catch(() => alert("Erro.")).finally(() => { btn.innerText = "Salvar na Planilha Oficial"; btn.disabled = false; });
         }
 
@@ -418,16 +449,21 @@
             if (grupo.categoriasStr && grupo.categoriasStr.startsWith("[")) {
                 try { membrosLidos = JSON.parse(grupo.categoriasStr); } catch(e) {}
             } else {
-                // Se era do formato antigo, cria o array pra ele poder editar
                 let nomes = grupo.membros.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0);
-                membrosLidos = nomes.map(n => ({nome: n, categoria: "Convidado"}));
+                membrosLidos = nomes.map(n => ({nome: n, categoria: "Convidado", tipo: "Adulto", idade: ""}));
             }
 
             membrosLidos.forEach(m => {
+                let isCri = m.tipo === "Criança";
+                let selAd = !isCri ? "selected" : "";
+                let selCr = isCri ? "selected" : "";
+                let dispId = isCri ? "block" : "none";
+                let valIdade = m.idade || "";
+
                 const html = `
-                <div class="linha-edit-membro" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
-                    <input type="text" class="input-nome-membro" value="${m.nome}" style="flex: 2;">
-                    <select class="select-cat-membro" style="flex: 1.5; padding: 10px;">
+                <div class="linha-edit-membro" style="display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;">
+                    <input type="text" class="input-nome-membro" value="${m.nome}" style="flex: 2; min-width: 120px; padding: 8px;">
+                    <select class="select-cat-membro" style="flex: 1.5; padding: 8px; min-width: 100px;">
                         <option value="Convidado" ${m.categoria==='Convidado'?'selected':''}>Convidado</option>
                         <option value="Padrinho" ${m.categoria==='Padrinho'?'selected':''}>Padrinho</option>
                         <option value="Madrinha" ${m.categoria==='Madrinha'?'selected':''}>Madrinha</option>
@@ -436,6 +472,11 @@
                         <option value="Florista" ${m.categoria==='Florista'?'selected':''}>Florista</option>
                         <option value="Pajem" ${m.categoria==='Pajem'?'selected':''}>Pajem</option>
                     </select>
+                    <select class="select-tipo-membro" onchange="toggleIdadeAdmin(this)" style="flex: 1; padding: 8px; min-width: 90px;">
+                        <option value="Adulto" ${selAd}>Adulto</option>
+                        <option value="Criança" ${selCr}>Criança</option>
+                    </select>
+                    <input type="number" class="input-idade-membro" placeholder="Idade" min="0" max="17" value="${valIdade}" style="display: ${dispId}; flex: 0.8; padding: 8px; min-width: 60px;">
                     <button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button>
                 </div>`;
                 container.insertAdjacentHTML('beforeend', html);
@@ -450,10 +491,14 @@
             const linhas = document.querySelectorAll('.linha-edit-membro');
             let membros = []; let temErro = false;
             linhas.forEach(l => {
-                const n = l.querySelector('.input-nome-membro').value.trim(); const c = l.querySelector('.select-cat-membro').value;
-                if(!n) temErro = true; else membros.push({ nome: n, categoria: c });
+                const n = l.querySelector('.input-nome-membro').value.trim(); 
+                const c = l.querySelector('.select-cat-membro').value;
+                const t = l.querySelector('.select-tipo-membro').value;
+                const i = l.querySelector('.input-idade-membro').value;
+                if(!n || (t === 'Criança' && !i)) temErro = true; 
+                else membros.push({ nome: n, categoria: c, tipo: t, idade: i });
             });
-            if(temErro || membros.length === 0) return alert("Preencha o nome de todos!");
+            if(temErro || membros.length === 0) return alert("Preencha o nome e idade (se criança) de todos!");
             
             const btn = document.getElementById('btn-salvar-edicao-grupo'); btn.innerText = "Atualizando..."; btn.disabled = true;
             fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "editarGrupoConvidado", linha: linhaGrupoEditando, grupo: grupo, membros: membros }) })
@@ -468,32 +513,64 @@
             let contagemIdades = {}; 
             let arrayGruposConfirmados = [];
 
+            // Faz a leitura profunda das idades (0 a 5 anos = isento, > 9 = Adulto)
             window.listaPresencasGlobais.forEach(p => {
                 arrayGruposConfirmados.push(p.grupo); 
-                totalAdultos += Number(p.adultos) || 0;
-                totalCriancas += Number(p.criancas) || 0;
                 
                 if(p.jsonRaw && p.jsonRaw !== "[]") {
                     try {
                         let objMembros = JSON.parse(p.jsonRaw);
                         objMembros.forEach(m => {
-                            if(m.status && m.tipo === 'Criança') {
-                                let numIdade = parseInt(m.idade);
-                                if(!isNaN(numIdade) && numIdade <= 5) isentosTotal++;
-                                let label = m.idade ? `${m.idade} anos` : "Idade ñ info.";
-                                contagemIdades[label] = (contagemIdades[label] || 0) + 1;
+                            if(m.status) {
+                                if(m.tipo === 'Criança') {
+                                    let numIdade = parseInt(m.idade);
+                                    if(!isNaN(numIdade)) {
+                                        if(numIdade > 9) {
+                                            totalAdultos++; // Acima de 9 é Adulto matemático
+                                        } else {
+                                            totalCriancas++; // Até 9 é Criança
+                                            if(numIdade <= 5) isentosTotal++;
+                                        }
+                                        let label = `${numIdade} anos`;
+                                        contagemIdades[label] = (contagemIdades[label] || 0) + 1;
+                                    } else { totalCriancas++; }
+                                } else { totalAdultos++; }
                             }
                         });
                     } catch(e) { }
+                } else {
+                    // Fallback antigo
+                    totalAdultos += Number(p.adultos) || 0;
+                    totalCriancas += Number(p.criancas) || 0;
+                }
+            });
+
+            // Lê a lista oficial para os totais
+            let listaConvidadosTotal = 0;
+            let listaConvidadosIsentos = 0;
+            window.estatisticasGlobais.listaOficial.forEach(g => {
+                if (g.categoriasStr && g.categoriasStr.startsWith("[")) {
+                    try {
+                        let membros = JSON.parse(g.categoriasStr);
+                        membros.forEach(m => {
+                            listaConvidadosTotal++;
+                            if(m.tipo === 'Criança') {
+                                let idNum = parseInt(m.idade);
+                                if(!isNaN(idNum) && idNum <= 5) listaConvidadosIsentos++;
+                            }
+                        });
+                    } catch(e) {}
+                } else {
+                    let nomes = g.membros.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0);
+                    listaConvidadosTotal += nomes.length;
                 }
             });
 
             let totalConfirmadosGeral = totalAdultos + totalCriancas;
             let confirmadosPagantes = totalConfirmadosGeral - isentosTotal;
-            let totalDaListaGeral = window.estatisticasGlobais.totalConvidados;
-            let pagantesEstimadoLista = totalDaListaGeral - isentosTotal; 
+            let pagantesEstimadoLista = listaConvidadosTotal - listaConvidadosIsentos; 
 
-            document.getElementById('dash-total-lista').innerText = totalDaListaGeral;
+            document.getElementById('dash-total-lista').innerText = listaConvidadosTotal;
             document.getElementById('dash-total-pagantes-lista').innerText = pagantesEstimadoLista;
             document.getElementById('dash-total-confirmados').innerText = totalConfirmadosGeral;
             document.getElementById('dash-pagantes-confirmados').innerText = confirmadosPagantes;
@@ -553,7 +630,7 @@
                         <p style="font-size: 0.95rem; margin-bottom: 5px; color:#2e7d32;"><strong>✅ Confirmados:</strong> ${p.confirmados}</p>
                         ${naoViraoHtml}
                         <div style="margin-top: 10px; font-size: 0.85rem; color: #555; background: #fff; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
-                            <strong>Totais:</strong> Adultos: ${p.adultos} | Crianças: ${p.criancas} | 📞 ${p.telefone}
+                            📞 ${p.telefone}
                         </div>
                         ${btnEditar}
                         <button onclick="cancelarConfirmacao(${p.linha}, this)" style="position: absolute; top: 15px; right: 15px; background: #d32f2f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition:0.3s;">🗑️ Apagar</button>
@@ -601,9 +678,9 @@
                         <div id="edit-opcoes-membro-${idx}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; opacity: ${m.status ? '1' : '0.3'}; pointer-events: ${m.status ? 'auto' : 'none'};">
                             <select class="edit-tipo-membro" onchange="toggleIdadeEdit(this, ${idx})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
                                 <option value="Adulto" ${selectAdulto}>É Adulto</option>
-                                <option value="Criança" ${selectCrianca}>É Criança (até 9 anos)</option>
+                                <option value="Criança" ${selectCrianca}>É Criança</option>
                             </select>
-                            <input type="number" id="edit-idade-crianca-${idx}" class="edit-idade-membro" placeholder="Idade" min="0" max="10" value="${m.idade}" style="display: ${displayIdade}; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;">
+                            <input type="number" id="edit-idade-crianca-${idx}" class="edit-idade-membro" placeholder="Idade" min="0" max="17" value="${m.idade}" style="display: ${displayIdade}; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;">
                         </div>
                     </div>`;
                     containerMembros.insertAdjacentHTML('beforeend', html);
@@ -632,9 +709,17 @@
                     if(tipo === 'Adulto') {
                         totalA++; confArray.push(`${nome} (Adulto)`); novaMemoriaJson.push({nome: nome, status: true, tipo: "Adulto", idade: ""});
                     } else {
-                        totalC++; const idade = b.querySelector('.edit-idade-membro').value;
+                        const idade = b.querySelector('.edit-idade-membro').value;
                         if(idade === "") temErro = true; 
-                        else { confArray.push(`${nome} (Criança: ${idade} anos)`); novaMemoriaJson.push({nome: nome, status: true, tipo: "Criança", idade: idade}); }
+                        else {
+                            let idNum = parseInt(idade);
+                            if(idNum > 9) {
+                                totalA++; confArray.push(`${nome} (Criança: ${idade} anos - Cont. Adulto)`); 
+                            } else {
+                                totalC++; confArray.push(`${nome} (Criança: ${idade} anos)`);
+                            }
+                            novaMemoriaJson.push({nome: nome, status: true, tipo: "Criança", idade: idade}); 
+                        }
                     }
                 } else {
                     naoConfArray.push(nome); novaMemoriaJson.push({nome: nome, status: false, tipo: "", idade: ""});
@@ -659,7 +744,7 @@
         }
 
 
-        // --- SISTEMA DE RSVP PÚBLICO (AGORA LÊ AS CATEGORIAS) ---
+        // --- SISTEMA DE RSVP PÚBLICO ---
         function buscarConvidado() {
             const nomeDigitado = document.getElementById('rsvp-busca').value; const btn = document.getElementById('btn-buscar-convite'); const msg = document.getElementById('msg-busca');
             if(!nomeDigitado || nomeDigitado.length < 3) return alert("Digite pelo menos 3 letras.");
@@ -682,6 +767,12 @@
                     if(membrosLidos.length > 0) {
                         membrosLidos.forEach((m, index) => {
                             let tagHtml = m.categoria !== "Convidado" ? `<span class="tag-categoria">${m.categoria}</span>` : "";
+                            let isCri = m.tipo === "Criança";
+                            let selAd = !isCri ? "selected" : "";
+                            let selCr = isCri ? "selected" : "";
+                            let dispId = isCri ? "block" : "none";
+                            let valIdade = m.idade || "";
+
                             const html = `
                             <div class="membro-rsvp-item" id="bloco-membro-${index}">
                                 <label style="display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: #333;">
@@ -689,14 +780,16 @@
                                     ${m.nome.trim()} ${tagHtml}
                                 </label>
                                 <div id="opcoes-membro-${index}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                    <select class="tipo-membro" onchange="toggleIdade(this, ${index})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: #fff;"><option value="Adulto">É Adulto</option><option value="Criança">É Criança (até 9 anos)</option></select>
-                                    <input type="number" id="idade-crianca-${index}" class="idade-membro" placeholder="Idade" min="0" max="10" style="display: none; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;">
+                                    <select class="tipo-membro" onchange="toggleIdade(this, ${index})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: #fff;">
+                                        <option value="Adulto" ${selAd}>É Adulto</option>
+                                        <option value="Criança" ${selCr}>É Criança (até 9 anos)</option>
+                                    </select>
+                                    <input type="number" id="idade-crianca-${index}" class="idade-membro" placeholder="Idade" min="0" max="17" value="${valIdade}" style="display: ${dispId}; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;">
                                 </div>
                             </div>`;
                             containerCheckboxes.insertAdjacentHTML('beforeend', html);
                         });
                     } else {
-                        // Formato Antigo
                         let arrayNomes = grupoRSVP.nomes.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0);
                         arrayNomes.forEach((nomeMembro, index) => {
                             const html = `
@@ -704,7 +797,7 @@
                                 <label style="display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: #333;"><input type="checkbox" class="cb-membro" value="${nomeMembro.trim()}" checked onchange="toggleMembro(this, ${index})" style="width: 20px; height: 20px; accent-color: #8c7b65;"> ${nomeMembro.trim()}</label>
                                 <div id="opcoes-membro-${index}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                                     <select class="tipo-membro" onchange="toggleIdade(this, ${index})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: #fff;"><option value="Adulto">É Adulto</option><option value="Criança">É Criança (até 9 anos)</option></select>
-                                    <input type="number" id="idade-crianca-${index}" class="idade-membro" placeholder="Idade" min="0" max="10" style="display: none; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;">
+                                    <input type="number" id="idade-crianca-${index}" class="idade-membro" placeholder="Idade" min="0" max="17" style="display: none; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;">
                                 </div>
                             </div>`;
                             containerCheckboxes.insertAdjacentHTML('beforeend', html);
@@ -737,9 +830,17 @@
                     if(tipo === 'Adulto') {
                         totalA++; confArray.push(`${nome} (Adulto)`); memoriaJson.push({nome: nome, status: true, tipo: "Adulto", idade: ""});
                     } else {
-                        totalC++; const idade = b.querySelector('.idade-membro').value;
+                        const idade = b.querySelector('.idade-membro').value;
                         if(idade === "") temErro = true; 
-                        else { confArray.push(`${nome} (Criança: ${idade} anos)`); memoriaJson.push({nome: nome, status: true, tipo: "Criança", idade: idade}); }
+                        else { 
+                            let idNum = parseInt(idade);
+                            if(idNum > 9) {
+                                totalA++; confArray.push(`${nome} (Criança: ${idade} anos - Cont. Adulto)`); 
+                            } else {
+                                totalC++; confArray.push(`${nome} (Criança: ${idade} anos)`); 
+                            }
+                            memoriaJson.push({nome: nome, status: true, tipo: "Criança", idade: idade}); 
+                        }
                     }
                 } else { naoConfArray.push(nome); memoriaJson.push({nome: nome, status: false, tipo: "", idade: ""}); }
             });
