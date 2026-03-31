@@ -80,10 +80,13 @@
         .mapa-container { margin-top: 30px; background: #eee; height: 300px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #888; border: 1px solid #ddd; }
 
         /* Dashboard Styles & Tabs */
-        .dash-card { background: #fdfdfc; border: 1px solid #e0e0e0; padding: 15px; border-radius: 8px; flex: 1; min-width: 130px; text-align: center; }
+        .dash-card { background: #fdfdfc; border: 1px solid #e0e0e0; padding: 15px; border-radius: 8px; flex: 1; min-width: 130px; text-align: center; position: relative; }
         .dash-card h3 { font-size: 2rem; color: #8c7b65; font-family: 'Playfair Display', serif; margin-bottom: 5px; }
         .dash-card p { font-size: 0.85rem; color: #666; text-transform: uppercase; font-weight: bold; }
         
+        .card-clicavel { cursor: pointer; transition: 0.2s ease; border-bottom: 3px solid transparent; }
+        .card-clicavel:hover { transform: translateY(-3px); border-bottom: 3px solid #8c7b65; background: #faf8f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
         .tab-container { display: flex; gap: 15px; margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 5px; justify-content: center; }
         .tab-btn { background: none; border: none; font-family: 'Lato', sans-serif; font-size: 1.05rem; color: #888; cursor: pointer; padding: 8px 15px; font-weight: bold; transition: 0.3s; }
         .tab-btn:hover { color: #555; }
@@ -93,6 +96,12 @@
         @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
 
         .tag-categoria { font-size: 0.7rem; color: #8c7b65; font-weight: bold; background: #f4f1eb; padding: 3px 8px; border-radius: 12px; margin-left: 8px; font-family: 'Lato', sans-serif; text-transform: uppercase; letter-spacing: 0.5px;}
+
+        /* Lista Modal de Detalhes */
+        .item-detalhe-dash { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }
+        .item-detalhe-dash:last-child { border-bottom: none; }
+        .item-detalhe-nome { font-weight: bold; color: #333; font-size: 1.05rem;}
+        .item-detalhe-grupo { font-size: 0.85rem; color: #888; font-style: italic; }
 
         .somente-admin { display: none !important; }
         .modo-admin-ativo .somente-admin { display: flex !important; }
@@ -198,20 +207,15 @@
                     <div class="dash-card">
                         <h3 id="dash-isentos" style="color: #1976d2;">0</h3><p>Isentos (Até 5 anos)</p>
                     </div>
-                    <div class="dash-card" style="position: relative;">
+                    <div class="dash-card card-clicavel" onclick="abrirDetalhesDash('Grupos Pendentes', 'pendentes')" title="Ver Grupos Pendentes">
                         <h3 id="dash-grupos-pendentes" style="color: #d32f2f;">0</h3><p>Grupos Pendentes</p>
-                        <button onclick="togglePendentes()" style="background:#d32f2f; color:#fff; border:none; border-radius:50%; width:26px; height:26px; font-weight:bold; cursor:pointer; position:absolute; top:10px; right:10px; font-size:1.2rem; display:flex; align-items:center; justify-content:center; transition:0.3s;" title="Ver Pendentes">+</button>
+                        <div style="font-size:0.75rem; color:#d32f2f; margin-top:5px;">👆 Clique para ver</div>
                     </div>
                 </div>
 
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
                     <div class="dash-card"><h3 id="dash-adultos">0</h3><p>Adultos (> 9 anos)</p></div>
                     <div class="dash-card"><h3 id="dash-criancas">0</h3><p>Crianças (≤ 9 anos)</p></div>
-                </div>
-
-                <div id="area-pendentes" style="display:none; text-align: left; background: #fffaf0; padding: 15px; border-radius: 8px; border: 1px solid #f5e6d3; margin-bottom:20px; max-height: 250px; overflow-y: auto;">
-                    <h4 style="margin-bottom: 10px; color: #d32f2f; border-bottom: 1px solid #f0d8d8; padding-bottom:5px;">Famílias Pendentes</h4>
-                    <div id="lista-grupos-pendentes"></div>
                 </div>
 
                 <div style="text-align: left; background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
@@ -226,15 +230,41 @@
                         <h3 id="dash-geral-total">0</h3><p>Total na Lista</p>
                         <div style="font-size:0.8rem; color:#888; margin-top:5px;">Pagantes Est.: <strong id="dash-total-pagantes-lista">0</strong></div>
                     </div>
-                    <div class="dash-card">
-                        <h3 id="dash-geral-grupos">0</h3><p>Total de Famílias/Grupos</p>
+                    <div class="dash-card card-clicavel" onclick="abrirDetalhesDash('Famílias / Grupos na Lista', 'gruposLista')" title="Ver Famílias">
+                        <h3 id="dash-geral-grupos">0</h3><p>Famílias/Grupos</p>
+                        <div style="font-size:0.75rem; color:#8c7b65; margin-top:5px;">👆 Clique para ver</div>
                     </div>
                 </div>
-                <div style="text-align: left; background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-                    <h4 style="margin-bottom: 10px; color: #555;">Divisão por Categorias na Lista Oficial</h4>
-                    <ul id="lista-categorias-geral" style="list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.95rem; color: #444;"></ul>
+                
+                <h4 style="margin: 20px 0 10px; color: #555; text-align: left;">Categorias na Lista (Estimada)</h4>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                    <div class="dash-card card-clicavel" onclick="abrirDetalhesDash('Padrinhos & Madrinhas', 'Padrinhos & Madrinhas')" style="min-width: 45%;">
+                        <h3 id="dash-cat-padrinhos" style="color: #1976d2;">0</h3><p>Padrinhos & Madrinhas</p>
+                    </div>
+                    <div class="dash-card card-clicavel" onclick="abrirDetalhesDash('Noivinhos(as)', 'Noivinhos(as)')">
+                        <h3 id="dash-cat-noivinhos">0</h3><p>Noivinhos(as)</p>
+                    </div>
+                    <div class="dash-card card-clicavel" onclick="abrirDetalhesDash('Pajens', 'Pajens')">
+                        <h3 id="dash-cat-pajens">0</h3><p>Pajens</p>
+                    </div>
+                    <div class="dash-card card-clicavel" onclick="abrirDetalhesDash('Floristas', 'Floristas')">
+                        <h3 id="dash-cat-floristas">0</h3><p>Floristas</p>
+                    </div>
+                    <div class="dash-card card-clicavel" onclick="abrirDetalhesDash('Crianças (Todas)', 'Crianças')" style="min-width: 45%;">
+                        <h3 id="dash-cat-criancas" style="color: #f57c00;">0</h3><p>Crianças na Lista</p>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="modal-detalhes-dash" class="modal" style="z-index: 1100;">
+        <div class="modal-conteudo">
+            <span class="fechar" onclick="fecharModal('modal-detalhes-dash')">&times;</span>
+            <h2 id="titulo-detalhe-dash" style="font-family: 'Playfair Display', serif; margin-bottom: 15px; color:#2c2c2c;">Detalhes</h2>
+            <div id="conteudo-detalhe-dash" style="max-height: 50vh; overflow-y: auto; text-align: left; padding-right: 5px;">
+                </div>
+            <button class="btn-padrao" onclick="fecharModal('modal-detalhes-dash')" style="margin-top: 15px; background: #999;">⬅ Voltar ao Relatório</button>
         </div>
     </div>
 
@@ -255,11 +285,12 @@
                 <label>Nome do Grupo ou Família:</label>
                 <input type="text" id="novo-grupo-nome" placeholder="Ex: Família Rute (Tia do Noivo)">
                 <div style="margin-top: 10px; margin-bottom: 5px;"><label>Membros do Grupo:</label></div>
-                
                 <div id="container-novos-membros" style="max-height: 35vh; overflow-y: auto; padding-right: 5px; margin-bottom: 10px;"></div>
-                
                 <button onclick="adicionarLinhaMembro()" style="background: #f9f9f9; border: 1px dashed #ccc; padding: 10px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; width: 100%; color: #555; font-weight: bold; transition:0.3s;">+ Adicionar outra pessoa ao grupo</button>
-                <button class="btn-padrao" id="btn-salvar-novo-convidado" onclick="salvarNovoConvidado()">Salvar na Planilha Oficial</button>
+                <div style="display:flex; gap: 10px;">
+                    <button class="btn-padrao" onclick="fecharModal('modal-adicionar-convidado'); abrirModalListaConvidados();" style="background: #999; flex: 1; margin-top: 0;">⬅ Cancelar</button>
+                    <button class="btn-padrao" id="btn-salvar-novo-convidado" onclick="salvarNovoConvidado()" style="flex: 2; margin-top: 0;">Salvar na Planilha Oficial</button>
+                </div>
             </div>
         </div>
     </div>
@@ -313,6 +344,7 @@
         
         window.listaPresencasGlobais = [];
         window.estatisticasGlobais = { totalConvidados: 0, totalGrupos: 0, listaOficial: [] };
+        window.dadosDetalhesDash = {}; // Objeto para guardar as listas clicáveis do painel
         
         let linhaRsvpEditando = null;
         let linhaGrupoEditando = null;
@@ -455,6 +487,7 @@
                 processarDadosPlanilha(dados);
                 alert("Grupo adicionado!"); fecharModal('modal-adicionar-convidado'); 
                 document.getElementById('novo-grupo-nome').value = ""; document.getElementById('container-novos-membros').innerHTML = ""; 
+                abrirModalListaConvidados();
             }).catch(() => alert("Erro.")).finally(() => { btn.innerText = "Salvar na Planilha Oficial"; btn.disabled = false; });
         }
 
@@ -529,7 +562,7 @@
             .then(() => fetch(API_URL)).then(r => r.json())
             .then(dados => {
                 processarDadosPlanilha(dados);
-                alert("Grupo atualizado com sucesso!"); 
+                alert("Grupo atualizado!"); 
             })
             .catch(() => alert("Erro ao salvar."))
             .finally(() => { 
@@ -539,13 +572,33 @@
         }
 
 
-        // --- SISTEMA DE RELATÓRIO E CONTAS (COM ABAS) ---
+        // --- SISTEMA DE RELATÓRIO E CONTAS (DASHBOARD) ---
         function mudarAbaDash(abaId, btnSelecionado) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('ativo'));
             if(btnSelecionado) btnSelecionado.classList.add('ativo');
             const aba = document.getElementById(abaId);
             if(aba) aba.classList.add('ativo');
+        }
+
+        // Nova função: Abre o modal de detalhes para listas específicas
+        function abrirDetalhesDash(titulo, chaveCategoria) {
+            document.getElementById('titulo-detalhe-dash').innerText = titulo;
+            const container = document.getElementById('conteudo-detalhe-dash');
+            container.innerHTML = "";
+            
+            const arrayDados = window.dadosDetalhesDash[chaveCategoria] || [];
+            
+            if(arrayDados.length === 0) {
+                container.innerHTML = "<p style='color:#888;'>Nenhum registro encontrado nesta categoria.</p>";
+            } else {
+                arrayDados.forEach(itemHtml => {
+                    container.innerHTML += `<div class="item-detalhe-dash">${itemHtml}</div>`;
+                });
+            }
+            
+            fecharModal('modal-relatorio');
+            abrirModal('modal-detalhes-dash');
         }
 
         function abrirModalRelatorio() {
@@ -556,6 +609,18 @@
             let contagemIdades = {}; 
             let arrayGruposConfirmados = [];
 
+            // Reinicia as listas de detalhes globais
+            window.dadosDetalhesDash = {
+                "Padrinhos & Madrinhas": [],
+                "Noivinhos(as)": [],
+                "Pajens": [],
+                "Floristas": [],
+                "Crianças": [],
+                "gruposLista": [],
+                "pendentes": []
+            };
+
+            // LER ABA CONFIRMAÇÕES (Aba 1)
             window.listaPresencasGlobais.forEach(p => {
                 arrayGruposConfirmados.push(p.grupo); 
                 if(p.jsonRaw && p.jsonRaw !== "[]") {
@@ -578,23 +643,36 @@
                 }
             });
 
+            // LER LISTA OFICIAL GERAL E PREPARAR DADOS DETALHADOS (Aba 2)
             let listaConvidadosTotal = 0;
             let listaConvidadosIsentos = 0;
-            let contagemCategorias = {};
 
             let listaOficial = window.estatisticasGlobais.listaOficial || [];
 
             listaOficial.forEach(g => {
+                let htmlMembrosGeral = ""; // para o card de Familias/Grupos
+
                 if (g.categoriasStr && g.categoriasStr.startsWith("[")) {
                     try {
                         let membros = JSON.parse(g.categoriasStr);
                         membros.forEach(m => {
                             listaConvidadosTotal++;
                             let cat = m.categoria || "Convidado";
-                            contagemCategorias[cat] = (contagemCategorias[cat] || 0) + 1;
+                            
+                            let htmlBase = `<span class="item-detalhe-nome">${m.nome}</span><br><span class="item-detalhe-grupo">Pertence a: ${g.identificacao}</span>`;
+                            htmlMembrosGeral += `${m.nome} (${cat}), `;
+
+                            if(cat === "Padrinho" || cat === "Madrinha") window.dadosDetalhesDash["Padrinhos & Madrinhas"].push(htmlBase);
+                            else if(cat === "Noivinho" || cat === "Noivinha") window.dadosDetalhesDash["Noivinhos(as)"].push(htmlBase);
+                            else if(cat === "Pajem") window.dadosDetalhesDash["Pajens"].push(htmlBase);
+                            else if(cat === "Florista") window.dadosDetalhesDash["Floristas"].push(htmlBase);
 
                             if(m.tipo === 'Criança') {
                                 let idNum = parseInt(m.idade);
+                                let txIdade = m.idade ? `${m.idade} anos` : "Idade ñ info.";
+                                let htmlCrianca = `<span class="item-detalhe-nome">${m.nome} <span style="color:#1976d2;">(${txIdade})</span></span><br><span class="item-detalhe-grupo">Pertence a: ${g.identificacao}</span>`;
+                                window.dadosDetalhesDash["Crianças"].push(htmlCrianca);
+                                
                                 if(!isNaN(idNum) && idNum <= 5) listaConvidadosIsentos++;
                             }
                         });
@@ -602,66 +680,49 @@
                 } else {
                     let nomes = g.membros.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0);
                     listaConvidadosTotal += nomes.length;
-                    contagemCategorias["Convidado"] = (contagemCategorias["Convidado"] || 0) + nomes.length;
+                    htmlMembrosGeral = g.membros;
                 }
+
+                // Salva o grupo na lista para poder ver todos os grupos clicando
+                htmlMembrosGeral = htmlMembrosGeral.replace(/, $/, ""); // Remove ultima virgula
+                window.dadosDetalhesDash["gruposLista"].push(`<span class="item-detalhe-nome">${g.identificacao}</span><br><span class="item-detalhe-grupo">${htmlMembrosGeral}</span>`);
             });
 
             let totalConfirmadosGeral = totalAdultos + totalCriancas;
             let confirmadosPagantes = totalConfirmadosGeral - isentosTotal;
             let pagantesEstimadoLista = listaConvidadosTotal - listaConvidadosIsentos; 
 
+            // Textos Aba 1
             const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; };
-
             setVal('dash-total-confirmados', totalConfirmadosGeral);
             setVal('dash-pagantes-confirmados', confirmadosPagantes);
             setVal('dash-isentos', isentosTotal);
             setVal('dash-adultos', totalAdultos);
             setVal('dash-criancas', totalCriancas);
+            
+            // Textos Aba 2
             setVal('dash-geral-total', listaConvidadosTotal);
             setVal('dash-total-pagantes-lista', pagantesEstimadoLista);
             setVal('dash-geral-grupos', listaOficial.length);
 
+            // Contagens Clicaveis
+            setVal('dash-cat-padrinhos', window.dadosDetalhesDash["Padrinhos & Madrinhas"].length);
+            setVal('dash-cat-noivinhos', window.dadosDetalhesDash["Noivinhos(as)"].length);
+            setVal('dash-cat-pajens', window.dadosDetalhesDash["Pajens"].length);
+            setVal('dash-cat-floristas', window.dadosDetalhesDash["Floristas"].length);
+            setVal('dash-cat-criancas', window.dadosDetalhesDash["Crianças"].length);
+
             let listaPendentes = [];
             listaOficial.forEach(g => {
-                if(!arrayGruposConfirmados.includes(g.identificacao)) listaPendentes.push(g);
+                if(!arrayGruposConfirmados.includes(g.identificacao)) {
+                    listaPendentes.push(g);
+                    // Adiciona na memória do painel detalhado tbm
+                    window.dadosDetalhesDash["pendentes"].push(`<span class="item-detalhe-nome" style="color:#d32f2f">${g.identificacao}</span><br><span class="item-detalhe-grupo">${g.membros}</span>`);
+                }
             });
             setVal('dash-grupos-pendentes', listaPendentes.length);
-            
-            let pendentesHtml = "";
-            if(listaPendentes.length === 0) { pendentesHtml = "<p style='color:#388e3c;'>Todos os grupos confirmaram!</p>"; } 
-            else {
-                listaPendentes.forEach(p => {
-                    pendentesHtml += `<div style="padding: 10px; border-bottom: 1px solid #f0d8d8;"><strong style="color:#555;">${p.identificacao}</strong><br><span style="font-size:0.85rem; color:#888;">${p.membros}</span></div>`;
-                });
-            }
-            
-            const elPendentes = document.getElementById('lista-grupos-pendentes');
-            if(elPendentes) elPendentes.innerHTML = pendentesHtml;
-            
-            const areaPendentes = document.getElementById('area-pendentes');
-            if(areaPendentes) areaPendentes.style.display = "none";
-
-            let ulIdades = document.getElementById('lista-idades-criancas');
-            if(ulIdades) {
-                ulIdades.innerHTML = "";
-                if(Object.keys(contagemIdades).length === 0) { ulIdades.innerHTML = "<li>Nenhuma criança confirmada.</li>"; } 
-                else { for (const [idade, qtd] of Object.entries(contagemIdades)) { ulIdades.innerHTML += `<li>👶 ${idade}: <strong>${qtd}</strong></li>`; } }
-            }
-
-            let ulCats = document.getElementById('lista-categorias-geral');
-            if(ulCats) {
-                ulCats.innerHTML = "";
-                for (const [cat, qtd] of Object.entries(contagemCategorias)) {
-                    ulCats.innerHTML += `<li>🏷️ ${cat}: <strong style="color:#1976d2;">${qtd}</strong></li>`;
-                }
-            }
 
             abrirModal('modal-relatorio');
-        }
-
-        function togglePendentes() {
-            let area = document.getElementById('area-pendentes');
-            if(area) area.style.display = area.style.display === "none" ? "block" : "none";
         }
 
 
@@ -708,7 +769,6 @@
             }
         }
 
-        // --- SISTEMA ADMIN DE EDITAR RSVP ---
         function prepararEdicaoRsvp(indexArrayGlobal) {
             const rsvp = window.listaPresencasGlobais[indexArrayGlobal];
             linhaRsvpEditando = rsvp.linha;
@@ -790,10 +850,7 @@
 
             fetch(API_URL, {
                 method: 'POST',
-                body: JSON.stringify({ 
-                    action: "editarRSVP", linha: linhaRsvpEditando, confirmados: confArray.join(" | "), naoConfirmados: naoConfArray.join(" | "), 
-                    adultos: totalA, criancas: totalC, jsonRaw: JSON.stringify(novaMemoriaJson)
-                })
+                body: JSON.stringify({ action: "editarRSVP", linha: linhaRsvpEditando, confirmados: confArray.join(" | "), naoConfirmados: naoConfArray.join(" | "), adultos: totalA, criancas: totalC, jsonRaw: JSON.stringify(novaMemoriaJson) })
             }).then(() => fetch(API_URL)).then(r => r.json())
             .then(dados => {
                 processarDadosPlanilha(dados);
@@ -933,7 +990,7 @@
         function salvarNovasCredenciais() { const u = document.getElementById('novo-admin-user').value; const p = document.getElementById('novo-admin-pass').value; if(u && p) { localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: u, pass: p })); alert("Atualizado!"); fecharModal('modal-config-admin'); } else alert("Preencha tudo!"); }
         function abrirModal(id) { document.getElementById(id).style.display = "block"; }
         function fecharModal(id) { document.getElementById(id).style.display = "none"; }
-        window.onclick = function(e) { if(e.target.classList.contains('modal')) e.target.style.display = "none"; }
+        window.onclick = function(e) { if(e.target.classList.contains('modal')) { e.target.style.display = "none"; if(e.target.id === "modal-detalhes-dash") abrirModal('modal-relatorio'); } }
         function copiarPix() { const c = document.getElementById("codigo-pix"); c.select(); c.setSelectionRange(0, 99999); navigator.clipboard.writeText(c.value); alert("Copiado!"); }
     </script>
 </body>
