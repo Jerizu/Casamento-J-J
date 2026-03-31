@@ -50,6 +50,7 @@
         .btn-excluir { background-color: #d32f2f; }
         .btn-editar { background-color: #1976d2; }
         
+        /* Ajustes Formulário RSVP e Checkboxes */
         .formulario-bloco { background: #fff; padding: 30px; border-radius: 8px; border: 1px solid #eaeaea; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .formulario-inputs { display: flex; flex-direction: column; gap: 10px; text-align: left; }
         .formulario-inputs label { font-size: 0.9rem; font-weight: bold; color: #555; }
@@ -59,7 +60,6 @@
         .caixa-convite-encontrado p.aviso-grupo { color: #2c2c2c; font-size: 1rem; margin-bottom: 5px; font-weight: bold;}
         .identificacao-grupo { font-size: 0.9rem; color: #8c7b65; font-style: italic; display: block; margin-bottom: 15px; font-family: 'Playfair Display', serif; }
         
-        /* Novos estilos para os membros da família */
         .membro-rsvp-item { background: #fff; border: 1px solid #e0e0e0; padding: 15px; border-radius: 6px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); transition: opacity 0.3s; }
         .membro-rsvp-item.inativo { opacity: 0.5; background: #f5f5f5; }
 
@@ -67,8 +67,10 @@
         .btn-padrao:hover { background-color: #6b5c49; }
         .btn-padrao:disabled { background-color: #ccc; cursor: not-allowed; }
 
+        /* Modais */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); overflow-y: auto; padding: 20px 0; }
         .modal-conteudo { background-color: #fff; margin: auto; padding: 25px 20px; width: 90%; max-width: 450px; text-align: center; position: relative; border-radius: 10px; }
+        .modal-conteudo-largo { max-width: 700px; } /* Usado para o modal de presença */
         .fechar { position: absolute; top: 10px; right: 20px; color: #999; font-size: 30px; cursor: pointer; }
 
         .area-qrcode { display: flex; justify-content: center; margin-bottom: 10px; }
@@ -101,6 +103,7 @@
             <span style="color: #ddd; margin: 0 5px;">|</span>
             <button class="btn-menu esconder-logado" onclick="abrirModal('modal-login')">Acesso Restrito</button>
             <div class="somente-admin flex-admin-menu">
+                <button class="btn-menu" onclick="abrirModalPresenca()" style="color: #1976d2;">📋 Presenças</button>
                 <button class="btn-menu" onclick="abrirModal('modal-adicionar')">➕ Add Item</button>
                 <button class="btn-menu" onclick="abrirModalConfigPix()">💳 Config PIX</button>
                 <button class="btn-menu" onclick="abrirModal('modal-config-admin')">⚙️ Senha</button>
@@ -141,17 +144,13 @@
             <div class="caixa-convite-encontrado" id="caixa-grupo">
                 <p class="aviso-grupo">✅ Convite localizado para:</p>
                 <span class="identificacao-grupo" id="rsvp-identificacao"></span>
-                
                 <p style="font-size: 0.95rem; margin-bottom: 15px; color: #555;">Quem estará presente na festa? (Desmarque quem não puder ir)</p>
-                
                 <div id="lista-checkbox-membros"></div>
             </div>
 
             <div class="formulario-inputs" id="bloco-formulario" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
-                
                 <label>Telefone (WhatsApp) principal para contato do grupo:</label>
                 <input type="text" id="rsvp-telefone" placeholder="(11) 99999-9999">
-                
                 <button class="btn-padrao" id="btn-enviar-rsvp" onclick="enviarRSVP()" style="margin-top: 10px;">Confirmar Nossa Presença</button>
             </div>
         </div>
@@ -172,6 +171,16 @@
     </section>
 
     <div id="modal-pix" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-pix')">&times;</span><h2 id="modal-titulo" style="font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-top: 10px;">Nome</h2><p id="modal-valor" style="font-size: 1.2rem; color: #8c7b65; font-weight: bold; margin-bottom: 10px;">R$ 0,00</p><div class="area-qrcode"><img src="" id="img-qr-pix-modal"></div><div class="area-copia-cola"><input type="text" id="codigo-pix" readonly><button class="btn-elegante" onclick="copiarPix()" style="padding: 8px;">Copiar Código PIX</button></div><div style="height: 1px; background-color: #eee; margin: 15px 0;"></div><div class="formulario-inputs" style="margin-top: 0;"><p style="text-align: center; font-size: 0.85rem; color: #666; margin-bottom: 5px;">Deixe uma mensagem para os noivos!</p><input type="text" id="input-nome-pix" placeholder="Seu nome"><textarea id="input-mensagem-pix" rows="2" placeholder="Sua mensagem de carinho..."></textarea><button class="btn-padrao" id="btn-enviar-pix" onclick="confirmarPagamentoPix()">Confirmar PIX e Enviar</button></div></div></div>
+    
+    <div id="modal-lista-presenca" class="modal">
+        <div class="modal-conteudo modal-conteudo-largo">
+            <span class="fechar" onclick="fecharModal('modal-lista-presenca')">&times;</span>
+            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 15px;">Lista de Presenças Confirmadas</h2>
+            <div id="conteudo-lista-presenca" style="margin-top: 20px; text-align: left; max-height: 65vh; overflow-y: auto;">
+                </div>
+        </div>
+    </div>
+
     <div id="modal-adicionar" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-adicionar')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Adicionar Presente</h2><div class="formulario-inputs"><input type="text" id="novo-nome" placeholder="Nome (Ex: Batedeira)"><input type="text" id="novo-valor" placeholder="Valor (Ex: 150,00)"><input type="text" id="nova-imagem" placeholder="Link da Imagem"><button class="btn-padrao" id="btn-salvar-novo" onclick="salvarNovoPresente()">Salvar Item</button></div></div></div>
     <div id="modal-editar" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-editar')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Editar Presente</h2><div class="formulario-inputs"><input type="text" id="edit-nome"><input type="text" id="edit-valor"><input type="text" id="edit-imagem"><button class="btn-padrao" id="btn-salvar-edicao" onclick="salvarEdicao()">Atualizar Item</button></div></div></div>
     <div id="modal-config-pix" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-pix')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Configurar PIX</h2><div class="formulario-inputs"><textarea id="config-chave-pix" rows="3" placeholder="Chave Copia e Cola"></textarea><input type="text" id="config-qr-pix" placeholder="Link do QR Code"><button class="btn-padrao" id="btn-salvar-pix" onclick="salvarConfigPix()">Salvar na Nuvem</button></div></div></div>
@@ -184,6 +193,9 @@
         let idEditando = null; let idComprando = null; let nomeComprando = null;
         let dadosPixNuvem = { chave: "", qr: "" };
         let grupoRSVP = { nomes: "", identificacao: "" };
+        
+        // Váriavel para armazenar os RSVPs que vieram da nuvem
+        window.listaPresencasGlobais = [];
 
         window.onload = function() {
             if (!localStorage.getItem('credenciaisAdmin')) localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: 'admin', pass: 'admin' }));
@@ -191,7 +203,7 @@
             carregarListaDaPlanilha();
         };
 
-        // --- BUSCA NA PLANILHA (PRESENTES) ---
+        // --- BUSCA NA PLANILHA (PRESENTES E PRESENÇAS) ---
         function carregarListaDaPlanilha() {
             const grid = document.getElementById('grid-presentes');
             grid.innerHTML = '<div class="loading" id="mensagem-loading">⏳ Sincronizando com a base de dados...</div>';
@@ -201,6 +213,10 @@
                 const isAdmin = sessionStorage.getItem('logadoComoAdmin') === 'sim';
                 
                 if(dados.pix) { dadosPixNuvem.chave = dados.pix.chave || ""; dadosPixNuvem.qr = dados.pix.qr || ""; }
+                
+                // Salva as presenças para o modal Admin
+                if(dados.presencas) { window.listaPresencasGlobais = dados.presencas; }
+
                 if(dados.presentes.length === 0) { grid.innerHTML = "<p class='loading'>A lista está vazia!</p>"; return; }
 
                 let itensRenderizados = 0;
@@ -247,6 +263,52 @@
             }).catch(erro => { grid.innerHTML = "<p class='loading' style='color:red;'>Erro de conexão com o Google. Recarregue.</p>"; });
         }
 
+        // --- SISTEMA DE ADMIN DE PRESENÇAS ---
+        function abrirModalPresenca() {
+            const container = document.getElementById('conteudo-lista-presenca');
+            container.innerHTML = "";
+
+            if(!window.listaPresencasGlobais || window.listaPresencasGlobais.length === 0) {
+                container.innerHTML = "<p style='text-align:center; color:#888;'>Nenhuma presença foi confirmada ainda.</p>";
+            } else {
+                // Loop para cada presença recebida da planilha
+                window.listaPresencasGlobais.forEach(p => {
+                    const naoViraoHtml = p.naoConfirmados ? `<p style="color:#d32f2f; font-size:0.9rem; margin-bottom:5px;"><strong>❌ Não virão:</strong> ${p.naoConfirmados}</p>` : '';
+                    
+                    const html = `
+                    <div style="border: 1px solid #e0e0e0; padding: 15px; border-radius: 6px; margin-bottom: 15px; position: relative; background: #f9f9f9;">
+                        <h4 style="color: #8c7b65; margin-bottom: 8px; font-family: 'Playfair Display', serif; font-size: 1.2rem;">${p.grupo || "Convite Avulso"}</h4>
+                        <p style="font-size: 0.95rem; margin-bottom: 5px; color:#2e7d32;"><strong>✅ Confirmados:</strong> ${p.confirmados}</p>
+                        ${naoViraoHtml}
+                        <div style="margin-top: 10px; font-size: 0.85rem; color: #555; background: #fff; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+                            <strong>Totais:</strong> Adultos: ${p.adultos} | Crianças: ${p.criancas} | 📞 Contato: ${p.telefone}
+                        </div>
+                        <button onclick="cancelarConfirmacao(${p.linha}, this)" style="position: absolute; top: 15px; right: 15px; background: #d32f2f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition:0.3s;">🗑️ Cancelar</button>
+                    </div>`;
+                    container.insertAdjacentHTML('beforeend', html);
+                });
+            }
+            abrirModal('modal-lista-presenca');
+        }
+
+        function cancelarConfirmacao(linha, btn) {
+            if(confirm("Tem certeza que deseja apagar essa confirmação da planilha?")) {
+                btn.innerText = "Apagando..."; btn.disabled = true;
+                fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "cancelarRSVP", linha: linha })
+                }).then(() => {
+                    alert("A confirmação foi apagada com sucesso da sua planilha.");
+                    fecharModal('modal-lista-presenca');
+                    carregarListaDaPlanilha(); // Recarrega para puxar a lista nova atualizada
+                }).catch(() => {
+                    alert("Erro ao apagar. Tente novamente.");
+                    btn.innerText = "🗑️ Cancelar"; btn.disabled = false;
+                });
+            }
+        }
+
+
         // --- SISTEMA DE RSVP INTELIGENTE (INDIVIDUAL) ---
         function buscarConvidado() {
             const nomeDigitado = document.getElementById('rsvp-busca').value;
@@ -271,10 +333,8 @@
                     let containerCheckboxes = document.getElementById('lista-checkbox-membros');
                     containerCheckboxes.innerHTML = ""; 
                     
-                    // Quebra a string de nomes pela vírgula ou pela letra "e"
                     let arrayNomes = grupoRSVP.nomes.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0);
                     
-                    // Desenha o painel de cada membro
                     arrayNomes.forEach((nomeMembro, index) => {
                         const html = `
                         <div class="membro-rsvp-item" id="bloco-membro-${index}">
@@ -286,7 +346,7 @@
                             <div id="opcoes-membro-${index}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                                 <select class="tipo-membro" onchange="toggleIdade(this, ${index})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Lato', sans-serif; background: #fff;">
                                     <option value="Adulto">É Adulto</option>
-                                    <option value="Criança">É Criança (até 9 anos)</option>
+                                    <option value="Criança">É Criança (até 10 anos)</option>
                                 </select>
                                 
                                 <input type="number" id="idade-crianca-${index}" class="idade-membro" placeholder="Idade" min="0" max="10" style="display: none; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px; font-family: 'Lato', sans-serif;">
@@ -304,7 +364,6 @@
             .finally(() => { btn.innerText = "Buscar"; btn.disabled = false; });
         }
 
-        // Funções para animar a janelinha de cada membro
         function toggleMembro(checkbox, index) {
             const bloco = document.getElementById(`bloco-membro-${index}`);
             const opcoes = document.getElementById(`opcoes-membro-${index}`);
@@ -331,7 +390,6 @@
             }
         }
 
-        // Enviar os dados compilados
         function enviarRSVP() {
             const tel = document.getElementById('rsvp-telefone').value;
             if(!tel) return alert("Por favor, informe o telefone de contato principal do grupo!");
@@ -339,15 +397,16 @@
             let totalAdultos = 0;
             let totalCriancas = 0;
             let confirmadosArray = [];
+            let naoConfirmadosArray = []; // NOVO: Pra salvar quem desmarcou a caixa
             let temErroIdade = false;
 
-            // Vasculha todos os blocos gerados na tela
             const blocos = document.querySelectorAll('.membro-rsvp-item');
             
             blocos.forEach(bloco => {
                 const cb = bloco.querySelector('.cb-membro');
+                const nome = cb.value;
+
                 if(cb.checked) {
-                    const nome = cb.value;
                     const tipo = bloco.querySelector('.tipo-membro').value;
                     
                     if(tipo === 'Adulto') {
@@ -356,19 +415,19 @@
                     } else {
                         totalCriancas++;
                         const idade = bloco.querySelector('.idade-membro').value;
-                        if(idade === "") {
-                            temErroIdade = true; // Impede o envio se não colocou a idade
-                        } else {
-                            confirmadosArray.push(`${nome} (Criança: ${idade} anos)`);
-                        }
+                        if(idade === "") temErroIdade = true; 
+                        else confirmadosArray.push(`${nome} (Criança: ${idade} anos)`);
                     }
+                } else {
+                    naoConfirmadosArray.push(nome);
                 }
             });
 
             if(temErroIdade) return alert("Por favor, preencha a idade das crianças selecionadas.");
             if(totalAdultos === 0 && totalCriancas === 0) return alert("Você precisa selecionar pelo menos uma pessoa para confirmar presença.");
 
-            const confirmadosStr = confirmadosArray.join(" | "); // Junta tudo num texto bonitinho
+            const confirmadosStr = confirmadosArray.join(" | "); 
+            const naoConfirmadosStr = naoConfirmadosArray.join(" | ");
 
             const btn = document.getElementById('btn-enviar-rsvp');
             btn.innerText = "Enviando..."; btn.disabled = true;
@@ -379,6 +438,7 @@
                     action: "rsvp", 
                     grupo: grupoRSVP.identificacao, 
                     confirmados: confirmadosStr, 
+                    naoConfirmados: naoConfirmadosStr, // Enviando os ausentes
                     telefone: tel, 
                     adultos: totalAdultos, 
                     criancas: totalCriancas 
@@ -389,6 +449,7 @@
             }).catch(() => alert("Erro ao enviar. Tente novamente."))
             .finally(() => { btn.innerText = "Confirmar Nossa Presença"; btn.disabled = false; });
         }
+
 
         // --- DEMAIS FUNÇÕES DO SITE ---
         function mudarStatusPresente(id, e) { e.target.innerText = "⏳"; e.target.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "mudarStatus", id: id, novoStatus: "" }) }).then(() => carregarListaDaPlanilha()); }
