@@ -410,7 +410,7 @@
                         <div id="edit-opcoes-membro-${idx}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; opacity: ${m.status ? '1' : '0.3'}; pointer-events: ${m.status ? 'auto' : 'none'};">
                             <select class="edit-tipo-membro" onchange="toggleIdadeEdit(this, ${idx})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
                                 <option value="Adulto" ${selectAdulto}>É Adulto</option>
-                                <option value="Criança" ${selectCrianca}>É Criança (até 10 anos)</option>
+                                <option value="Criança" ${selectCrianca}>É Criança (até 9 anos)</option>
                             </select>
                             <input type="number" id="edit-idade-crianca-${idx}" class="edit-idade-membro" placeholder="Idade" min="0" max="10" value="${m.idade}" style="display: ${displayIdade}; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;">
                         </div>
@@ -493,7 +493,7 @@
                         <div class="membro-rsvp-item" id="bloco-membro-${index}">
                             <label style="display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: #333;"><input type="checkbox" class="cb-membro" value="${nomeMembro.trim()}" checked onchange="toggleMembro(this, ${index})" style="width: 20px; height: 20px; accent-color: #8c7b65;"> ${nomeMembro.trim()}</label>
                             <div id="opcoes-membro-${index}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                <select class="tipo-membro" onchange="toggleIdade(this, ${index})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: #fff;"><option value="Adulto">É Adulto</option><option value="Criança">É Criança (até 10 anos)</option></select>
+                                <select class="tipo-membro" onchange="toggleIdade(this, ${index})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: #fff;"><option value="Adulto">É Adulto</option><option value="Criança">É Criança (até 9 anos)</option></select>
                                 <input type="number" id="idade-crianca-${index}" class="idade-membro" placeholder="Idade" min="0" max="10" style="display: none; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;">
                             </div>
                         </div>`;
