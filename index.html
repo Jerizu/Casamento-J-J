@@ -10,7 +10,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background-color: #fdfdfc; color: #333; font-family: 'Lato', sans-serif; line-height: 1.6; }
         
-        /* Menu Superior */
         .menu-superior { background-color: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
         .menu-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #8c7b65; font-weight: bold; text-decoration: none;}
         .menu-links { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; justify-content: center; }
@@ -19,25 +18,21 @@
         .btn-sair { color: #d32f2f; }
         .flex-admin-menu { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; align-items: center; }
         
-        /* Seções Gerais */
         .secao-site { padding: 60px 20px; max-width: 900px; margin: 0 auto; border-bottom: 1px solid #f0f0f0; }
         .secao-site:last-child { border-bottom: none; }
         .titulo-secao { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #2c2c2c; margin-bottom: 15px; text-align: center; }
         .linha-decorativa { width: 60px; height: 1px; background-color: #d4c4a8; margin: 0 auto 30px; }
         .texto-centralizado { text-align: center; color: #666; max-width: 700px; margin: 0 auto 40px; font-weight: 300; }
         
-        /* Cabeçalho Home */
         .header-elegante { text-align: center; padding: 80px 20px 60px; background-color: #faf8f5; }
         .nomes { font-family: 'Playfair Display', serif; font-size: 4rem; color: #2c2c2c; margin-bottom: 10px; }
         .data { font-size: 1.2rem; letter-spacing: 4px; color: #8c7b65; font-weight: bold; }
         
-        /* Grid de Presentes */
         .grid-colunas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
         .loading { text-align: center; grid-column: 1 / -1; color: #8c7b65; font-size: 1.2rem; padding: 40px; font-style: italic; }
         
         .item-lista { position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; border: 1px solid #eaeaea; background: #fff; border-radius: 8px; transition: transform 0.3s; overflow: hidden; }
         .item-lista:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .item-lista.sumindo { opacity: 0; transform: scale(0.9); } 
         
         .vitrine-produto { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
         .vitrine-produto img { width: 90px; height: 90px; object-fit: cover; border-radius: 5px; border: 1px solid #f0f0f0; }
@@ -48,7 +43,6 @@
         .btn-elegante:hover { background-color: #8c7b65; color: #fff; }
         .btn-restaurar { background-color: #1976d2; color: white; border: none; padding: 10px; border-radius: 5px; width: 100%; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.9rem; }
         
-        /* Selos e Botoes Admin */
         .selo-status { position: absolute; top: 12px; left: 12px; background-color: #d32f2f; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; z-index: 10;}
         .selo-comprado { background-color: #388e3c; }
         .botoes-admin { display: none; position: absolute; top: 12px; right: 12px; gap: 8px; z-index: 15; }
@@ -56,12 +50,16 @@
         .btn-excluir { background-color: #d32f2f; }
         .btn-editar { background-color: #1976d2; }
         
-        /* Formulários e Modais */
         .formulario-bloco { background: #fff; padding: 30px; border-radius: 8px; border: 1px solid #eaeaea; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .formulario-inputs { display: flex; flex-direction: column; gap: 10px; text-align: left; }
         .formulario-inputs label { font-size: 0.9rem; font-weight: bold; color: #555; }
         .formulario-inputs input, .formulario-inputs textarea, .formulario-inputs select { padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-family: 'Lato', sans-serif; width: 100%; }
         
+        .caixa-convite-encontrado { background-color: #f0f7f0; border: 1px solid #c8e6c9; padding: 15px; border-radius: 5px; margin-bottom: 10px; display: none; }
+        .caixa-convite-encontrado p { color: #2e7d32; font-size: 0.9rem; margin-bottom: 5px; }
+        .caixa-convite-encontrado strong { color: #1b5e20; font-size: 1.1rem; display: block; font-family: 'Playfair Display', serif; }
+        .identificacao-grupo { font-size: 0.8rem; color: #555; font-style: italic; display: block; margin-top: 5px; }
+
         .btn-padrao { background-color: #8c7b65; color: white; border: none; padding: 14px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; margin-top: 10px; text-transform: uppercase; font-size: 0.9rem; }
         .btn-padrao:hover { background-color: #6b5c49; }
         .btn-padrao:disabled { background-color: #ccc; cursor: not-allowed; }
@@ -74,7 +72,6 @@
         .area-qrcode img { max-width: 130px; border-radius: 10px; border: 2px solid #eee; } 
         .area-copia-cola input { width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #e0e0e0; text-align: center; font-family: monospace; }
         
-        /* Detalhes do Local */
         .info-local { text-align: center; font-size: 1.1rem; color: #444; }
         .info-local h4 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #8c7b65; margin: 15px 0 5px; }
         .mapa-container { margin-top: 30px; background: #eee; height: 300px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #888; border: 1px solid #ddd; }
@@ -94,16 +91,12 @@
 
     <nav class="menu-superior">
         <a href="#" class="menu-logo">J&J</a>
-        
         <div class="menu-links">
             <a href="#presentes" class="btn-menu">Presentes</a>
             <a href="#presenca" class="btn-menu">Confirmação</a>
             <a href="#local" class="btn-menu">Local</a>
-            
             <span style="color: #ddd; margin: 0 5px;">|</span>
-            
             <button class="btn-menu esconder-logado" onclick="abrirModal('modal-login')">Acesso Restrito</button>
-
             <div class="somente-admin flex-admin-menu">
                 <button class="btn-menu" onclick="abrirModal('modal-adicionar')">➕ Add Item</button>
                 <button class="btn-menu" onclick="abrirModalConfigPix()">💳 Config PIX</button>
@@ -122,7 +115,6 @@
         <h2 class="titulo-secao">Lista de Presentes</h2>
         <div class="linha-decorativa"></div>
         <p class="texto-centralizado">Ajudem-nos a montar nossa casa! Escolha um item abaixo e contribua de forma segura via PIX direto para a nossa conta.</p>
-        
         <div class="grid-colunas" id="grid-presentes">
             <div class="loading" id="mensagem-loading">⏳ Sincronizando com a base de dados...</div>
         </div>
@@ -131,32 +123,44 @@
     <section id="presenca" class="secao-site" style="background-color: #faf8f5;">
         <h2 class="titulo-secao">Confirmação de Presença</h2>
         <div class="linha-decorativa"></div>
-        <p class="texto-centralizado">Por favor, confirme sua presença até o dia 01 de novembro de 2026 para podermos organizar tudo com muito carinho.</p>
+        <p class="texto-centralizado">Para confirmar sua presença, digite o seu nome (ou de alguém do seu grupo) para localizarmos o seu convite na nossa lista.</p>
         
         <div class="formulario-bloco" style="max-width: 600px; margin: 0 auto;">
-            <div class="formulario-inputs">
-                <label>Nome Completo do Responsável</label>
-                <input type="text" id="rsvp-nome" placeholder="Digite seu nome">
-                
-                <label>Telefone (WhatsApp)</label>
+            <div class="formulario-inputs" id="bloco-busca">
+                <label>Seu Nome ou Sobrenome:</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="rsvp-busca" placeholder="Ex: Zoraide">
+                    <button class="btn-padrao" id="btn-buscar-convite" onclick="buscarConvidado()" style="width: auto; margin-top: 0; padding: 0 20px;">Buscar</button>
+                </div>
+                <p id="msg-busca" style="font-size: 0.85rem; margin-top: 5px;"></p>
+            </div>
+
+            <div class="caixa-convite-encontrado" id="caixa-grupo">
+                <p>✅ Convite localizado para:</p>
+                <strong id="rsvp-nomes-grupo">Carregando...</strong>
+                <span class="identificacao-grupo" id="rsvp-identificacao"></span>
+            </div>
+
+            <div class="formulario-inputs" id="bloco-formulario" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+                <label>Telefone (WhatsApp) para contato:</label>
                 <input type="text" id="rsvp-telefone" placeholder="(11) 99999-9999">
                 
                 <div style="display: flex; gap: 15px;">
                     <div style="flex: 1;">
-                        <label>Qtd. Adultos</label>
+                        <label>Qtd. Adultos Presentes:</label>
                         <select id="rsvp-adultos">
-                            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
+                            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
                         </select>
                     </div>
                     <div style="flex: 1;">
-                        <label>Crianças (até 10 anos)</label>
+                        <label>Crianças (até 10 anos):</label>
                         <select id="rsvp-criancas">
                             <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
                         </select>
                     </div>
                 </div>
 
-                <button class="btn-padrao" id="btn-enviar-rsvp" onclick="enviarRSVP()">Confirmar Minha Presença</button>
+                <button class="btn-padrao" id="btn-enviar-rsvp" onclick="enviarRSVP()" style="margin-top: 20px;">Confirmar Nossa Presença</button>
             </div>
         </div>
     </section>
@@ -165,12 +169,10 @@
         <h2 class="titulo-secao">Sobre o Local</h2>
         <div class="linha-decorativa"></div>
         <p class="texto-centralizado">Estamos preparando uma festa inesquecível para celebrarmos juntos este momento tão especial.</p>
-        
         <div class="info-local">
             <p>A nossa cerimônia e recepção serão realizadas no</p>
             <h4>Espaço Malavazzi</h4>
             <p style="color: #777; font-size: 0.9rem; margin-top: 5px;">Aguardamos vocês lá para brindarmos ao nosso amor!</p>
-            
             <div class="mapa-container">
                 [ Área reservada para o Mapa do Local ]
             </div>
@@ -199,21 +201,17 @@
     </div>
 
     <div id="modal-adicionar" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-adicionar')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Adicionar Presente</h2><div class="formulario-inputs"><input type="text" id="novo-nome" placeholder="Nome (Ex: Batedeira)"><input type="text" id="novo-valor" placeholder="Valor (Ex: 150,00)"><input type="text" id="nova-imagem" placeholder="Link da Imagem"><button class="btn-padrao" id="btn-salvar-novo" onclick="salvarNovoPresente()">Salvar Item</button></div></div></div>
-
     <div id="modal-editar" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-editar')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Editar Presente</h2><div class="formulario-inputs"><input type="text" id="edit-nome"><input type="text" id="edit-valor"><input type="text" id="edit-imagem"><button class="btn-padrao" id="btn-salvar-edicao" onclick="salvarEdicao()">Atualizar Item</button></div></div></div>
-
     <div id="modal-config-pix" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-pix')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Configurar PIX</h2><div class="formulario-inputs"><textarea id="config-chave-pix" rows="3" placeholder="Chave Copia e Cola"></textarea><input type="text" id="config-qr-pix" placeholder="Link do QR Code"><button class="btn-padrao" id="btn-salvar-pix" onclick="salvarConfigPix()">Salvar na Nuvem</button></div></div></div>
-    
     <div id="modal-login" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-login')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Acesso Restrito</h2><div class="formulario-inputs"><input type="text" id="login-user" placeholder="Usuário"><input type="password" id="login-pass" placeholder="Senha"><button class="btn-padrao" onclick="fazerLogin()">Entrar</button></div></div></div>
-
     <div id="modal-config-admin" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-admin')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Alterar Credenciais</h2><div class="formulario-inputs"><input type="text" id="novo-admin-user" placeholder="Novo usuário"><input type="password" id="novo-admin-pass" placeholder="Nova senha"><button class="btn-padrao" onclick="salvarNovasCredenciais()">Atualizar</button></div></div></div>
-
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbz5Twl62Dv-f42fDtKzUl8TcL_WWkiI5ako3EOFXRS1Jt4kqOB97-ZexR2XkxUQAC2a/exec";
         
         let idEditando = null; let idComprando = null; let nomeComprando = null;
         let dadosPixNuvem = { chave: "", qr: "" };
+        let grupoRSVP = { nomes: "", identificacao: "" }; // Salva temporariamente os dados do grupo achado
 
         window.onload = function() {
             if (!localStorage.getItem('credenciaisAdmin')) localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: 'admin', pass: 'admin' }));
@@ -221,7 +219,7 @@
             carregarListaDaPlanilha();
         };
 
-        // --- BUSCA NA PLANILHA ---
+        // --- BUSCA NA PLANILHA (PRESENTES) ---
         function carregarListaDaPlanilha() {
             const grid = document.getElementById('grid-presentes');
             grid.innerHTML = '<div class="loading" id="mensagem-loading">⏳ Sincronizando com a base de dados...</div>';
@@ -278,27 +276,61 @@
             }).catch(erro => { grid.innerHTML = "<p class='loading' style='color:red;'>Erro de conexão com o Google. Recarregue.</p>"; });
         }
 
-        // --- ENVIAR CONFIRMAÇÃO DE PRESENÇA (RSVP) ---
+        // --- SISTEMA DE RSVP (CONFIRMAR CONVIDADO) ---
+        function buscarConvidado() {
+            const nomeDigitado = document.getElementById('rsvp-busca').value;
+            const btn = document.getElementById('btn-buscar-convite');
+            const msg = document.getElementById('msg-busca');
+
+            if(!nomeDigitado || nomeDigitado.length < 3) return alert("Digite pelo menos 3 letras do seu nome.");
+
+            btn.innerText = "⏳ Buscando..."; btn.disabled = true;
+
+            fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "verificarNome", nome: nomeDigitado })
+            })
+            .then(res => res.json())
+            .then(dados => {
+                if(dados.encontrado) {
+                    grupoRSVP = dados.grupo; // Salva o grupo para enviar depois
+                    
+                    document.getElementById('bloco-busca').style.display = "none";
+                    document.getElementById('caixa-grupo').style.display = "block";
+                    document.getElementById('bloco-formulario').style.display = "flex";
+                    
+                    document.getElementById('rsvp-nomes-grupo').innerText = dados.grupo.nomes;
+                    document.getElementById('rsvp-identificacao').innerText = "(" + (dados.grupo.identificacao || "Convite Localizado") + ")";
+                } else {
+                    msg.innerText = "❌ Nome não localizado. Tente digitar apenas o seu primeiro nome ou sobrenome.";
+                    msg.style.color = "#d32f2f";
+                }
+            })
+            .catch(() => msg.innerText = "Erro ao conectar. Tente novamente.")
+            .finally(() => { btn.innerText = "Buscar"; btn.disabled = false; });
+        }
+
         function enviarRSVP() {
-            const nome = document.getElementById('rsvp-nome').value;
             const tel = document.getElementById('rsvp-telefone').value;
             const adultos = document.getElementById('rsvp-adultos').value;
             const criancas = document.getElementById('rsvp-criancas').value;
 
-            if(!nome || !tel) return alert("Por favor, preencha o seu nome e telefone!");
+            if(!tel) return alert("Por favor, informe seu telefone!");
 
             const btn = document.getElementById('btn-enviar-rsvp');
             btn.innerText = "Enviando..."; btn.disabled = true;
 
             fetch(API_URL, {
                 method: 'POST',
-                body: JSON.stringify({ action: "rsvp", nome: nome, telefone: tel, adultos: adultos, criancas: criancas })
+                // Manda o grupo completo (ex: João e Zoraide) e a identificacao (Pais do Noivo)
+                body: JSON.stringify({ action: "rsvp", nomes: grupoRSVP.nomes, grupo: grupoRSVP.identificacao, telefone: tel, adultos: adultos, criancas: criancas })
             }).then(() => {
-                alert("Presença confirmada com sucesso! Os noivos agradecem.");
-                document.getElementById('rsvp-nome').value = ""; document.getElementById('rsvp-telefone').value = "";
-            }).catch(erro => alert("Erro ao enviar. Tente novamente."))
-            .finally(() => { btn.innerText = "Confirmar Minha Presença"; btn.disabled = false; });
+                alert("Presença confirmada com sucesso! Nós agradecemos muito.");
+                location.reload(); // Recarrega a página para limpar
+            }).catch(() => alert("Erro ao enviar. Tente novamente."))
+            .finally(() => { btn.innerText = "Confirmar Nossa Presença"; btn.disabled = false; });
         }
+
 
         // --- FUNÇÕES GERAIS ADMIN E PIX ---
         function mudarStatusPresente(id, e) {
