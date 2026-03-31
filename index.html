@@ -84,6 +84,9 @@
         .dash-card h3 { font-size: 2rem; color: #8c7b65; font-family: 'Playfair Display', serif; margin-bottom: 5px; }
         .dash-card p { font-size: 0.85rem; color: #666; text-transform: uppercase; font-weight: bold; }
 
+        /* Etiquetas Especiais no RSVP */
+        .tag-categoria { font-size: 0.75rem; color: #8c7b65; font-weight: normal; background: #f4f1eb; padding: 2px 6px; border-radius: 10px; margin-left: 5px; font-family: 'Lato', sans-serif; text-transform: uppercase; letter-spacing: 0.5px;}
+
         .somente-admin { display: none !important; }
         .modo-admin-ativo .somente-admin { display: flex !important; }
         .modo-admin-ativo .esconder-logado { display: none !important; }
@@ -107,10 +110,11 @@
             <span style="color: #ddd; margin: 0 5px;">|</span>
             <button class="btn-menu esconder-logado" onclick="abrirModal('modal-login')">Acesso Restrito</button>
             <div class="somente-admin flex-admin-menu">
-                <button class="btn-menu" onclick="abrirModalRelatorio()" style="color: #388e3c;">📊 Relatório</button>
+                <button class="btn-menu" onclick="abrirModalRelatorio()" style="color: #388e3c;">📊 Dashboard</button>
                 <button class="btn-menu" onclick="abrirModalPresenca()" style="color: #1976d2;">📋 Presenças</button>
+                <button class="btn-menu" onclick="abrirModal('modal-adicionar-convidado')" style="color: #f57c00;">👥 Add Convidados</button>
                 <span style="color: #ccc;">|</span>
-                <button class="btn-menu" onclick="abrirModal('modal-adicionar')">➕ Add Item</button>
+                <button class="btn-menu" onclick="abrirModal('modal-adicionar')">🎁 Add Presente</button>
                 <button class="btn-menu" onclick="abrirModalConfigPix()">💳 Config PIX</button>
                 <button class="btn-menu btn-sair" onclick="sairAdmin()">Sair</button>
             </div>
@@ -213,23 +217,41 @@
         </div>
     </div>
 
-    <div id="modal-lista-presenca" class="modal">
+    <div id="modal-adicionar-convidado" class="modal" style="z-index: 1060;">
         <div class="modal-conteudo modal-conteudo-largo">
-            <span class="fechar" onclick="fecharModal('modal-lista-presenca')">&times;</span>
-            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 15px;">Famílias Confirmadas</h2>
-            <div id="conteudo-lista-presenca" style="margin-top: 20px; text-align: left; max-height: 65vh; overflow-y: auto; padding-right: 10px;"></div>
+            <span class="fechar" onclick="fecharModal('modal-adicionar-convidado')">&times;</span>
+            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 15px;">Adicionar à Lista de Convidados</h2>
+            <div class="formulario-inputs">
+                <label>Nome do Grupo ou Família:</label>
+                <input type="text" id="novo-grupo-nome" placeholder="Ex: Família Rute (Tia do Noivo)">
+                
+                <div style="margin-top: 10px; margin-bottom: 5px;"><label>Membros do Grupo:</label></div>
+                
+                <div id="container-novos-membros" style="max-height: 35vh; overflow-y: auto; padding-right: 5px; margin-bottom: 10px;">
+                    <div class="linha-novo-membro" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
+                        <input type="text" class="input-nome-membro" placeholder="Nome do Convidado" style="flex: 2;">
+                        <select class="select-cat-membro" style="flex: 1.5; padding: 10px;">
+                            <option value="Convidado">Convidado</option>
+                            <option value="Padrinho">Padrinho</option>
+                            <option value="Madrinha">Madrinha</option>
+                            <option value="Noivinho">Noivinho</option>
+                            <option value="Noivinha">Noivinha</option>
+                            <option value="Florista">Florista</option>
+                            <option value="Pajem">Pajem</option>
+                        </select>
+                        <button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button>
+                    </div>
+                </div>
+                
+                <button onclick="adicionarLinhaMembro()" style="background: #f9f9f9; border: 1px dashed #ccc; padding: 10px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; width: 100%; color: #555; font-weight: bold; transition:0.3s;">+ Adicionar outra pessoa ao grupo</button>
+                
+                <button class="btn-padrao" id="btn-salvar-novo-convidado" onclick="salvarNovoConvidado()">Salvar na Planilha Oficial</button>
+            </div>
         </div>
     </div>
 
-    <div id="modal-editar-presenca" class="modal" style="z-index: 1050;"> <div class="modal-conteudo">
-            <span class="fechar" onclick="fecharModal('modal-editar-presenca')">&times;</span>
-            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 10px;">Editar Confirmação</h2>
-            <p id="edit-rsvp-grupo" style="font-size: 0.9rem; color: #888; margin-bottom: 15px; font-style: italic;"></p>
-            <div id="edit-rsvp-membros" style="text-align: left; margin-bottom: 15px; max-height: 40vh; overflow-y: auto;"></div>
-            <button class="btn-padrao" id="btn-salvar-edicao-rsvp" onclick="salvarEdicaoRSVP()">Salvar Alterações</button>
-        </div>
-    </div>
-
+    <div id="modal-lista-presenca" class="modal"><div class="modal-conteudo modal-conteudo-largo"><span class="fechar" onclick="fecharModal('modal-lista-presenca')">&times;</span><h2 style="font-family: 'Playfair Display', serif; margin-bottom: 15px;">Famílias Confirmadas</h2><div id="conteudo-lista-presenca" style="margin-top: 20px; text-align: left; max-height: 65vh; overflow-y: auto; padding-right: 10px;"></div></div></div>
+    <div id="modal-editar-presenca" class="modal" style="z-index: 1050;"> <div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-editar-presenca')">&times;</span><h2 style="font-family: 'Playfair Display', serif; margin-bottom: 10px;">Editar Confirmação</h2><p id="edit-rsvp-grupo" style="font-size: 0.9rem; color: #888; margin-bottom: 15px; font-style: italic;"></p><div id="edit-rsvp-membros" style="text-align: left; margin-bottom: 15px; max-height: 40vh; overflow-y: auto;"></div><button class="btn-padrao" id="btn-salvar-edicao-rsvp" onclick="salvarEdicaoRSVP()">Salvar Alterações</button></div></div>
     <div id="modal-adicionar" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-adicionar')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Adicionar Presente</h2><div class="formulario-inputs"><input type="text" id="novo-nome" placeholder="Nome (Ex: Batedeira)"><input type="text" id="novo-valor" placeholder="Valor (Ex: 150,00)"><input type="text" id="nova-imagem" placeholder="Link da Imagem"><button class="btn-padrao" id="btn-salvar-novo" onclick="salvarNovoPresente()">Salvar Item</button></div></div></div>
     <div id="modal-editar" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-editar')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Editar Presente</h2><div class="formulario-inputs"><input type="text" id="edit-nome"><input type="text" id="edit-valor"><input type="text" id="edit-imagem"><button class="btn-padrao" id="btn-salvar-edicao" onclick="salvarEdicao()">Atualizar Item</button></div></div></div>
     <div id="modal-config-pix" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-pix')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Configurar PIX</h2><div class="formulario-inputs"><textarea id="config-chave-pix" rows="3" placeholder="Chave Copia e Cola"></textarea><input type="text" id="config-qr-pix" placeholder="Link do QR Code"><button class="btn-padrao" id="btn-salvar-pix" onclick="salvarConfigPix()">Salvar na Nuvem</button></div></div></div>
@@ -241,7 +263,7 @@
         
         let idEditando = null; let idComprando = null; let nomeComprando = null;
         let dadosPixNuvem = { chave: "", qr: "" };
-        let grupoRSVP = { nomes: "", identificacao: "" };
+        let grupoRSVP = { nomes: "", identificacao: "", categoriasStr: "" };
         
         window.listaPresencasGlobais = [];
         window.estatisticasGlobais = { totalConvidados: 0, totalGrupos: 0, listaOficial: [] };
@@ -302,16 +324,71 @@
             }).catch(erro => { grid.innerHTML = "<p class='loading' style='color:red;'>Erro de conexão com o Google. Recarregue.</p>"; });
         }
 
+        // --- SISTEMA ADMIN: ADICIONAR CONVIDADOS (COM CATEGORIA) ---
+        function adicionarLinhaMembro() {
+            const container = document.getElementById('container-novos-membros');
+            const html = `
+                <div class="linha-novo-membro" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
+                    <input type="text" class="input-nome-membro" placeholder="Nome do Convidado" style="flex: 2;">
+                    <select class="select-cat-membro" style="flex: 1.5; padding: 10px;">
+                        <option value="Convidado">Convidado</option>
+                        <option value="Padrinho">Padrinho</option>
+                        <option value="Madrinha">Madrinha</option>
+                        <option value="Noivinho">Noivinho</option>
+                        <option value="Noivinha">Noivinha</option>
+                        <option value="Florista">Florista</option>
+                        <option value="Pajem">Pajem</option>
+                    </select>
+                    <button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        }
+
+        function removerLinhaMembro(btn) { btn.parentElement.remove(); }
+
+        function salvarNovoConvidado() {
+            const grupo = document.getElementById('novo-grupo-nome').value.trim();
+            if(!grupo) return alert("Digite o nome do grupo!");
+            
+            const linhas = document.querySelectorAll('.linha-novo-membro');
+            let membros = []; let temErro = false;
+            
+            linhas.forEach(linha => {
+                const nome = linha.querySelector('.input-nome-membro').value.trim();
+                const cat = linha.querySelector('.select-cat-membro').value;
+                if(!nome) temErro = true; else membros.push({ nome: nome, categoria: cat });
+            });
+            
+            if(temErro || membros.length === 0) return alert("Preencha o nome de todos os membros adicionados!");
+            
+            const btn = document.getElementById('btn-salvar-novo-convidado');
+            btn.innerText = "Salvando..."; btn.disabled = true;
+            
+            fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "adicionarConvidado", grupo: grupo, membros: membros })
+            }).then(() => {
+                alert("Grupo adicionado à lista oficial com sucesso!");
+                fecharModal('modal-adicionar-convidado');
+                document.getElementById('novo-grupo-nome').value = "";
+                document.getElementById('container-novos-membros').innerHTML = `
+                    <div class="linha-novo-membro" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
+                        <input type="text" class="input-nome-membro" placeholder="Nome do Convidado" style="flex: 2;"><select class="select-cat-membro" style="flex: 1.5; padding: 10px;"><option value="Convidado">Convidado</option><option value="Padrinho">Padrinho</option><option value="Madrinha">Madrinha</option><option value="Noivinho">Noivinho</option><option value="Noivinha">Noivinha</option><option value="Florista">Florista</option><option value="Pajem">Pajem</option></select><button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button>
+                    </div>`;
+                carregarListaDaPlanilha(); // Atualiza dashboard
+            }).catch(() => alert("Erro ao salvar.")).finally(() => { btn.innerText = "Salvar na Planilha Oficial"; btn.disabled = false; });
+        }
+
+
         // --- SISTEMA DE RELATÓRIO E CONTAS ---
         function abrirModalRelatorio() {
             let totalAdultos = 0; let totalCriancas = 0; let isentosTotal = 0;
             let contagemIdades = {}; 
             let arrayGruposConfirmados = [];
 
-            // Faz a leitura profunda das idades (0 a 5 anos = isento)
             window.listaPresencasGlobais.forEach(p => {
-                arrayGruposConfirmados.push(p.grupo); // Salva quem já confirmou
-                
+                arrayGruposConfirmados.push(p.grupo); 
                 totalAdultos += Number(p.adultos) || 0;
                 totalCriancas += Number(p.criancas) || 0;
                 
@@ -321,9 +398,7 @@
                         objMembros.forEach(m => {
                             if(m.status && m.tipo === 'Criança') {
                                 let numIdade = parseInt(m.idade);
-                                if(!isNaN(numIdade) && numIdade <= 5) {
-                                    isentosTotal++;
-                                }
+                                if(!isNaN(numIdade) && numIdade <= 5) isentosTotal++;
                                 let label = m.idade ? `${m.idade} anos` : "Idade ñ info.";
                                 contagemIdades[label] = (contagemIdades[label] || 0) + 1;
                             }
@@ -332,75 +407,50 @@
                 }
             });
 
-            // Matemáticas do Buffet
             let totalConfirmadosGeral = totalAdultos + totalCriancas;
             let confirmadosPagantes = totalConfirmadosGeral - isentosTotal;
             let totalDaListaGeral = window.estatisticasGlobais.totalConvidados;
-            
-            // Total estimado pagantes na lista: desconta apenas as crianças isentas já confirmadas
             let pagantesEstimadoLista = totalDaListaGeral - isentosTotal; 
 
             document.getElementById('dash-total-lista').innerText = totalDaListaGeral;
             document.getElementById('dash-total-pagantes-lista').innerText = pagantesEstimadoLista;
-            
             document.getElementById('dash-total-confirmados').innerText = totalConfirmadosGeral;
             document.getElementById('dash-pagantes-confirmados').innerText = confirmadosPagantes;
-            
             document.getElementById('dash-isentos').innerText = isentosTotal;
             document.getElementById('dash-adultos').innerText = totalAdultos;
             document.getElementById('dash-criancas').innerText = totalCriancas;
 
-            // Tratamento de Grupos Pendentes
             let listaPendentes = [];
             window.estatisticasGlobais.listaOficial.forEach(g => {
-                if(!arrayGruposConfirmados.includes(g.identificacao)) {
-                    listaPendentes.push(g);
-                }
+                if(!arrayGruposConfirmados.includes(g.identificacao)) listaPendentes.push(g);
             });
 
             document.getElementById('dash-grupos-pendentes').innerText = listaPendentes.length;
             
-            // Injeta o HTML dos pendentes
             let pendentesHtml = "";
-            if(listaPendentes.length === 0) {
-                pendentesHtml = "<p style='color:#388e3c;'>Todos os grupos confirmaram!</p>";
-            } else {
+            if(listaPendentes.length === 0) { pendentesHtml = "<p style='color:#388e3c;'>Todos os grupos confirmaram!</p>"; } 
+            else {
                 listaPendentes.forEach(p => {
-                    pendentesHtml += `<div style="padding: 10px; border-bottom: 1px solid #f0d8d8;">
-                                        <strong style="color:#555;">${p.identificacao}</strong><br>
-                                        <span style="font-size:0.85rem; color:#888;">${p.membros}</span>
-                                      </div>`;
+                    pendentesHtml += `<div style="padding: 10px; border-bottom: 1px solid #f0d8d8;"><strong style="color:#555;">${p.identificacao}</strong><br><span style="font-size:0.85rem; color:#888;">${p.membros}</span></div>`;
                 });
             }
             document.getElementById('lista-grupos-pendentes').innerHTML = pendentesHtml;
-            // Esconde a área por padrão
             document.getElementById('area-pendentes').style.display = "none";
 
-            // Preenche a lista de idades
             let ulIdades = document.getElementById('lista-idades-criancas');
             ulIdades.innerHTML = "";
-            if(Object.keys(contagemIdades).length === 0) {
-                ulIdades.innerHTML = "<li>Nenhuma criança confirmada ainda.</li>";
-            } else {
-                for (const [idade, qtd] of Object.entries(contagemIdades)) {
-                    ulIdades.innerHTML += `<li>👶 ${idade}: <strong>${qtd}</strong></li>`;
-                }
-            }
+            if(Object.keys(contagemIdades).length === 0) { ulIdades.innerHTML = "<li>Nenhuma criança confirmada ainda.</li>"; } 
+            else { for (const [idade, qtd] of Object.entries(contagemIdades)) { ulIdades.innerHTML += `<li>👶 ${idade}: <strong>${qtd}</strong></li>`; } }
 
             abrirModal('modal-relatorio');
         }
 
-        // Exibe ou oculta a caixa de grupos pendentes no relatório
         function togglePendentes() {
             let area = document.getElementById('area-pendentes');
-            if (area.style.display === "none") {
-                area.style.display = "block";
-            } else {
-                area.style.display = "none";
-            }
+            area.style.display = area.style.display === "none" ? "block" : "none";
         }
 
-        // --- SISTEMA ADMIN DE PRESENÇAS (Ver e Cancelar) ---
+        // --- SISTEMA ADMIN DE PRESENÇAS ---
         function abrirModalPresenca() {
             const container = document.getElementById('conteudo-lista-presenca');
             container.innerHTML = "";
@@ -478,9 +528,7 @@
                     containerMembros.insertAdjacentHTML('beforeend', html);
                 });
                 abrirModal('modal-editar-presenca');
-            } catch(e) {
-                alert("Não é possível editar este registro antigo. Delete e faça de novo.");
-            }
+            } catch(e) { alert("Não é possível editar este registro antigo. Delete e faça de novo."); }
         }
 
         function toggleMembroEdit(cb, idx) {
@@ -494,9 +542,7 @@
         }
 
         function salvarEdicaoRSVP() {
-            let totalA = 0; let totalC = 0; let confArray = []; let naoConfArray = []; let temErro = false;
-            let novaMemoriaJson = [];
-
+            let totalA = 0; let totalC = 0; let confArray = []; let naoConfArray = []; let temErro = false; let novaMemoriaJson = [];
             const blocos = document.querySelectorAll('#edit-rsvp-membros .membro-rsvp-item');
             blocos.forEach(b => {
                 const cb = b.querySelector('.edit-cb-membro'); const nome = cb.value;
@@ -509,9 +555,7 @@
                         if(idade === "") temErro = true; 
                         else { confArray.push(`${nome} (Criança: ${idade} anos)`); novaMemoriaJson.push({nome: nome, status: true, tipo: "Criança", idade: idade}); }
                     }
-                } else {
-                    naoConfArray.push(nome); novaMemoriaJson.push({nome: nome, status: false, tipo: "", idade: ""});
-                }
+                } else { naoConfArray.push(nome); novaMemoriaJson.push({nome: nome, status: false, tipo: "", idade: ""}); }
             });
 
             if(temErro) return alert("Preencha a idade das crianças!");
@@ -522,18 +566,15 @@
             fetch(API_URL, {
                 method: 'POST',
                 body: JSON.stringify({ 
-                    action: "editarRSVP", linha: linhaRsvpEditando, 
-                    confirmados: confArray.join(" | "), naoConfirmados: naoConfArray.join(" | "), 
+                    action: "editarRSVP", linha: linhaRsvpEditando, confirmados: confArray.join(" | "), naoConfirmados: naoConfArray.join(" | "), 
                     adultos: totalA, criancas: totalC, jsonRaw: JSON.stringify(novaMemoriaJson)
                 })
-            }).then(() => {
-                alert("Alteração salva na nuvem!"); 
-                fecharModal('modal-editar-presenca'); fecharModal('modal-lista-presenca'); carregarListaDaPlanilha(); 
-            }).finally(() => { btn.innerText = "Salvar Alterações"; btn.disabled = false; });
+            }).then(() => { alert("Alteração salva na nuvem!"); fecharModal('modal-editar-presenca'); fecharModal('modal-lista-presenca'); carregarListaDaPlanilha(); })
+            .finally(() => { btn.innerText = "Salvar Alterações"; btn.disabled = false; });
         }
 
 
-        // --- SISTEMA DE RSVP INTELIGENTE PÚBLICO ---
+        // --- SISTEMA DE RSVP PÚBLICO (AGORA LÊ AS CATEGORIAS) ---
         function buscarConvidado() {
             const nomeDigitado = document.getElementById('rsvp-busca').value; const btn = document.getElementById('btn-buscar-convite'); const msg = document.getElementById('msg-busca');
             if(!nomeDigitado || nomeDigitado.length < 3) return alert("Digite pelo menos 3 letras.");
@@ -545,20 +586,47 @@
                     grupoRSVP = dados.grupo;
                     document.getElementById('bloco-busca').style.display = "none"; document.getElementById('caixa-grupo').style.display = "block"; document.getElementById('bloco-formulario').style.display = "block"; 
                     document.getElementById('rsvp-identificacao').innerText = grupoRSVP.identificacao ? "Grupo: " + grupoRSVP.identificacao : "Convite Localizado";
-                    let containerCheckboxes = document.getElementById('lista-checkbox-membros'); containerCheckboxes.innerHTML = ""; 
-                    let arrayNomes = grupoRSVP.nomes.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0);
                     
-                    arrayNomes.forEach((nomeMembro, index) => {
-                        const html = `
-                        <div class="membro-rsvp-item" id="bloco-membro-${index}">
-                            <label style="display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: #333;"><input type="checkbox" class="cb-membro" value="${nomeMembro.trim()}" checked onchange="toggleMembro(this, ${index})" style="width: 20px; height: 20px; accent-color: #8c7b65;"> ${nomeMembro.trim()}</label>
-                            <div id="opcoes-membro-${index}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                <select class="tipo-membro" onchange="toggleIdade(this, ${index})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: #fff;"><option value="Adulto">É Adulto</option><option value="Criança">É Criança (até 9 anos)</option></select>
-                                <input type="number" id="idade-crianca-${index}" class="idade-membro" placeholder="Idade" min="0" max="10" style="display: none; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;">
-                            </div>
-                        </div>`;
-                        containerCheckboxes.insertAdjacentHTML('beforeend', html);
-                    });
+                    let containerCheckboxes = document.getElementById('lista-checkbox-membros'); containerCheckboxes.innerHTML = ""; 
+                    
+                    // Lógica para ler se o grupo foi adicionado pelo Painel Novo (com categorias JSON) ou é o jeito antigo (texto puro)
+                    let membrosLidos = [];
+                    if (grupoRSVP.categoriasStr && grupoRSVP.categoriasStr.startsWith("[")) {
+                        try { membrosLidos = JSON.parse(grupoRSVP.categoriasStr); } catch(e) {}
+                    }
+
+                    if(membrosLidos.length > 0) {
+                        // Formato Novo com Categorias
+                        membrosLidos.forEach((m, index) => {
+                            let tagHtml = m.categoria !== "Convidado" ? `<span class="tag-categoria">${m.categoria}</span>` : "";
+                            const html = `
+                            <div class="membro-rsvp-item" id="bloco-membro-${index}">
+                                <label style="display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: #333;">
+                                    <input type="checkbox" class="cb-membro" value="${m.nome.trim()}" checked onchange="toggleMembro(this, ${index})" style="width: 20px; height: 20px; accent-color: #8c7b65;"> 
+                                    ${m.nome.trim()} ${tagHtml}
+                                </label>
+                                <div id="opcoes-membro-${index}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                    <select class="tipo-membro" onchange="toggleIdade(this, ${index})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: #fff;"><option value="Adulto">É Adulto</option><option value="Criança">É Criança (até 9 anos)</option></select>
+                                    <input type="number" id="idade-crianca-${index}" class="idade-membro" placeholder="Idade" min="0" max="10" style="display: none; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;">
+                                </div>
+                            </div>`;
+                            containerCheckboxes.insertAdjacentHTML('beforeend', html);
+                        });
+                    } else {
+                        // Formato Antigo (Mantém funcionando)
+                        let arrayNomes = grupoRSVP.nomes.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0);
+                        arrayNomes.forEach((nomeMembro, index) => {
+                            const html = `
+                            <div class="membro-rsvp-item" id="bloco-membro-${index}">
+                                <label style="display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: #333;"><input type="checkbox" class="cb-membro" value="${nomeMembro.trim()}" checked onchange="toggleMembro(this, ${index})" style="width: 20px; height: 20px; accent-color: #8c7b65;"> ${nomeMembro.trim()}</label>
+                                <div id="opcoes-membro-${index}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                    <select class="tipo-membro" onchange="toggleIdade(this, ${index})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: #fff;"><option value="Adulto">É Adulto</option><option value="Criança">É Criança (até 9 anos)</option></select>
+                                    <input type="number" id="idade-crianca-${index}" class="idade-membro" placeholder="Idade" min="0" max="10" style="display: none; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;">
+                                </div>
+                            </div>`;
+                            containerCheckboxes.insertAdjacentHTML('beforeend', html);
+                        });
+                    }
                 } else { msg.innerText = "❌ Nome não localizado."; msg.style.color = "#d32f2f"; }
             }).catch(() => msg.innerText = "Erro na busca.").finally(() => { btn.innerText = "Buscar"; btn.disabled = false; });
         }
@@ -576,8 +644,7 @@
             const tel = document.getElementById('rsvp-telefone').value;
             if(!tel) return alert("Por favor, informe o telefone de contato principal do grupo!");
 
-            let totalA = 0; let totalC = 0; let confArray = []; let naoConfArray = []; let temErro = false;
-            let memoriaJson = []; 
+            let totalA = 0; let totalC = 0; let confArray = []; let naoConfArray = []; let temErro = false; let memoriaJson = []; 
 
             const blocos = document.querySelectorAll('.membro-rsvp-item');
             blocos.forEach(b => {
