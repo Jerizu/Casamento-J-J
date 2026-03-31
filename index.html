@@ -231,7 +231,7 @@
                     </div>
                 </div>
                 <div style="text-align: left; background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-                    <h4 style="margin-bottom: 10px; color: #555;">Divisão por Categorias na Lista (Estimada)</h4>
+                    <h4 style="margin-bottom: 10px; color: #555;">Divisão por Categorias na Lista Oficial</h4>
                     <ul id="lista-categorias-geral" style="list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.95rem; color: #444;"></ul>
                 </div>
             </div>
@@ -255,7 +255,9 @@
                 <label>Nome do Grupo ou Família:</label>
                 <input type="text" id="novo-grupo-nome" placeholder="Ex: Família Rute (Tia do Noivo)">
                 <div style="margin-top: 10px; margin-bottom: 5px;"><label>Membros do Grupo:</label></div>
+                
                 <div id="container-novos-membros" style="max-height: 35vh; overflow-y: auto; padding-right: 5px; margin-bottom: 10px;"></div>
+                
                 <button onclick="adicionarLinhaMembro()" style="background: #f9f9f9; border: 1px dashed #ccc; padding: 10px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; width: 100%; color: #555; font-weight: bold; transition:0.3s;">+ Adicionar outra pessoa ao grupo</button>
                 <button class="btn-padrao" id="btn-salvar-novo-convidado" onclick="salvarNovoConvidado()">Salvar na Planilha Oficial</button>
             </div>
@@ -283,8 +285,7 @@
 
     <div id="modal-lista-presenca" class="modal"><div class="modal-conteudo modal-conteudo-largo"><span class="fechar" onclick="fecharModal('modal-lista-presenca')">&times;</span><h2 style="font-family: 'Playfair Display', serif; margin-bottom: 15px;">Famílias Confirmadas</h2><div id="conteudo-lista-presenca" style="margin-top: 20px; text-align: left; max-height: 65vh; overflow-y: auto; padding-right: 10px;"></div></div></div>
     
-    <div id="modal-editar-presenca" class="modal" style="z-index: 1050;"> 
-        <div class="modal-conteudo">
+    <div id="modal-editar-presenca" class="modal" style="z-index: 1050;"> <div class="modal-conteudo">
             <span class="fechar" onclick="fecharModal('modal-editar-presenca')">&times;</span>
             <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 10px;">Editar Confirmação</h2>
             <p id="edit-rsvp-grupo" style="font-size: 0.9rem; color: #888; margin-bottom: 15px; font-style: italic;"></p>
@@ -322,7 +323,6 @@
             carregarListaDaPlanilha();
         };
 
-        // Função isolada que apenas renderiza dados em tela para ser rápida
         function processarDadosPlanilha(dados) {
             const grid = document.getElementById('grid-presentes');
             grid.innerHTML = ""; 
@@ -372,6 +372,7 @@
             .catch(erro => { document.getElementById('grid-presentes').innerHTML = "<p class='loading' style='color:red;'>Erro de conexão com o Google. Recarregue.</p>"; });
         }
 
+
         // --- SISTEMA ADMIN: GERENCIAR LISTA DE CONVIDADOS ---
         function abrirModalListaConvidados() {
             const container = document.getElementById('conteudo-lista-convidados');
@@ -406,13 +407,12 @@
             abrirModal('modal-lista-convidados');
         }
 
-        // Ações que não fecham a tela de lista ao excluir
         function excluirGrupoDaLista(linha, btn) {
             if(confirm("ATENÇÃO: Deseja apagar este grupo permanentemente da sua lista oficial?")) {
                 btn.innerText = "..."; btn.disabled = true;
                 fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "excluirGrupoConvidado", linha: linha }) })
                 .then(() => fetch(API_URL)).then(r => r.json())
-                .then(dados => { processarDadosPlanilha(dados); abrirModalListaConvidados(); }) // Recarrega a lista aberta
+                .then(dados => { processarDadosPlanilha(dados); abrirModalListaConvidados(); }) 
                 .catch(() => { alert("Erro."); btn.disabled = false; });
             }
         }
@@ -439,8 +439,12 @@
             const linhas = document.querySelectorAll('.linha-novo-membro');
             let membros = []; let temErro = false;
             linhas.forEach(l => {
-                const n = l.querySelector('.input-nome-membro').value.trim(); const c = l.querySelector('.select-cat-membro').value; const t = l.querySelector('.select-tipo-membro').value; const i = l.querySelector('.input-idade-membro').value;
-                if(!n || (t === 'Criança' && !i)) temErro = true; else membros.push({ nome: n, categoria: c, tipo: t, idade: i });
+                const n = l.querySelector('.input-nome-membro').value.trim(); 
+                const c = l.querySelector('.select-cat-membro').value;
+                const t = l.querySelector('.select-tipo-membro').value;
+                const i = l.querySelector('.input-idade-membro').value;
+                if(!n || (t === 'Criança' && !i)) temErro = true; 
+                else membros.push({ nome: n, categoria: c, tipo: t, idade: i });
             });
             if(temErro || membros.length === 0) return alert("Preencha o nome e idade (se criança) de todos!");
             
@@ -490,7 +494,8 @@
                         <option value="Pajem" ${m.categoria==='Pajem'?'selected':''}>Pajem</option>
                     </select>
                     <select class="select-tipo-membro" onchange="toggleIdadeAdmin(this)" style="flex: 1; padding: 8px; min-width: 90px;">
-                        <option value="Adulto" ${selAd}>Adulto</option><option value="Criança" ${selCr}>Criança</option>
+                        <option value="Adulto" ${selAd}>Adulto</option>
+                        <option value="Criança" ${selCr}>Criança</option>
                     </select>
                     <input type="number" class="input-idade-membro" placeholder="Idade" min="0" max="17" value="${valIdade}" style="display: ${dispId}; flex: 0.8; padding: 8px; min-width: 60px;">
                     <button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button>
@@ -501,27 +506,30 @@
             abrirModal('modal-editar-grupo');
         }
 
-        // NOVO: Salva a Edição, mostra alerta e permite voltar!
         function salvarEdicaoGrupo() {
             const grupo = document.getElementById('edit-lista-grupo-nome').value.trim();
             if(!grupo) return alert("Digite o nome do grupo!");
             const linhas = document.querySelectorAll('.linha-edit-membro');
             let membros = []; let temErro = false;
             linhas.forEach(l => {
-                const n = l.querySelector('.input-nome-membro').value.trim(); const c = l.querySelector('.select-cat-membro').value; const t = l.querySelector('.select-tipo-membro').value; const i = l.querySelector('.input-idade-membro').value;
-                if(!n || (t === 'Criança' && !i)) temErro = true; else membros.push({ nome: n, categoria: c, tipo: t, idade: i });
+                const n = l.querySelector('.input-nome-membro').value.trim(); 
+                const c = l.querySelector('.select-cat-membro').value;
+                const t = l.querySelector('.select-tipo-membro').value;
+                const i = l.querySelector('.input-idade-membro').value;
+                if(!n || (t === 'Criança' && !i)) temErro = true; 
+                else membros.push({ nome: n, categoria: c, tipo: t, idade: i });
             });
             if(temErro || membros.length === 0) return alert("Preencha o nome e idade (se criança) de todos!");
             
             const btn = document.getElementById('btn-salvar-edicao-grupo'); 
             btn.innerText = "Atualizando..."; btn.disabled = true;
-            document.getElementById('btn-voltar-grupo').disabled = true; // Trava o voltar até terminar
+            document.getElementById('btn-voltar-grupo').disabled = true;
 
             fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "editarGrupoConvidado", linha: linhaGrupoEditando, grupo: grupo, membros: membros }) })
             .then(() => fetch(API_URL)).then(r => r.json())
             .then(dados => {
                 processarDadosPlanilha(dados);
-                alert("Grupo atualizado com sucesso! \nVocê pode fechar esta janela no 'Voltar' ou fazer mais edições."); 
+                alert("Grupo atualizado com sucesso!"); 
             })
             .catch(() => alert("Erro ao salvar."))
             .finally(() => { 
@@ -535,22 +543,21 @@
         function mudarAbaDash(abaId, btnSelecionado) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('ativo'));
-            btnSelecionado.classList.add('ativo');
-            document.getElementById(abaId).classList.add('ativo');
+            if(btnSelecionado) btnSelecionado.classList.add('ativo');
+            const aba = document.getElementById(abaId);
+            if(aba) aba.classList.add('ativo');
         }
 
         function abrirModalRelatorio() {
-            // Volta sempre pra primeira aba
-            mudarAbaDash('dash-confirmados', document.querySelector('.tab-btn'));
+            const tabBtn = document.querySelector('.tab-btn');
+            if(tabBtn) mudarAbaDash('dash-confirmados', tabBtn);
 
             let totalAdultos = 0; let totalCriancas = 0; let isentosTotal = 0;
             let contagemIdades = {}; 
             let arrayGruposConfirmados = [];
 
-            // Ler aba de Confirmações (aba 1)
             window.listaPresencasGlobais.forEach(p => {
                 arrayGruposConfirmados.push(p.grupo); 
-                
                 if(p.jsonRaw && p.jsonRaw !== "[]") {
                     try {
                         let objMembros = JSON.parse(p.jsonRaw);
@@ -571,12 +578,13 @@
                 }
             });
 
-            // Ler a Lista Oficial Geral (Aba 2)
             let listaConvidadosTotal = 0;
             let listaConvidadosIsentos = 0;
             let contagemCategorias = {};
 
-            window.estatisticasGlobais.listaOficial.forEach(g => {
+            let listaOficial = window.estatisticasGlobais.listaOficial || [];
+
+            listaOficial.forEach(g => {
                 if (g.categoriasStr && g.categoriasStr.startsWith("[")) {
                     try {
                         let membros = JSON.parse(g.categoriasStr);
@@ -602,24 +610,22 @@
             let confirmadosPagantes = totalConfirmadosGeral - isentosTotal;
             let pagantesEstimadoLista = listaConvidadosTotal - listaConvidadosIsentos; 
 
-            // Textos da Aba 1 (Confirmados)
-            document.getElementById('dash-total-confirmados').innerText = totalConfirmadosGeral;
-            document.getElementById('dash-pagantes-confirmados').innerText = confirmadosPagantes;
-            document.getElementById('dash-isentos').innerText = isentosTotal;
-            document.getElementById('dash-adultos').innerText = totalAdultos;
-            document.getElementById('dash-criancas').innerText = totalCriancas;
+            const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; };
 
-            // Textos da Aba 2 (Lista Oficial)
-            document.getElementById('dash-total-lista').innerText = listaConvidadosTotal;
-            document.getElementById('dash-total-pagantes-lista').innerText = pagantesEstimadoLista;
-            document.getElementById('dash-geral-total').innerText = listaConvidadosTotal;
-            document.getElementById('dash-geral-grupos').innerText = window.estatisticasGlobais.listaOficial.length;
+            setVal('dash-total-confirmados', totalConfirmadosGeral);
+            setVal('dash-pagantes-confirmados', confirmadosPagantes);
+            setVal('dash-isentos', isentosTotal);
+            setVal('dash-adultos', totalAdultos);
+            setVal('dash-criancas', totalCriancas);
+            setVal('dash-geral-total', listaConvidadosTotal);
+            setVal('dash-total-pagantes-lista', pagantesEstimadoLista);
+            setVal('dash-geral-grupos', listaOficial.length);
 
             let listaPendentes = [];
-            window.estatisticasGlobais.listaOficial.forEach(g => {
+            listaOficial.forEach(g => {
                 if(!arrayGruposConfirmados.includes(g.identificacao)) listaPendentes.push(g);
             });
-            document.getElementById('dash-grupos-pendentes').innerText = listaPendentes.length;
+            setVal('dash-grupos-pendentes', listaPendentes.length);
             
             let pendentesHtml = "";
             if(listaPendentes.length === 0) { pendentesHtml = "<p style='color:#388e3c;'>Todos os grupos confirmaram!</p>"; } 
@@ -628,20 +634,26 @@
                     pendentesHtml += `<div style="padding: 10px; border-bottom: 1px solid #f0d8d8;"><strong style="color:#555;">${p.identificacao}</strong><br><span style="font-size:0.85rem; color:#888;">${p.membros}</span></div>`;
                 });
             }
-            document.getElementById('lista-grupos-pendentes').innerHTML = pendentesHtml;
-            document.getElementById('area-pendentes').style.display = "none";
+            
+            const elPendentes = document.getElementById('lista-grupos-pendentes');
+            if(elPendentes) elPendentes.innerHTML = pendentesHtml;
+            
+            const areaPendentes = document.getElementById('area-pendentes');
+            if(areaPendentes) areaPendentes.style.display = "none";
 
-            // Print Idades
             let ulIdades = document.getElementById('lista-idades-criancas');
-            ulIdades.innerHTML = "";
-            if(Object.keys(contagemIdades).length === 0) { ulIdades.innerHTML = "<li>Nenhuma criança confirmada.</li>"; } 
-            else { for (const [idade, qtd] of Object.entries(contagemIdades)) { ulIdades.innerHTML += `<li>👶 ${idade}: <strong>${qtd}</strong></li>`; } }
+            if(ulIdades) {
+                ulIdades.innerHTML = "";
+                if(Object.keys(contagemIdades).length === 0) { ulIdades.innerHTML = "<li>Nenhuma criança confirmada.</li>"; } 
+                else { for (const [idade, qtd] of Object.entries(contagemIdades)) { ulIdades.innerHTML += `<li>👶 ${idade}: <strong>${qtd}</strong></li>`; } }
+            }
 
-            // Print Categorias (Aba 2)
             let ulCats = document.getElementById('lista-categorias-geral');
-            ulCats.innerHTML = "";
-            for (const [cat, qtd] of Object.entries(contagemCategorias)) {
-                ulCats.innerHTML += `<li>🏷️ ${cat}: <strong style="color:#1976d2;">${qtd}</strong></li>`;
+            if(ulCats) {
+                ulCats.innerHTML = "";
+                for (const [cat, qtd] of Object.entries(contagemCategorias)) {
+                    ulCats.innerHTML += `<li>🏷️ ${cat}: <strong style="color:#1976d2;">${qtd}</strong></li>`;
+                }
             }
 
             abrirModal('modal-relatorio');
@@ -649,11 +661,11 @@
 
         function togglePendentes() {
             let area = document.getElementById('area-pendentes');
-            area.style.display = area.style.display === "none" ? "block" : "none";
+            if(area) area.style.display = area.style.display === "none" ? "block" : "none";
         }
 
 
-        // --- SISTEMA ADMIN DE PRESENÇAS (Ver, Editar e Cancelar) ---
+        // --- SISTEMA ADMIN DE PRESENÇAS (Ver e Cancelar) ---
         function abrirModalPresenca() {
             const container = document.getElementById('conteudo-lista-presenca');
             container.innerHTML = "";
@@ -696,6 +708,7 @@
             }
         }
 
+        // --- SISTEMA ADMIN DE EDITAR RSVP ---
         function prepararEdicaoRsvp(indexArrayGlobal) {
             const rsvp = window.listaPresencasGlobais[indexArrayGlobal];
             linhaRsvpEditando = rsvp.linha;
@@ -745,7 +758,6 @@
             if(sel.value === "Criança") { c.style.display = "block"; } else { c.style.display = "none"; c.value = ""; }
         }
 
-        // NOVO: Salva a Edição do RSVP, mostra alerta e permite voltar!
         function salvarEdicaoRSVP() {
             let totalA = 0; let totalC = 0; let confArray = []; let naoConfArray = []; let temErro = false; let novaMemoriaJson = [];
             const blocos = document.querySelectorAll('#edit-rsvp-membros .membro-rsvp-item');
@@ -785,7 +797,7 @@
             }).then(() => fetch(API_URL)).then(r => r.json())
             .then(dados => {
                 processarDadosPlanilha(dados);
-                alert("Alteração de Presença salva na nuvem! \nVocê pode fechar esta janela no 'Voltar' ou continuar editando."); 
+                alert("Alteração salva na nuvem!"); 
             }).finally(() => { 
                 btn.innerText = "Salvar Alterações"; btn.disabled = false; 
                 document.getElementById('btn-voltar-rsvp').disabled = false;
@@ -793,7 +805,7 @@
         }
 
 
-        // --- SISTEMA DE RSVP PÚBLICO (AGORA LÊ AS CATEGORIAS) ---
+        // --- SISTEMA DE RSVP PÚBLICO ---
         function buscarConvidado() {
             const nomeDigitado = document.getElementById('rsvp-busca').value; const btn = document.getElementById('btn-buscar-convite'); const msg = document.getElementById('msg-busca');
             if(!nomeDigitado || nomeDigitado.length < 3) return alert("Digite pelo menos 3 letras.");
