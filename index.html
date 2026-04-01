@@ -287,7 +287,6 @@
                     <h4 style="margin-bottom: 10px; color: #555; text-align: left;">Convidados Confirmados</h4>
                     <div id="lista-arrastavel-convidados"></div>
                 </div>
-                
                 <div class="mesas-mapa-dir" id="area-mapa-mesas"></div>
             </div>
         </div>
@@ -377,7 +376,7 @@
             abrirModal('modal-mesas');
         }
 
-        // Transforma o JSON de confirmações em uma lista linear fácil de ler
+        // Transforma o JSON de confirmações em uma lista linear
         function extrairTodosConfirmados() {
             todosConfirmadosArray = [];
             window.listaPresencasGlobais.forEach(p => {
@@ -385,12 +384,8 @@
                     try {
                         let membros = JSON.parse(p.jsonRaw);
                         membros.forEach(m => {
-                            if(m.status) { // Se confirmou que vai
-                                todosConfirmadosArray.push({
-                                    idStr: p.grupo + "|||" + m.nome,
-                                    grupo: p.grupo,
-                                    nome: m.nome
-                                });
+                            if(m.status) { 
+                                todosConfirmadosArray.push({ idStr: p.grupo + "|||" + m.nome, grupo: p.grupo, nome: m.nome });
                             }
                         });
                     } catch(e) {}
@@ -404,7 +399,6 @@
             painelEsq.innerHTML = ""; painelMap.innerHTML = "";
 
             // --- RENDERIZAR ESQUERDA (Grupos Sanfona) ---
-            // Agrupa primeiro
             let gruposDict = {};
             todosConfirmadosArray.forEach(c => {
                 if(!gruposDict[c.grupo]) gruposDict[c.grupo] = [];
@@ -412,21 +406,16 @@
             });
 
             for(const [nomeGrupo, listaPessoas] of Object.entries(gruposDict)) {
-                // Checa quantos já estão nas mesas
-                let countAlocados = 0;
-                let htmlPessoas = "";
+                let countAlocados = 0; let htmlPessoas = "";
 
                 listaPessoas.forEach(pessoa => {
                     let taAlocado = pessoaEstaEmMesa(pessoa.idStr);
                     if(taAlocado) countAlocados++;
                     let strAlocado = taAlocado ? "alocado" : "";
-                    let strCheck = taAlocado ? "✅" : "⣿"; // icone de arrastar
+                    let strCheck = taAlocado ? "✅" : "⣿"; 
                     let dragAttr = taAlocado ? "" : `draggable="true" ondragstart="dragInicia(event, '${pessoa.idStr}')"`;
 
-                    htmlPessoas += `
-                    <div class="convidado-arrastavel ${strAlocado}" ${dragAttr}>
-                        <span>${pessoa.nome}</span> <span>${strCheck}</span>
-                    </div>`;
+                    htmlPessoas += `<div class="convidado-arrastavel ${strAlocado}" ${dragAttr}><span>${pessoa.nome}</span> <span>${strCheck}</span></div>`;
                 });
 
                 let corGrupo = countAlocados === listaPessoas.length ? "#e8f5e9" : "#fff";
@@ -467,9 +456,7 @@
 
         // Funções Lógicas do Mapa
         function pessoaEstaEmMesa(idStr) {
-            for(let m of layoutMesas) {
-                if(m.convidados.find(c => c.idStr === idStr)) return true;
-            }
+            for(let m of layoutMesas) { if(m.convidados.find(c => c.idStr === idStr)) return true; }
             return false;
         }
 
@@ -510,7 +497,6 @@
             let mesa = layoutMesas.find(m => m.id === idMesa);
             if(mesa.convidados.length >= mesa.assentos) return alert("Mesa cheia!");
             if(pessoaEstaEmMesa(idStr)) return alert("Pessoa já está em uma mesa.");
-            
             let pessoa = todosConfirmadosArray.find(c => c.idStr === idStr);
             if(pessoa) { mesa.convidados.push(pessoa); renderizarPaineisMesas(); }
         }
@@ -525,7 +511,6 @@
             const container = document.getElementById('lista-checkbox-mesas');
             container.innerHTML = "";
 
-            // Agrupar lista global para exibir caixinhas
             let gruposDict = {};
             todosConfirmadosArray.forEach(c => {
                 if(!gruposDict[c.grupo]) gruposDict[c.grupo] = [];
@@ -539,7 +524,7 @@
                     let taNestaMesa = mesa.convidados.find(mc => mc.idStr === p.idStr);
                     let taEmOutraMesa = pessoaEstaEmMesa(p.idStr) && !taNestaMesa;
                     
-                    if(!taEmOutraMesa) { // Só mostra quem está livre ou quem já está NESTA mesa
+                    if(!taEmOutraMesa) { // Só mostra quem está livre ou já nesta mesa
                         temAlguemLivre = true;
                         let checkd = taNestaMesa ? "checked" : "";
                         htmlChecks += `<label style="display:flex; gap:10px; padding:5px 0; margin-left:15px; cursor:pointer;"><input type="checkbox" class="cb-preencher-mesa" value="${p.idStr}" ${checkd} style="width:18px; height:18px;"> ${p.nome}</label>`;
@@ -550,7 +535,7 @@
                     container.insertAdjacentHTML('beforeend', `<div style="margin-bottom:10px; background:#f9f9f9; padding:10px; border-radius:4px;"><strong style="color:#8c7b65;">${nomeGrupo}</strong>${htmlChecks}</div>`);
                 }
             }
-            if(container.innerHTML === "") container.innerHTML = "<p>Não há mais convidados livres para adicionar.</p>";
+            if(container.innerHTML === "") container.innerHTML = "<p>Não há convidados livres.</p>";
             abrirModal('modal-selecionar-convidados-mesa');
         }
 
@@ -560,9 +545,8 @@
             let selecionadosIdStr = [];
             checks.forEach(cb => { if(cb.checked) selecionadosIdStr.push(cb.value); });
 
-            if(selecionadosIdStr.length > mesa.assentos) return alert("Você selecionou mais pessoas do que a mesa suporta!");
+            if(selecionadosIdStr.length > mesa.assentos) return alert("Selecionou mais pessoas do que a mesa suporta!");
 
-            // Limpa a mesa atual e remonta
             mesa.convidados = [];
             selecionadosIdStr.forEach(idStr => {
                 let p = todosConfirmadosArray.find(c => c.idStr === idStr);
@@ -580,14 +564,14 @@
                 method: 'POST',
                 body: JSON.stringify({ action: "salvarMesas", layout: JSON.stringify(layoutMesas) })
             })
-            .then(() => alert("Mapa salvo na nuvem com sucesso!"))
+            .then(() => alert("Mapa de Mesas salvo na nuvem com sucesso!"))
             .catch(() => alert("Erro ao salvar."))
             .finally(() => { btn.innerText = "💾 Salvar Mapa"; btn.disabled = false; });
         }
         // ========================================================
 
 
-        // --- DEMAIS FUNÇÕES DO SITE (Inalteradas do Admin Geral) ---
+        // --- DEMAIS FUNÇÕES DO SITE ---
         function abrirModalListaConvidados() {
             const container = document.getElementById('conteudo-lista-convidados'); container.innerHTML = "";
             if(!window.estatisticasGlobais.listaOficial || window.estatisticasGlobais.listaOficial.length === 0) { container.innerHTML = "<p style='text-align:center; color:#888;'>A sua lista está vazia.</p>"; } 
@@ -611,9 +595,97 @@
         function salvarNovoConvidado() { const grupo = document.getElementById('novo-grupo-nome').value.trim(); if(!grupo) return alert("Digite o nome do grupo!"); const linhas = document.querySelectorAll('.linha-novo-membro'); let membros = []; let temErro = false; linhas.forEach(l => { const n = l.querySelector('.input-nome-membro').value.trim(); const c = l.querySelector('.select-cat-membro').value; const t = l.querySelector('.select-tipo-membro').value; const i = l.querySelector('.input-idade-membro').value; if(!n || (t === 'Criança' && !i)) temErro = true; else membros.push({ nome: n, categoria: c, tipo: t, idade: i }); }); if(temErro || membros.length === 0) return alert("Preencha o nome e idade (se criança) de todos!"); const btn = document.getElementById('btn-salvar-novo-convidado'); btn.innerText = "Salvando..."; btn.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "adicionarConvidado", grupo: grupo, membros: membros }) }).then(() => fetch(API_URL)).then(r => r.json()).then(dados => { processarDadosPlanilha(dados); alert("Grupo adicionado!"); fecharModal('modal-adicionar-convidado'); document.getElementById('novo-grupo-nome').value = ""; document.getElementById('container-novos-membros').innerHTML = ""; abrirModalListaConvidados(); }).catch(() => alert("Erro.")).finally(() => { btn.innerText = "Salvar na Planilha Oficial"; btn.disabled = false; }); }
         function prepararEdicaoGrupo(index) { const grupo = window.estatisticasGlobais.listaOficial[index]; linhaGrupoEditando = grupo.linha; document.getElementById('edit-lista-grupo-nome').value = grupo.identificacao; const container = document.getElementById('container-edit-membros'); container.innerHTML = ""; let membrosLidos = []; if (grupo.categoriasStr && grupo.categoriasStr.startsWith("[")) { try { membrosLidos = JSON.parse(grupo.categoriasStr); } catch(e) {} } else { let nomes = grupo.membros.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0); membrosLidos = nomes.map(n => ({nome: n, categoria: "Convidado", tipo: "Adulto", idade: ""})); } membrosLidos.forEach(m => { let isCri = m.tipo === "Criança"; let selAd = !isCri ? "selected" : ""; let selCr = isCri ? "selected" : ""; let dispId = isCri ? "block" : "none"; let valIdade = m.idade || ""; const html = `<div class="linha-edit-membro" style="display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;"><input type="text" class="input-nome-membro" value="${m.nome}" style="flex: 2; min-width: 120px; padding: 8px;"><select class="select-cat-membro" style="flex: 1.5; padding: 8px; min-width: 100px;"><option value="Convidado" ${m.categoria==='Convidado'?'selected':''}>Convidado</option><option value="Padrinho" ${m.categoria==='Padrinho'?'selected':''}>Padrinho</option><option value="Madrinha" ${m.categoria==='Madrinha'?'selected':''}>Madrinha</option><option value="Noivinho" ${m.categoria==='Noivinho'?'selected':''}>Noivinho</option><option value="Noivinha" ${m.categoria==='Noivinha'?'selected':''}>Noivinha</option><option value="Florista" ${m.categoria==='Florista'?'selected':''}>Florista</option><option value="Pajem" ${m.categoria==='Pajem'?'selected':''}>Pajem</option></select><select class="select-tipo-membro" onchange="toggleIdadeAdmin(this)" style="flex: 1; padding: 8px; min-width: 90px;"><option value="Adulto" ${selAd}>Adulto</option><option value="Criança" ${selCr}>Criança</option></select><input type="number" class="input-idade-membro" placeholder="Idade" min="0" max="17" value="${valIdade}" style="display: ${dispId}; flex: 0.8; padding: 8px; min-width: 60px;"><button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button></div>`; container.insertAdjacentHTML('beforeend', html); }); fecharModal('modal-lista-convidados'); abrirModal('modal-editar-grupo'); }
         function salvarEdicaoGrupo() { const grupo = document.getElementById('edit-lista-grupo-nome').value.trim(); if(!grupo) return alert("Digite o nome do grupo!"); const linhas = document.querySelectorAll('.linha-edit-membro'); let membros = []; let temErro = false; linhas.forEach(l => { const n = l.querySelector('.input-nome-membro').value.trim(); const c = l.querySelector('.select-cat-membro').value; const t = l.querySelector('.select-tipo-membro').value; const i = l.querySelector('.input-idade-membro').value; if(!n || (t === 'Criança' && !i)) temErro = true; else membros.push({ nome: n, categoria: c, tipo: t, idade: i }); }); if(temErro || membros.length === 0) return alert("Preencha o nome e idade de todos!"); const btn = document.getElementById('btn-salvar-edicao-grupo'); btn.innerText = "Atualizando..."; btn.disabled = true; document.getElementById('btn-voltar-grupo').disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "editarGrupoConvidado", linha: linhaGrupoEditando, grupo: grupo, membros: membros }) }).then(() => fetch(API_URL)).then(r => r.json()).then(dados => { processarDadosPlanilha(dados); alert("Grupo atualizado!"); }).catch(() => alert("Erro ao salvar.")).finally(() => { btn.innerText = "Salvar Alterações"; btn.disabled = false; document.getElementById('btn-voltar-grupo').disabled = false; }); }
+        
         function mudarAbaDash(abaId, btnSelecionado) { document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo')); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('ativo')); if(btnSelecionado) btnSelecionado.classList.add('ativo'); const aba = document.getElementById(abaId); if(aba) aba.classList.add('ativo'); }
-        function abrirDetalhesDash(titulo, chaveCategoria) { document.getElementById('titulo-detalhe-dash').innerText = titulo; const container = document.getElementById('conteudo-detalhe-dash'); container.innerHTML = ""; const gruposObj = window.dadosDetalhesDash[chaveCategoria] || {}; const chavesGrupos = Object.keys(gruposObj); if(chavesGrupos.length === 0) { container.innerHTML = "<p style='color:#888;'>Nenhum registro encontrado nesta categoria.</p>"; } else { chavesGrupos.forEach(grupoNome => { let membrosHtml = ""; if(Array.isArray(gruposObj[grupoNome])) { membrosHtml = gruposObj[grupoNome].join(", "); } else { membrosHtml = gruposObj[grupoNome]; } const html = `<div class="bloco-detalhe-grupo"><div class="bloco-detalhe-titulo">${grupoNome}</div><div class="bloco-detalhe-membros">${membrosHtml}</div></div>`; container.innerHTML += html; }); } fecharModal('modal-relatorio'); abrirModal('modal-detalhes-dash'); }
-        function abrirModalRelatorio() { const tabBtn = document.querySelector('.tab-btn'); if(tabBtn) mudarAbaDash('dash-confirmados', tabBtn); let totalAdultos = 0; let totalCriancas = 0; let isentosTotal = 0; let contagemIdades = {}; let arrayGruposConfirmados = []; window.dadosDetalhesDash = { "Padrinhos & Madrinhas": {}, "Noivinhos(as)": {}, "Pajens": {}, "Floristas": {}, "Crianças": {}, "gruposLista": {}, "pendentes": {}, "Adultos Lista": {}, "Crianças Lista": {}, "Isentos Lista": {} }; window.listaPresencasGlobais.forEach(p => { arrayGruposConfirmados.push(p.grupo); if(p.jsonRaw && p.jsonRaw !== "[]") { try { let objMembros = JSON.parse(p.jsonRaw); objMembros.forEach(m => { if(m.status) { if(m.tipo === 'Criança') { let numIdade = parseInt(m.idade); if(!isNaN(numIdade)) { if(numIdade > 9) totalAdultos++; else { totalCriancas++; if(numIdade <= 5) isentosTotal++; } let label = `${numIdade} anos`; contagemIdades[label] = (contagemIdades[label] || 0) + 1; } else { totalCriancas++; } if(!window.dadosDetalhesDash["Crianças"][p.grupo]) window.dadosDetalhesDash["Crianças"][p.grupo] = []; let txIdade = m.idade ? `${m.idade} a.` : "Idade ñ info."; window.dadosDetalhesDash["Crianças"][p.grupo].push(`${m.nome} <span style="color:#1976d2; font-size:0.85em;">(${txIdade})</span>`); } else { totalAdultos++; } } }); } catch(e) { } } else { totalAdultos += Number(p.adultos) || 0; totalCriancas += Number(p.criancas) || 0; } }); let listaConvidadosTotal = 0; let listaConvidadosIsentos = 0; let listaConvidadosAdultos = 0; let listaConvidadosCriancas = 0; let listaOficial = window.estatisticasGlobais.listaOficial || []; listaOficial.forEach(g => { let htmlMembrosGeral = ""; if (g.categoriasStr && g.categoriasStr.startsWith("[")) { try { let membros = JSON.parse(g.categoriasStr); membros.forEach(m => { listaConvidadosTotal++; let cat = m.categoria || "Convidado"; htmlMembrosGeral += `${m.nome} (${cat}), `; let targetCat = null; if(cat === "Padrinho" || cat === "Madrinha") targetCat = "Padrinhos & Madrinhas"; else if(cat === "Noivinho" || cat === "Noivinha") targetCat = "Noivinhos(as)"; else if(cat === "Pajem") targetCat = "Pajens"; else if(cat === "Florista") targetCat = "Floristas"; if(targetCat) { if(!window.dadosDetalhesDash[targetCat][g.identificacao]) window.dadosDetalhesDash[targetCat][g.identificacao] = []; window.dadosDetalhesDash[targetCat][g.identificacao].push(m.nome); } if(m.tipo === 'Criança') { let idNum = parseInt(m.idade); let txIdade = m.idade ? `${m.idade} a.` : "Idade ñ info."; let strMembro = `${m.nome} <span style="color:#1976d2; font-size:0.85em;">(${txIdade})</span>`; if(!isNaN(idNum)) { if(idNum > 9) { listaConvidadosAdultos++; if(!window.dadosDetalhesDash["Adultos Lista"][g.identificacao]) window.dadosDetalhesDash["Adultos Lista"][g.identificacao] = []; window.dadosDetalhesDash["Adultos Lista"][g.identificacao].push(`${m.nome} <span style="font-size:0.85em; color:#888;">(${txIdade} - Cont. Adulto)</span>`); } else { listaConvidadosCriancas++; if(!window.dadosDetalhesDash["Crianças Lista"][g.identificacao]) window.dadosDetalhesDash["Crianças Lista"][g.identificacao] = []; window.dadosDetalhesDash["Crianças Lista"][g.identificacao].push(strMembro); if(idNum <= 5) { listaConvidadosIsentos++; if(!window.dadosDetalhesDash["Isentos Lista"][g.identificacao]) window.dadosDetalhesDash["Isentos Lista"][g.identificacao] = []; window.dadosDetalhesDash["Isentos Lista"][g.identificacao].push(strMembro); } } } else { listaConvidadosCriancas++; if(!window.dadosDetalhesDash["Crianças Lista"][g.identificacao]) window.dadosDetalhesDash["Crianças Lista"][g.identificacao] = []; window.dadosDetalhesDash["Crianças Lista"][g.identificacao].push(strMembro); } } else { listaConvidadosAdultos++; if(!window.dadosDetalhesDash["Adultos Lista"][g.identificacao]) window.dadosDetalhesDash["Adultos Lista"][g.identificacao] = []; window.dadosDetalhesDash["Adultos Lista"][g.identificacao].push(m.nome); } }); } catch(e) {} } else { let nomes = g.membros.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0); listaConvidadosTotal += nomes.length; htmlMembrosGeral = g.membros; listaConvidadosAdultos += nomes.length; if(!window.dadosDetalhesDash["Adultos Lista"][g.identificacao]) window.dadosDetalhesDash["Adultos Lista"][g.identificacao] = []; nomes.forEach(n => window.dadosDetalhesDash["Adultos Lista"][g.identificacao].push(n)); } htmlMembrosGeral = htmlMembrosGeral.replace(/, $/, ""); window.dadosDetalhesDash["gruposLista"][g.identificacao] = htmlMembrosGeral; }); let totalConfirmadosGeral = totalAdultos + totalCriancas; let confirmadosPagantes = totalConfirmadosGeral - isentosTotal; let pagantesEstimadoLista = listaConvidadosTotal - listaConvidadosIsentos; const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; }; setVal('dash-total-confirmados', totalConfirmadosGeral); setVal('dash-pagantes-confirmados', confirmadosPagantes); setVal('dash-isentos', isentosTotal); setVal('dash-adultos', totalAdultos); setVal('dash-criancas', totalCriancas); setVal('dash-geral-total', listaConvidadosTotal); setVal('dash-total-pagantes-lista', pagantesEstimadoLista); setVal('dash-geral-grupos', listaOficial.length); setVal('dash-geral-adultos', listaConvidadosAdultos); setVal('dash-geral-criancas', listaConvidadosCriancas); setVal('dash-geral-isentos', listaConvidadosIsentos); setVal('dash-cat-padrinhos', Object.values(window.dadosDetalhesDash["Padrinhos & Madrinhas"]).flat().length); setVal('dash-cat-noivinhos', Object.values(window.dadosDetalhesDash["Noivinhos(as)"]).flat().length); setVal('dash-cat-pajens', Object.values(window.dadosDetalhesDash["Pajens"]).flat().length); setVal('dash-cat-floristas', Object.values(window.dadosDetalhesDash["Floristas"]).flat().length); let listaPendentes = []; listaOficial.forEach(g => { if(!arrayGruposConfirmados.includes(g.identificacao)) { listaPendentes.push(g); window.dadosDetalhesDash["pendentes"][g.identificacao] = g.membros; } }); setVal('dash-grupos-pendentes', listaPendentes.length); let pendentesHtml = ""; if(listaPendentes.length === 0) { pendentesHtml = "<p style='color:#388e3c;'>Todos confirmaram!</p>"; } else { listaPendentes.forEach(p => { pendentesHtml += `<div style="padding: 10px; border-bottom: 1px solid #f0d8d8;"><strong style="color:#555;">${p.identificacao}</strong><br><span style="font-size:0.85rem; color:#888;">${p.membros}</span></div>`; }); } document.getElementById('lista-grupos-pendentes').innerHTML = pendentesHtml; document.getElementById('area-pendentes').style.display = "none"; let ulIdades = document.getElementById('lista-idades-criancas'); ulIdades.innerHTML = ""; if(Object.keys(contagemIdades).length === 0) { ulIdades.innerHTML = "<li>Nenhuma criança confirmada.</li>"; } else { for (const [idade, qtd] of Object.entries(contagemIdades)) { ulIdades.innerHTML += `<li>👶 ${idade}: <strong>${qtd}</strong></li>`; } } abrirModal('modal-relatorio'); }
+        
+        function abrirDetalhesDash(titulo, chaveCategoria) { 
+            document.getElementById('titulo-detalhe-dash').innerText = titulo; const container = document.getElementById('conteudo-detalhe-dash'); container.innerHTML = ""; 
+            const gruposObj = window.dadosDetalhesDash[chaveCategoria] || {}; const chavesGrupos = Object.keys(gruposObj); 
+            if(chavesGrupos.length === 0) { container.innerHTML = "<p style='color:#888;'>Nenhum registro encontrado nesta categoria.</p>"; } 
+            else { chavesGrupos.forEach(grupoNome => { let membrosHtml = ""; if(Array.isArray(gruposObj[grupoNome])) { membrosHtml = gruposObj[grupoNome].join(", "); } else { membrosHtml = gruposObj[grupoNome]; } const html = `<div class="bloco-detalhe-grupo"><div class="bloco-detalhe-titulo">${grupoNome}</div><div class="bloco-detalhe-membros">${membrosHtml}</div></div>`; container.innerHTML += html; }); } 
+            fecharModal('modal-relatorio'); abrirModal('modal-detalhes-dash'); 
+        }
+
+        function abrirModalRelatorio() { 
+            const tabBtn = document.querySelector('.tab-btn'); if(tabBtn) mudarAbaDash('dash-confirmados', tabBtn); 
+            let totalAdultos = 0; let totalCriancas = 0; let isentosTotal = 0; let contagemIdades = {}; let arrayGruposConfirmados = []; 
+            window.dadosDetalhesDash = { "Padrinhos & Madrinhas": {}, "Noivinhos(as)": {}, "Pajens": {}, "Floristas": {}, "Crianças": {}, "gruposLista": {}, "pendentes": {}, "Adultos Lista": {}, "Crianças Lista": {}, "Isentos Lista": {} }; 
+            
+            window.listaPresencasGlobais.forEach(p => { 
+                arrayGruposConfirmados.push(p.grupo); 
+                if(p.jsonRaw && p.jsonRaw !== "[]") { 
+                    try { 
+                        let objMembros = JSON.parse(p.jsonRaw); 
+                        objMembros.forEach(m => { 
+                            if(m.status) { 
+                                if(m.tipo === 'Criança') { 
+                                    let numIdade = parseInt(m.idade); 
+                                    if(!isNaN(numIdade)) { 
+                                        if(numIdade > 9) totalAdultos++; else { totalCriancas++; if(numIdade <= 5) isentosTotal++; } 
+                                        let label = `${numIdade} anos`; contagemIdades[label] = (contagemIdades[label] || 0) + 1; 
+                                    } else { totalCriancas++; } 
+                                    if(!window.dadosDetalhesDash["Crianças"][p.grupo]) window.dadosDetalhesDash["Crianças"][p.grupo] = []; 
+                                    let txIdade = m.idade ? `${m.idade} a.` : "Idade ñ info."; 
+                                    window.dadosDetalhesDash["Crianças"][p.grupo].push(`${m.nome} <span style="color:#1976d2; font-size:0.85em;">(${txIdade})</span>`); 
+                                } else { totalAdultos++; } 
+                            } 
+                        }); 
+                    } catch(e) { } 
+                } else { totalAdultos += Number(p.adultos) || 0; totalCriancas += Number(p.criancas) || 0; } 
+            }); 
+            
+            let listaConvidadosTotal = 0; let listaConvidadosIsentos = 0; let listaConvidadosAdultos = 0; let listaConvidadosCriancas = 0; 
+            let listaOficial = window.estatisticasGlobais.listaOficial || []; 
+            
+            listaOficial.forEach(g => { 
+                let htmlMembrosGeral = ""; 
+                if (g.categoriasStr && g.categoriasStr.startsWith("[")) { 
+                    try { 
+                        let membros = JSON.parse(g.categoriasStr); 
+                        membros.forEach(m => { 
+                            listaConvidadosTotal++; let cat = m.categoria || "Convidado"; htmlMembrosGeral += `${m.nome} (${cat}), `; 
+                            let targetCat = null; if(cat === "Padrinho" || cat === "Madrinha") targetCat = "Padrinhos & Madrinhas"; else if(cat === "Noivinho" || cat === "Noivinha") targetCat = "Noivinhos(as)"; else if(cat === "Pajem") targetCat = "Pajens"; else if(cat === "Florista") targetCat = "Floristas"; 
+                            if(targetCat) { if(!window.dadosDetalhesDash[targetCat][g.identificacao]) window.dadosDetalhesDash[targetCat][g.identificacao] = []; window.dadosDetalhesDash[targetCat][g.identificacao].push(m.nome); } 
+                            if(m.tipo === 'Criança') { 
+                                let idNum = parseInt(m.idade); let txIdade = m.idade ? `${m.idade} a.` : "Idade ñ info."; let strMembro = `${m.nome} <span style="color:#1976d2; font-size:0.85em;">(${txIdade})</span>`; 
+                                if(!isNaN(idNum)) { 
+                                    if(idNum > 9) { 
+                                        listaConvidadosAdultos++; if(!window.dadosDetalhesDash["Adultos Lista"][g.identificacao]) window.dadosDetalhesDash["Adultos Lista"][g.identificacao] = []; window.dadosDetalhesDash["Adultos Lista"][g.identificacao].push(`${m.nome} <span style="font-size:0.85em; color:#888;">(${txIdade} - Cont. Adulto)</span>`); 
+                                    } else { 
+                                        listaConvidadosCriancas++; if(!window.dadosDetalhesDash["Crianças Lista"][g.identificacao]) window.dadosDetalhesDash["Crianças Lista"][g.identificacao] = []; window.dadosDetalhesDash["Crianças Lista"][g.identificacao].push(strMembro); 
+                                        if(idNum <= 5) { listaConvidadosIsentos++; if(!window.dadosDetalhesDash["Isentos Lista"][g.identificacao]) window.dadosDetalhesDash["Isentos Lista"][g.identificacao] = []; window.dadosDetalhesDash["Isentos Lista"][g.identificacao].push(strMembro); } 
+                                    } 
+                                } else { 
+                                    listaConvidadosCriancas++; if(!window.dadosDetalhesDash["Crianças Lista"][g.identificacao]) window.dadosDetalhesDash["Crianças Lista"][g.identificacao] = []; window.dadosDetalhesDash["Crianças Lista"][g.identificacao].push(strMembro); 
+                                } 
+                            } else { 
+                                listaConvidadosAdultos++; if(!window.dadosDetalhesDash["Adultos Lista"][g.identificacao]) window.dadosDetalhesDash["Adultos Lista"][g.identificacao] = []; window.dadosDetalhesDash["Adultos Lista"][g.identificacao].push(m.nome); 
+                            } 
+                        }); 
+                    } catch(e) {} 
+                } else { 
+                    let nomes = g.membros.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0); listaConvidadosTotal += nomes.length; htmlMembrosGeral = g.membros; listaConvidadosAdultos += nomes.length; 
+                    if(!window.dadosDetalhesDash["Adultos Lista"][g.identificacao]) window.dadosDetalhesDash["Adultos Lista"][g.identificacao] = []; nomes.forEach(n => window.dadosDetalhesDash["Adultos Lista"][g.identificacao].push(n)); 
+                } 
+                htmlMembrosGeral = htmlMembrosGeral.replace(/, $/, ""); window.dadosDetalhesDash["gruposLista"][g.identificacao] = htmlMembrosGeral; 
+            }); 
+            
+            let totalConfirmadosGeral = totalAdultos + totalCriancas; let confirmadosPagantes = totalConfirmadosGeral - isentosTotal; let pagantesEstimadoLista = listaConvidadosTotal - listaConvidadosIsentos; 
+            const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; }; 
+            setVal('dash-total-confirmados', totalConfirmadosGeral); setVal('dash-pagantes-confirmados', confirmadosPagantes); setVal('dash-isentos', isentosTotal); setVal('dash-adultos', totalAdultos); setVal('dash-criancas', totalCriancas); setVal('dash-geral-total', listaConvidadosTotal); setVal('dash-total-pagantes-lista', pagantesEstimadoLista); setVal('dash-geral-grupos', listaOficial.length); setVal('dash-geral-adultos', listaConvidadosAdultos); setVal('dash-geral-criancas', listaConvidadosCriancas); setVal('dash-geral-isentos', listaConvidadosIsentos); 
+            
+            // FUNÇÃO CORRIGIDA DO FLAT
+            const contaMembros = function(catObj) { let total = 0; for(let key in catObj) { if(Array.isArray(catObj[key])) total += catObj[key].length; } return total; };
+            setVal('dash-cat-padrinhos', contaMembros(window.dadosDetalhesDash["Padrinhos & Madrinhas"])); 
+            setVal('dash-cat-noivinhos', contaMembros(window.dadosDetalhesDash["Noivinhos(as)"])); 
+            setVal('dash-cat-pajens', contaMembros(window.dadosDetalhesDash["Pajens"])); 
+            setVal('dash-cat-floristas', contaMembros(window.dadosDetalhesDash["Floristas"])); 
+            
+            let listaPendentes = []; listaOficial.forEach(g => { if(!arrayGruposConfirmados.includes(g.identificacao)) { listaPendentes.push(g); window.dadosDetalhesDash["pendentes"][g.identificacao] = g.membros; } }); setVal('dash-grupos-pendentes', listaPendentes.length); let pendentesHtml = ""; if(listaPendentes.length === 0) { pendentesHtml = "<p style='color:#388e3c;'>Todos confirmaram!</p>"; } else { listaPendentes.forEach(p => { pendentesHtml += `<div style="padding: 10px; border-bottom: 1px solid #f0d8d8;"><strong style="color:#555;">${p.identificacao}</strong><br><span style="font-size:0.85rem; color:#888;">${p.membros}</span></div>`; }); } document.getElementById('lista-grupos-pendentes').innerHTML = pendentesHtml; document.getElementById('area-pendentes').style.display = "none"; let ulIdades = document.getElementById('lista-idades-criancas'); ulIdades.innerHTML = ""; if(Object.keys(contagemIdades).length === 0) { ulIdades.innerHTML = "<li>Nenhuma criança confirmada.</li>"; } else { for (const [idade, qtd] of Object.entries(contagemIdades)) { ulIdades.innerHTML += `<li>👶 ${idade}: <strong>${qtd}</strong></li>`; } } 
+            
+            abrirModal('modal-relatorio'); 
+        }
+
         function togglePendentes() { let area = document.getElementById('area-pendentes'); if(area) area.style.display = area.style.display === "none" ? "block" : "none"; }
         function abrirModalPresenca() { const container = document.getElementById('conteudo-lista-presenca'); container.innerHTML = ""; if(!window.listaPresencasGlobais || window.listaPresencasGlobais.length === 0) { container.innerHTML = "<p style='text-align:center; color:#888;'>Nenhuma presença confirmada ainda.</p>"; } else { window.listaPresencasGlobais.forEach((p, indexOriginalArray) => { const naoViraoHtml = p.naoConfirmados ? `<p style="color:#d32f2f; font-size:0.9rem; margin-bottom:5px;"><strong>❌ Não virão:</strong> ${p.naoConfirmados}</p>` : ''; let btnEditar = ""; if(p.jsonRaw && p.jsonRaw !== "[]") { btnEditar = `<button onclick="prepararEdicaoRsvp(${indexOriginalArray})" style="position: absolute; top: 15px; right: 90px; background: #1976d2; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition:0.3s;">✏️ Editar</button>`; } const html = `<div style="border: 1px solid #e0e0e0; padding: 15px; border-radius: 6px; margin-bottom: 15px; position: relative; background: #f9f9f9;"><h4 style="color: #8c7b65; margin-bottom: 8px; font-family: 'Playfair Display', serif; font-size: 1.2rem;">${p.grupo || "Convite Avulso"}</h4><p style="font-size: 0.95rem; margin-bottom: 5px; color:#2e7d32;"><strong>✅ Confirmados:</strong> ${p.confirmados}</p>${naoViraoHtml}<div style="margin-top: 10px; font-size: 0.85rem; color: #555; background: #fff; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">📞 ${p.telefone}</div>${btnEditar}<button onclick="cancelarConfirmacao(${p.linha}, this)" style="position: absolute; top: 15px; right: 15px; background: #d32f2f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition:0.3s;">🗑️ Apagar</button></div>`; container.insertAdjacentHTML('beforeend', html); }); } abrirModal('modal-lista-presenca'); }
         function cancelarConfirmacao(linha, btn) { if(confirm("Apagar essa confirmação da planilha?")) { const card = btn.parentElement; btn.innerText = "..."; btn.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "cancelarRSVP", linha: linha }) }).then(() => { card.remove(); fetch(API_URL).then(r => r.json()).then(dados => processarDadosPlanilha(dados)); }).catch(() => { alert("Erro."); btn.innerText = "🗑️ Apagar"; btn.disabled = false; }); } }
@@ -621,10 +693,12 @@
         function toggleMembroEdit(cb, idx) { const b = document.getElementById(`edit-bloco-membro-${idx}`); const o = document.getElementById(`edit-opcoes-membro-${idx}`); if(cb.checked) { b.classList.remove('inativo'); o.style.opacity = "1"; o.style.pointerEvents = "auto"; } else { b.classList.add('inativo'); o.style.opacity = "0.3"; o.style.pointerEvents = "none"; } }
         function toggleIdadeEdit(sel, idx) { const c = document.getElementById(`edit-idade-crianca-${idx}`); if(sel.value === "Criança") { c.style.display = "block"; } else { c.style.display = "none"; c.value = ""; } }
         function salvarEdicaoRSVP() { let totalA = 0; let totalC = 0; let confArray = []; let naoConfArray = []; let temErro = false; let novaMemoriaJson = []; const blocos = document.querySelectorAll('#edit-rsvp-membros .membro-rsvp-item'); blocos.forEach(b => { const cb = b.querySelector('.edit-cb-membro'); const nome = cb.value; if(cb.checked) { const tipo = b.querySelector('.edit-tipo-membro').value; if(tipo === 'Adulto') { totalA++; confArray.push(`${nome} (Adulto)`); novaMemoriaJson.push({nome: nome, status: true, tipo: "Adulto", idade: ""}); } else { const idade = b.querySelector('.edit-idade-membro').value; if(idade === "") temErro = true; else { let idNum = parseInt(idade); if(idNum > 9) { totalA++; confArray.push(`${nome} (Criança: ${idade} anos - Cont. Adulto)`); } else { totalC++; confArray.push(`${nome} (Criança: ${idade} anos)`); } novaMemoriaJson.push({nome: nome, status: true, tipo: "Criança", idade: idade}); } } } else { naoConfArray.push(nome); novaMemoriaJson.push({nome: nome, status: false, tipo: "", idade: ""}); } }); if(temErro) return alert("Preencha a idade das crianças!"); if(totalA === 0 && totalC === 0) return alert("Se ninguém vai, use o botão de Apagar no painel anterior."); const btn = document.getElementById('btn-salvar-edicao-rsvp'); btn.innerText = "Atualizando..."; btn.disabled = true; document.getElementById('btn-voltar-rsvp').disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "editarRSVP", linha: linhaRsvpEditando, confirmados: confArray.join(" | "), naoConfirmados: naoConfArray.join(" | "), adultos: totalA, criancas: totalC, jsonRaw: JSON.stringify(novaMemoriaJson) }) }).then(() => fetch(API_URL)).then(r => r.json()).then(dados => { processarDadosPlanilha(dados); alert("Salvo!"); }).finally(() => { btn.innerText = "Salvar Alterações"; btn.disabled = false; document.getElementById('btn-voltar-rsvp').disabled = false; }); }
+        
         function buscarConvidado() { const nomeDigitado = document.getElementById('rsvp-busca').value; const btn = document.getElementById('btn-buscar-convite'); const msg = document.getElementById('msg-busca'); if(!nomeDigitado || nomeDigitado.length < 3) return alert("Digite pelo menos 3 letras."); btn.innerText = "⏳"; btn.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "verificarNome", nome: nomeDigitado }) }).then(res => res.json()).then(dados => { if(dados.encontrado) { grupoRSVP = dados.grupo; document.getElementById('bloco-busca').style.display = "none"; document.getElementById('caixa-grupo').style.display = "block"; document.getElementById('bloco-formulario').style.display = "block"; document.getElementById('rsvp-identificacao').innerText = grupoRSVP.identificacao ? "Grupo: " + grupoRSVP.identificacao : "Convite Localizado"; let containerCheckboxes = document.getElementById('lista-checkbox-membros'); containerCheckboxes.innerHTML = ""; let membrosLidos = []; if (grupoRSVP.categoriasStr && grupoRSVP.categoriasStr.startsWith("[")) { try { membrosLidos = JSON.parse(grupoRSVP.categoriasStr); } catch(e) {} } if(membrosLidos.length > 0) { membrosLidos.forEach((m, index) => { let tagHtml = m.categoria !== "Convidado" ? `<span class="tag-categoria">${m.categoria}</span>` : ""; let isCri = m.tipo === "Criança"; let selAd = !isCri ? "selected" : ""; let selCr = isCri ? "selected" : ""; let dispId = isCri ? "block" : "none"; let valIdade = m.idade || ""; const html = `<div class="membro-rsvp-item" id="bloco-membro-${index}"><label style="display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: #333;"><input type="checkbox" class="cb-membro" value="${m.nome.trim()}" checked onchange="toggleMembro(this, ${index})" style="width: 20px; height: 20px; accent-color: #8c7b65;"> ${m.nome.trim()} ${tagHtml}</label><div id="opcoes-membro-${index}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;"><select class="tipo-membro" onchange="toggleIdade(this, ${index})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: #fff;"><option value="Adulto" ${selAd}>É Adulto</option><option value="Criança" ${selCr}>É Criança (até 9 anos)</option></select><input type="number" id="idade-crianca-${index}" class="idade-membro" placeholder="Idade" min="0" max="17" value="${valIdade}" style="display: ${dispId}; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"></div></div>`; containerCheckboxes.insertAdjacentHTML('beforeend', html); }); } else { let arrayNomes = grupoRSVP.nomes.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0); arrayNomes.forEach((nomeMembro, index) => { const html = `<div class="membro-rsvp-item" id="bloco-membro-${index}"><label style="display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: #333;"><input type="checkbox" class="cb-membro" value="${nomeMembro.trim()}" checked onchange="toggleMembro(this, ${index})" style="width: 20px; height: 20px; accent-color: #8c7b65;"> ${nomeMembro.trim()}</label><div id="opcoes-membro-${index}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;"><select class="tipo-membro" onchange="toggleIdade(this, ${index})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: #fff;"><option value="Adulto">É Adulto</option><option value="Criança">É Criança (até 9 anos)</option></select><input type="number" id="idade-crianca-${index}" class="idade-membro" placeholder="Idade" min="0" max="17" style="display: none; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"></div></div>`; containerCheckboxes.insertAdjacentHTML('beforeend', html); }); } } else { msg.innerText = "❌ Nome não localizado."; msg.style.color = "#d32f2f"; } }).catch(() => msg.innerText = "Erro na busca.").finally(() => { btn.innerText = "Buscar"; btn.disabled = false; }); }
         function toggleMembro(cb, idx) { const b = document.getElementById(`bloco-membro-${idx}`); const o = document.getElementById(`opcoes-membro-${idx}`); if(cb.checked) { b.classList.remove('inativo'); o.style.opacity = "1"; o.style.pointerEvents = "auto"; } else { b.classList.add('inativo'); o.style.opacity = "0.3"; o.style.pointerEvents = "none"; } }
         function toggleIdade(sel, idx) { const c = document.getElementById(`idade-crianca-${idx}`); if(sel.value === "Criança") { c.style.display = "block"; } else { c.style.display = "none"; c.value = ""; } }
         function enviarRSVP() { const tel = document.getElementById('rsvp-telefone').value; if(!tel) return alert("Por favor, informe o telefone de contato principal do grupo!"); let totalA = 0; let totalC = 0; let confArray = []; let naoConfArray = []; let temErro = false; let memoriaJson = []; const blocos = document.querySelectorAll('#caixa-grupo .membro-rsvp-item'); blocos.forEach(b => { const cb = b.querySelector('.cb-membro'); const nome = cb.value; if(cb.checked) { const tipo = b.querySelector('.tipo-membro').value; if(tipo === 'Adulto') { totalA++; confArray.push(`${nome} (Adulto)`); memoriaJson.push({nome: nome, status: true, tipo: "Adulto", idade: ""}); } else { const idade = b.querySelector('.idade-membro').value; if(idade === "") temErro = true; else { let idNum = parseInt(idade); if(idNum > 9) { totalA++; confArray.push(`${nome} (Criança: ${idade} anos - Cont. Adulto)`); } else { totalC++; confArray.push(`${nome} (Criança: ${idade} anos)`); } memoriaJson.push({nome: nome, status: true, tipo: "Criança", idade: idade}); } } } else { naoConfArray.push(nome); memoriaJson.push({nome: nome, status: false, tipo: "", idade: ""}); } }); if(temErro) return alert("Preencha a idade das crianças."); if(totalA === 0 && totalC === 0) return alert("Selecione pelo menos uma pessoa."); const btn = document.getElementById('btn-enviar-rsvp'); btn.innerText = "Enviando..."; btn.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "rsvp", grupo: grupoRSVP.identificacao, confirmados: confArray.join(" | "), naoConfirmados: naoConfArray.join(" | "), telefone: tel, adultos: totalA, criancas: totalC, jsonRaw: JSON.stringify(memoriaJson) }) }).then(() => { alert("Presença confirmada!"); location.reload(); }).catch(() => alert("Erro.")).finally(() => { btn.innerText = "Confirmar Nossa Presença"; btn.disabled = false; }); }
+
         function mudarStatusPresente(id, e) { e.target.innerText = "⏳"; e.target.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "mudarStatus", id: id, novoStatus: "" }) }).then(() => carregarListaDaPlanilha()); }
         function abrirModalConfigPix() { document.getElementById('config-chave-pix').value = dadosPixNuvem.chave; document.getElementById('config-qr-pix').value = dadosPixNuvem.qr; abrirModal('modal-config-pix'); }
         function salvarConfigPix() { const k = document.getElementById('config-chave-pix').value; const q = document.getElementById('config-qr-pix').value; if (!k || !q) return alert("Preencha!"); const b = document.getElementById('btn-salvar-pix'); b.innerText = "⏳"; b.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "configPix", chave: k, qr: q }) }).then(() => { dadosPixNuvem.chave = k; dadosPixNuvem.qr = q; alert("PIX atualizado!"); fecharModal('modal-config-pix'); }).finally(() => { b.innerText = "Salvar na Nuvem"; b.disabled = false; }); }
