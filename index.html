@@ -45,10 +45,6 @@
         
         .selo-status { position: absolute; top: 12px; left: 12px; background-color: #d32f2f; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; z-index: 10;}
         .selo-comprado { background-color: #388e3c; }
-        .botoes-admin { display: none; position: absolute; top: 12px; right: 12px; gap: 8px; z-index: 15; }
-        .btn-excluir, .btn-editar { color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .btn-excluir { background-color: #d32f2f; }
-        .btn-editar { background-color: #1976d2; }
         
         .formulario-bloco { background: #fff; padding: 30px; border-radius: 8px; border: 1px solid #eaeaea; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .formulario-inputs { display: flex; flex-direction: column; gap: 10px; text-align: left; }
@@ -70,7 +66,7 @@
         .modal-conteudo { background-color: #fff; margin: auto; padding: 25px 20px; width: 90%; max-width: 450px; text-align: center; position: relative; border-radius: 10px; }
         .modal-conteudo-largo { max-width: 750px; } 
         .modal-conteudo-gigante { max-width: 95%; height: 90vh; display: flex; flex-direction: column; overflow: hidden;} 
-        .fechar { position: absolute; top: 10px; right: 20px; color: #999; font-size: 30px; cursor: pointer; }
+        .fechar { position: absolute; top: 10px; right: 20px; color: #999; font-size: 30px; cursor: pointer; z-index: 9999;}
 
         .area-qrcode { display: flex; justify-content: center; margin-bottom: 10px; }
         .area-qrcode img { max-width: 130px; border-radius: 10px; border: 2px solid #eee; } 
@@ -98,35 +94,55 @@
 
         .tag-categoria { font-size: 0.7rem; color: #8c7b65; font-weight: bold; background: #f4f1eb; padding: 3px 8px; border-radius: 12px; margin-left: 8px; font-family: 'Lato', sans-serif; text-transform: uppercase; letter-spacing: 0.5px;}
 
-        /* Lista Modal de Detalhes - AGRUPADOS */
         .bloco-detalhe-grupo { border: 1px solid #e0e0e0; padding: 15px; border-radius: 6px; margin-bottom: 12px; background: #fff; text-align: left; }
         .bloco-detalhe-titulo { font-weight: bold; color: #8c7b65; font-size: 1.1rem; margin-bottom: 5px; font-family: 'Playfair Display', serif;}
         .bloco-detalhe-membros { font-size: 0.95rem; color: #444; line-height: 1.5; }
 
-        /* ---------- ESTILOS DO MAPA DE MESAS ---------- */
+        /* ---------- ESTILOS DO MAPA DE MESAS (CORRIGIDO) ---------- */
         .painel-mesas-container { display: flex; flex: 1; overflow: hidden; gap: 15px; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; }
         .mesas-lista-esq { width: 30%; overflow-y: auto; background: #fdfdfc; border-right: 1px solid #eee; padding-right: 10px; }
-        .mesas-mapa-dir { width: 70%; overflow-y: auto; background: #f4f1eb; padding: 15px; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 20px; align-content: flex-start; }
+        .mesas-mapa-dir { width: 70%; overflow-y: auto; background: #f4f1eb; padding: 15px; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 30px; align-content: flex-start; justify-content: center;}
         
+        .header-mesas-acoes { display: flex; gap: 10px; width: 100%; justify-content: flex-end; align-items: stretch; flex-wrap: wrap;}
+        .btn-mesa-header { color: white; border: none; padding: 10px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 0.85rem; flex: 1; min-width: max-content; display: flex; align-items: center; justify-content: center; text-transform: uppercase;}
+        .btn-mesa-header:hover { filter: brightness(0.9); }
+
         .grupo-sanfona { margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; background: #fff; }
         .grupo-sanfona-btn { width: 100%; text-align: left; padding: 10px; background: #f9f9f9; border: none; font-weight: bold; cursor: pointer; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
         .grupo-sanfona-conteudo { padding: 10px; display: none; flex-direction: column; gap: 5px; }
         .grupo-sanfona-conteudo.aberto { display: flex; }
         
-        .convidado-arrastavel { padding: 8px 10px; background: #fff; border: 1px solid #ccc; border-radius: 4px; font-size: 0.9rem; cursor: grab; display: flex; justify-content: space-between; }
-        .convidado-arrastavel.alocado { background: #e8f5e9; color: #2e7d32; text-decoration: line-through; cursor: not-allowed; opacity: 0.7; }
+        .convidado-arrastavel { padding: 6px 10px; background: #fff; border: 1px solid #ccc; border-radius: 4px; font-size: 0.85rem; cursor: grab; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .convidado-arrastavel:hover { border-color: #8c7b65; }
+        .convidado-arrastavel.alocado { background: #e8f5e9; color: #2e7d32; text-decoration: line-through; cursor: not-allowed; opacity: 0.6; }
         
-        .mesa-bloco { width: 100%; max-width: 250px; background: #fff; border: 2px dashed #bbb; border-radius: 50%; aspect-ratio: 1/1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; text-align: center; position: relative; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .mesa-bloco.arrastando-sobre { background: #e3f2fd; border-color: #1976d2; transform: scale(1.05); }
-        .mesa-bloco h4 { font-family: 'Playfair Display', serif; color: #8c7b65; margin-bottom: 5px; font-size: 1.2rem; }
-        .mesa-membros-lista { list-style: none; font-size: 0.8rem; color: #555; max-height: 50%; overflow-y: auto; width: 100%; padding: 0 10px; }
-        .mesa-membros-lista li { padding: 2px 0; border-bottom: 1px dotted #eee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .mesa-btn-acoes { margin-top: 10px; display: flex; gap: 5px; }
-        .mesa-btn-acoes button { background: #8c7b65; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; }
+        .mesa-wrapper { position: relative; width: 280px; height: 280px; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; }
+        .mesa-centro { width: 160px; height: 160px; background: #fff; border: 3px solid #8c7b65; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: 0.3s;}
+        .mesa-centro.arrastando-sobre { background: #e3f2fd; border-color: #1976d2; transform: scale(1.05); }
+        .mesa-centro h4 { font-family: 'Playfair Display', serif; color: #8c7b65; margin: 0 0 5px; font-size: 1.3rem; }
         
-        .modo-lista-mesas .mesa-bloco { width: 100%; max-width: none; border-radius: 8px; aspect-ratio: auto; border: 1px solid #ccc; flex-direction: row; justify-content: flex-start; align-items: flex-start; padding: 15px; gap: 15px; }
-        .modo-lista-mesas .mesa-membros-lista { max-height: none; width: auto; flex: 1; display: flex; flex-wrap: wrap; gap: 5px; }
-        .modo-lista-mesas .mesa-membros-lista li { border: none; background: #f4f1eb; padding: 4px 8px; border-radius: 12px; }
+        .assento-mesa { position: absolute; min-width: 75px; max-width: 100px; height: 35px; background: #f9f9f9; border: 1px solid #ccc; border-radius: 20px; font-size: 0.65rem; display: flex; align-items: center; justify-content: center; gap: 3px; cursor: grab; box-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: center; line-height: 1.1; padding: 2px 8px; z-index: 5; transition: 0.2s;}
+        .assento-mesa:hover { transform: scale(1.1); background: #fff; border-color: #d32f2f; color: #d32f2f; z-index: 20; cursor: pointer; }
+        .assento-vazio { background: #eee; color: #aaa; border: 1px dashed #ccc; cursor: default; }
+        .assento-vazio:hover { transform: none; border-color: #ccc; color: #aaa; }
+        
+        .remover-assento { background: #d32f2f; color: white; border-radius: 50%; width: 14px; height: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.55rem; margin-left: 2px; cursor: pointer; opacity: 0; transition: opacity 0.2s;}
+        .assento-mesa:hover .remover-assento { opacity: 1; }
+
+        .btn-lugar { background: #f0f0f0; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; padding: 2px 8px; font-weight: bold; color: #555; transition: 0.2s;}
+        .btn-lugar:hover { background: #ddd; }
+
+        .mesa-btn-acoes { position: absolute; bottom: -35px; display: flex; gap: 5px; width: 100%; justify-content: center;}
+        .mesa-btn-acoes button { color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-weight: bold; display: flex; align-items: center; gap: 3px; }
+        .mesa-btn-acoes button.del { background: #d32f2f; }
+        .mesa-btn-acoes button.edit { background: #1976d2; }
+
+        /* Visão Lista das Mesas com Wrap Corrigido */
+        .modo-lista-mesas { flex-direction: column; flex-wrap: nowrap; gap: 15px; justify-content: flex-start; }
+        .modo-lista-mesas .mesa-wrapper { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: flex-start; width: 100%; height: auto; padding: 15px; gap: 10px; margin-bottom: 0; background: #fff; border: 1px solid #ddd; border-radius: 8px;}
+        .modo-lista-mesas .mesa-centro { position: relative; width: 130px; height: auto; border: none; border-radius: 0; box-shadow: none; background: transparent; align-items: flex-start; padding: 0; margin-right: 15px; }
+        .modo-lista-mesas .assento-mesa { position: relative; left: auto !important; top: auto !important; width: auto; min-width: 0; height: auto; padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; }
+        .modo-lista-mesas .mesa-btn-acoes { position: relative; bottom: auto; width: auto; margin-left: auto; justify-content: flex-end;}
 
         .somente-admin { display: none !important; }
         .modo-admin-ativo .somente-admin { display: flex !important; }
@@ -140,7 +156,6 @@
             .painel-mesas-container { flex-direction: column; }
             .mesas-lista-esq { width: 100%; height: 30vh; border-right: none; border-bottom: 1px solid #eee; padding-bottom: 10px; }
             .mesas-mapa-dir { width: 100%; height: 50vh; }
-            .mesa-bloco { border-radius: 8px; aspect-ratio: auto; min-height: 150px; }
         }
     </style>
 </head>
@@ -306,6 +321,47 @@
         </div>
     </div>
 
+    <div id="modal-mesas" class="modal">
+        <div class="modal-conteudo modal-conteudo-gigante">
+            <span class="fechar" onclick="fecharModal('modal-mesas')">&times;</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+                <h2 style="font-family: 'Playfair Display', serif; margin:0;">Mapeamento de Mesas</h2>
+                <div class="header-mesas-acoes" style="flex: 1; min-width: 300px;">
+                    <select id="qtd-assentos-nova-mesa" style="padding: 8px; border-radius: 4px; border: 1px solid #ccc; flex: 0.5;">
+                        <option value="6">6 lugares</option><option value="7">7 lugares</option>
+                        <option value="8" selected>8 lugares</option><option value="9">9 lugares</option>
+                        <option value="10">10 lugares</option><option value="12">12 lugares</option>
+                    </select>
+                    <button class="btn-mesa-header" onclick="adicionarMesa()" style="background: #f57c00;" title="Adicionar Mesa Nova">+ Nova Mesa</button>
+                    <button class="btn-mesa-header" onclick="limparTodasMesas()" style="background: #d32f2f;" title="Apagar todas as mesas e liberar convidados">🗑️ Limpar Tudo</button>
+                    <button class="btn-mesa-header" onclick="alternarVisualizacaoMesas()" id="btn-toggle-mesas" style="background: #555;">Ver Lista</button>
+                    <button class="btn-mesa-header" id="btn-salvar-mesas" onclick="salvarMapaMesasNuvem()" style="background: #388e3c;">💾 Salvar Mapa</button>
+                </div>
+            </div>
+            
+            <div class="painel-mesas-container">
+                <div class="mesas-lista-esq">
+                    <h4 style="margin-bottom: 10px; color: #555; text-align: left;">Lista Oficial de Convidados <br><span style="font-size:0.75rem; font-weight:normal;">(✅ Confirmado | ⏳ Pendente)</span></h4>
+                    <div id="lista-arrastavel-convidados"></div>
+                </div>
+                <div class="mesas-mapa-dir" id="area-mapa-mesas"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-selecionar-convidados-mesa" class="modal" style="z-index: 1200;">
+        <div class="modal-conteudo modal-conteudo-largo">
+            <span class="fechar" onclick="fecharModal('modal-selecionar-convidados-mesa'); abrirModal('modal-mesas');">&times;</span>
+            <h2 id="titulo-selecao-mesa" style="font-family: 'Playfair Display', serif; margin-bottom: 15px;">Adicionar à Mesa</h2>
+            <div style="text-align: left; margin-bottom: 10px; font-size: 0.9rem; color: #666;">Selecione quem vai sentar nesta mesa (Vagas: <span id="vagas-restantes-mesa">0</span>):</div>
+            <div id="lista-checkbox-mesas" style="max-height: 40vh; overflow-y: auto; text-align: left; border: 1px solid #eee; padding: 10px; border-radius: 6px;"></div>
+            <div style="display:flex; gap: 10px;">
+                <button class="btn-padrao" onclick="fecharModal('modal-selecionar-convidados-mesa'); abrirModal('modal-mesas');" style="margin-top: 15px; background: #999;">⬅ Voltar</button>
+                <button class="btn-padrao" onclick="salvarSelecaoMesa()" style="margin-top: 15px;">Confirmar Seleção</button>
+            </div>
+        </div>
+    </div>
+
     <div id="modal-lista-convidados" class="modal">
         <div class="modal-conteudo modal-conteudo-largo">
             <span class="fechar" onclick="fecharModal('modal-lista-convidados')">&times;</span>
@@ -314,17 +370,15 @@
             <div id="conteudo-lista-convidados" style="text-align: left; max-height: 60vh; overflow-y: auto; padding-right: 10px;"></div>
         </div>
     </div>
-
+    
     <div id="modal-adicionar-convidado" class="modal" style="z-index: 1060;">
         <div class="modal-conteudo modal-conteudo-largo">
             <span class="fechar" onclick="fecharModal('modal-adicionar-convidado')">&times;</span>
-            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 15px;">Adicionar Grupo à Lista</h2>
+            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 15px;">Adicionar Grupo</h2>
             <div class="formulario-inputs">
-                <label>Nome do Grupo ou Família:</label>
-                <input type="text" id="novo-grupo-nome" placeholder="Ex: Família Rute (Tia do Noivo)">
-                <div style="margin-top: 10px; margin-bottom: 5px;"><label>Membros do Grupo:</label></div>
+                <input type="text" id="novo-grupo-nome" placeholder="Ex: Família Rute">
                 <div id="container-novos-membros" style="max-height: 35vh; overflow-y: auto; padding-right: 5px; margin-bottom: 10px;"></div>
-                <button onclick="adicionarLinhaMembro()" style="background: #f9f9f9; border: 1px dashed #ccc; padding: 10px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; width: 100%; color: #555; font-weight: bold; transition:0.3s;">+ Adicionar outra pessoa ao grupo</button>
+                <button onclick="adicionarLinhaMembro()" style="background: #f9f9f9; border: 1px dashed #ccc; padding: 10px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; width: 100%; color: #555; font-weight: bold; transition:0.3s;">+ Pessoa</button>
                 <div style="display:flex; gap: 10px;">
                     <button class="btn-padrao" onclick="fecharModal('modal-adicionar-convidado'); abrirModalListaConvidados();" style="background: #999; flex: 1; margin-top: 0;">⬅ Voltar</button>
                     <button class="btn-padrao" id="btn-salvar-novo-convidado" onclick="salvarNovoConvidado()" style="flex: 2; margin-top: 0;">Salvar na Planilha</button>
@@ -332,18 +386,15 @@
             </div>
         </div>
     </div>
-
+    
     <div id="modal-editar-grupo" class="modal" style="z-index: 1060;">
         <div class="modal-conteudo modal-conteudo-largo">
             <span class="fechar" onclick="fecharModal('modal-editar-grupo')">&times;</span>
-            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 15px;">Editar Grupo da Lista</h2>
+            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 15px;">Editar Grupo</h2>
             <div class="formulario-inputs">
-                <label>Nome do Grupo ou Família:</label>
-                <input type="text" id="edit-lista-grupo-nome" placeholder="Ex: Família Rute (Tia do Noivo)">
-                <div style="margin-top: 10px; margin-bottom: 5px;"><label>Membros do Grupo:</label></div>
+                <input type="text" id="edit-lista-grupo-nome" placeholder="Ex: Família Rute">
                 <div id="container-edit-membros" style="max-height: 35vh; overflow-y: auto; padding-right: 5px; margin-bottom: 10px;"></div>
-                <button onclick="adicionarLinhaMembroEdit()" style="background: #f9f9f9; border: 1px dashed #ccc; padding: 10px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; width: 100%; color: #555; font-weight: bold; transition:0.3s;">+ Adicionar outra pessoa ao grupo</button>
-                
+                <button onclick="adicionarLinhaMembroEdit()" style="background: #f9f9f9; border: 1px dashed #ccc; padding: 10px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; width: 100%; color: #555; font-weight: bold; transition:0.3s;">+ Pessoa</button>
                 <div style="display:flex; gap: 10px; margin-top: 10px;">
                     <button class="btn-padrao" id="btn-voltar-grupo" onclick="fecharModal('modal-editar-grupo'); abrirModalListaConvidados();" style="background: #999; flex: 1; margin-top: 0;">⬅ Voltar</button>
                     <button class="btn-padrao" id="btn-salvar-edicao-grupo" onclick="salvarEdicaoGrupo()" style="flex: 2; margin-top: 0;">Salvar Alterações</button>
@@ -351,7 +402,7 @@
             </div>
         </div>
     </div>
-
+    
     <div id="modal-lista-presenca" class="modal">
         <div class="modal-conteudo modal-conteudo-largo">
             <span class="fechar" onclick="fecharModal('modal-lista-presenca')">&times;</span>
@@ -374,45 +425,9 @@
         </div>
     </div>
 
-    <div id="modal-mesas" class="modal">
-        <div class="modal-conteudo modal-conteudo-gigante">
-            <span class="fechar" onclick="fecharModal('modal-mesas')">&times;</span>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
-                <h2 style="font-family: 'Playfair Display', serif;">Mapeamento de Mesas</h2>
-                <div style="display: flex; gap: 10px;">
-                    <select id="qtd-assentos-nova-mesa" style="padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
-                        <option value="6">Mesa 6 lugares</option><option value="7">Mesa 7 lugares</option>
-                        <option value="8" selected>Mesa 8 lugares</option><option value="9">Mesa 9 lugares</option>
-                    </select>
-                    <button class="btn-padrao" onclick="adicionarMesa()" style="margin: 0; padding: 8px 15px; background: #f57c00;">+ Nova Mesa</button>
-                    <button class="btn-padrao" onclick="alternarVisualizacaoMesas()" id="btn-toggle-mesas" style="margin: 0; padding: 8px 15px; background: #555;">Ver em Lista</button>
-                    <button class="btn-padrao" id="btn-salvar-mesas" onclick="salvarMapaMesasNuvem()" style="margin: 0; padding: 8px 15px; background: #388e3c;">💾 Salvar Mapa</button>
-                </div>
-            </div>
-            
-            <div class="painel-mesas-container">
-                <div class="mesas-lista-esq">
-                    <h4 style="margin-bottom: 10px; color: #555; text-align: left;">Convidados Confirmados</h4>
-                    <div id="lista-arrastavel-convidados"></div>
-                </div>
-                <div class="mesas-mapa-dir" id="area-mapa-mesas"></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-selecionar-convidados-mesa" class="modal" style="z-index: 1200;">
-        <div class="modal-conteudo modal-conteudo-largo">
-            <span class="fechar" onclick="fecharModal('modal-selecionar-convidados-mesa')">&times;</span>
-            <h2 id="titulo-selecao-mesa" style="font-family: 'Playfair Display', serif; margin-bottom: 15px;">Adicionar à Mesa</h2>
-            <div style="text-align: left; margin-bottom: 10px; font-size: 0.9rem; color: #666;">Selecione quem vai sentar nesta mesa (Vagas: <span id="vagas-restantes-mesa">0</span>):</div>
-            <div id="lista-checkbox-mesas" style="max-height: 40vh; overflow-y: auto; text-align: left; border: 1px solid #eee; padding: 10px; border-radius: 6px;"></div>
-            <button class="btn-padrao" onclick="salvarSelecaoMesa()" style="margin-top: 15px;">Confirmar Seleção</button>
-        </div>
-    </div>
-
-    <div id="modal-adicionar" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-adicionar')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Adicionar Presente</h2><div class="formulario-inputs"><input type="text" id="novo-nome" placeholder="Nome (Ex: Batedeira)"><input type="text" id="novo-valor" placeholder="Valor (Ex: 150,00)"><input type="text" id="nova-imagem" placeholder="Link da Imagem"><button class="btn-padrao" id="btn-salvar-novo" onclick="salvarNovoPresente()">Salvar Item</button></div></div></div>
-    <div id="modal-editar" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-editar')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Editar Presente</h2><div class="formulario-inputs"><input type="text" id="edit-nome"><input type="text" id="edit-valor"><input type="text" id="edit-imagem"><button class="btn-padrao" id="btn-salvar-edicao" onclick="salvarEdicao()">Atualizar Item</button></div></div></div>
-    <div id="modal-config-pix" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-pix')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Configurar PIX</h2><div class="formulario-inputs"><textarea id="config-chave-pix" rows="3" placeholder="Chave Copia e Cola"></textarea><input type="text" id="config-qr-pix" placeholder="Link do QR Code"><button class="btn-padrao" id="btn-salvar-pix" onclick="salvarConfigPix()">Salvar na Nuvem</button></div></div></div>
+    <div id="modal-adicionar" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-adicionar')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Adicionar Presente</h2><div class="formulario-inputs"><input type="text" id="novo-nome" placeholder="Nome"><input type="text" id="novo-valor" placeholder="Valor"><input type="text" id="nova-imagem" placeholder="Link"><button class="btn-padrao" id="btn-salvar-novo" onclick="salvarNovoPresente()">Salvar</button></div></div></div>
+    <div id="modal-editar" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-editar')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Editar Presente</h2><div class="formulario-inputs"><input type="text" id="edit-nome"><input type="text" id="edit-valor"><input type="text" id="edit-imagem"><button class="btn-padrao" id="btn-salvar-edicao" onclick="salvarEdicao()">Atualizar</button></div></div></div>
+    <div id="modal-config-pix" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-pix')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Configurar PIX</h2><div class="formulario-inputs"><textarea id="config-chave-pix" rows="3"></textarea><input type="text" id="config-qr-pix"><button class="btn-padrao" id="btn-salvar-pix" onclick="salvarConfigPix()">Salvar</button></div></div></div>
     <div id="modal-login" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-login')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Acesso Restrito</h2><div class="formulario-inputs"><input type="text" id="login-user" placeholder="Usuário"><input type="password" id="login-pass" placeholder="Senha"><button class="btn-padrao" onclick="fazerLogin()">Entrar</button></div></div></div>
     <div id="modal-config-admin" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharModal('modal-config-admin')">&times;</span><h2 style="font-family: 'Playfair Display', serif;">Alterar Credenciais</h2><div class="formulario-inputs"><input type="text" id="novo-admin-user" placeholder="Novo usuário"><input type="password" id="novo-admin-pass" placeholder="Nova senha"><button class="btn-padrao" onclick="salvarNovasCredenciais()">Atualizar</button></div></div></div>
 
@@ -423,17 +438,12 @@
         let dadosPixNuvem = { chave: "", qr: "" };
         let grupoRSVP = { nomes: "", identificacao: "", categoriasStr: "" };
         
-        window.listaPresencasGlobais = [];
-        window.estatisticasGlobais = { totalConvidados: 0, totalGrupos: 0, listaOficial: [] };
+        window.listaPresencasGlobais = []; window.estatisticasGlobais = { totalConvidados: 0, totalGrupos: 0, listaOficial: [] };
         window.dadosDetalhesDash = {}; 
-        
-        let linhaRsvpEditando = null;
-        let linhaGrupoEditando = null;
+        let linhaRsvpEditando = null; let linhaGrupoEditando = null;
 
-        let layoutMesas = []; 
-        let todosConfirmadosArray = []; 
-        let modoListaMesas = false; 
-        let idMesaSendoEditada = null;
+        // Variáveis do Mapa de Mesas
+        let layoutMesas = []; let todosConvidadosArray = []; let modoListaMesas = false; let idMesaSendoEditada = null;
 
         window.onload = function() {
             if (!localStorage.getItem('credenciaisAdmin')) localStorage.setItem('credenciaisAdmin', JSON.stringify({ user: 'admin', pass: 'admin' }));
@@ -441,9 +451,12 @@
             carregarListaDaPlanilha();
         };
 
+        const setHtmlSafe = (id, html) => { const el = document.getElementById(id); if(el) el.innerHTML = html; };
+        const setTextSafe = (id, text) => { const el = document.getElementById(id); if(el) el.innerText = text; };
+
         function processarDadosPlanilha(dados) {
-            const grid = document.getElementById('grid-presentes');
-            grid.innerHTML = ""; 
+            const grid = document.getElementById('grid-presentes'); 
+            if(grid) grid.innerHTML = ""; 
             const isAdmin = sessionStorage.getItem('logadoComoAdmin') === 'sim';
             
             if(dados.pix) { dadosPixNuvem.chave = dados.pix.chave || ""; dadosPixNuvem.qr = dados.pix.qr || ""; }
@@ -451,8 +464,7 @@
             if(dados.estatisticas) window.estatisticasGlobais = dados.estatisticas;
             if(dados.mesas && dados.mesas !== "[]") { try { layoutMesas = JSON.parse(dados.mesas); } catch(e) { layoutMesas = []; } }
 
-            if(dados.presentes.length === 0) { grid.innerHTML = "<p class='loading'>A lista está vazia!</p>"; return; }
-
+            if(dados.presentes.length === 0) { if(grid) grid.innerHTML = "<p class='loading'>A lista está vazia!</p>"; return; }
             let itensRenderizados = 0;
             dados.presentes.forEach(p => {
                 if (!p.id || !p.nome) return; 
@@ -460,90 +472,114 @@
                 const taOculto = statusNorm === 'COMPRADO' || statusNorm === 'EXCLUIDO';
                 if (!isAdmin && taOculto) return;
                 itensRenderizados++;
-
-                let valorLimpo = String(p.valor).replace('R$', '').trim();
-                if (!valorLimpo.includes(',')) valorLimpo = valorLimpo + ",00"; 
-
-                let estiloCard = ""; let seloHtml = "";
-                let botaoAcaoHtml = `<button class="btn-elegante" onclick="abrirModalPix('${p.id}', '${p.nome}', '${valorLimpo}')">Presentear</button>`;
-
+                let valorLimpo = String(p.valor).replace('R$', '').trim(); if (!valorLimpo.includes(',')) valorLimpo = valorLimpo + ",00"; 
+                let estiloCard = ""; let seloHtml = ""; let botaoAcaoHtml = `<button class="btn-elegante" onclick="abrirModalPix('${p.id}', '${p.nome}', '${valorLimpo}')">Presentear</button>`;
                 if (isAdmin && taOculto) {
                     estiloCard = "opacity: 0.6; filter: grayscale(50%); border: 2px dashed #ccc;";
-                    if(statusNorm === 'COMPRADO') seloHtml = `<div class="selo-status selo-comprado">🎁 COMPRADO</div>`;
-                    else seloHtml = `<div class="selo-status">🚫 EXCLUÍDO</div>`;
+                    if(statusNorm === 'COMPRADO') seloHtml = `<div class="selo-status selo-comprado">🎁 COMPRADO</div>`; else seloHtml = `<div class="selo-status">🚫 EXCLUÍDO</div>`;
                     botaoAcaoHtml = `<button class="btn-restaurar" onclick="mudarStatusPresente('${p.id}', event)">🔄 Restaurar</button>`;
                 }
-
-                grid.insertAdjacentHTML('beforeend', `
-                <div class="item-lista" id="${p.id}" style="${estiloCard}">
-                    ${seloHtml}
-                    <div class="botoes-admin somente-admin"><button class="btn-editar" onclick="abrirModalEditar('${p.id}', '${p.nome}', '${valorLimpo}', '${p.imagem}')">✏️</button><button class="btn-excluir" onclick="excluirPresente('${p.id}', event)">🗑️</button></div>
-                    <div class="vitrine-produto"><img src="${p.imagem}" alt="${p.nome}"><div class="info-item"><h3>${p.nome}</h3><span class="valor">Cota: R$ ${valorLimpo}</span></div></div>
-                    ${botaoAcaoHtml}
-                </div>`);
+                if(grid) grid.insertAdjacentHTML('beforeend', `<div class="item-lista" id="${p.id}" style="${estiloCard}">${seloHtml}<div class="botoes-admin somente-admin"><button class="btn-editar" onclick="abrirModalEditar('${p.id}', '${p.nome}', '${valorLimpo}', '${p.imagem}')">✏️</button><button class="btn-excluir" onclick="excluirPresente('${p.id}', event)">🗑️</button></div><div class="vitrine-produto"><img src="${p.imagem}" alt="${p.nome}"><div class="info-item"><h3>${p.nome}</h3><span class="valor">Cota: R$ ${valorLimpo}</span></div></div>${botaoAcaoHtml}</div>`);
             });
-            if (itensRenderizados === 0 && !isAdmin) grid.innerHTML = "<p class='loading'>Todos os itens da lista já foram comprados! Muito obrigado.</p>";
+            if (itensRenderizados === 0 && !isAdmin && grid) grid.innerHTML = "<p class='loading'>Todos os itens da lista já foram comprados! Muito obrigado.</p>";
         }
 
         function carregarListaDaPlanilha() {
-            document.getElementById('grid-presentes').innerHTML = '<div class="loading" id="mensagem-loading">⏳ Sincronizando com a base de dados...</div>';
-            fetch(API_URL).then(res => res.json()).then(dados => processarDadosPlanilha(dados))
-            .catch(erro => { document.getElementById('grid-presentes').innerHTML = "<p class='loading' style='color:red;'>Erro de conexão com o Google. Recarregue.</p>"; });
+            setHtmlSafe('grid-presentes', '<div class="loading" id="mensagem-loading">⏳ Sincronizando com a base de dados...</div>');
+            fetch(API_URL).then(res => res.json()).then(dados => processarDadosPlanilha(dados)).catch(erro => { setHtmlSafe('grid-presentes', "<p class='loading' style='color:red;'>Erro de conexão. Recarregue.</p>"); });
         }
 
 
-        // --- SISTEMA DE MAPA DE MESAS (SEATING PLAN) ---
+        // ========================================================
+        // 🪑 SISTEMA DE MAPA DE MESAS (SEATING PLAN) ATUALIZADO
+        // ========================================================
         function abrirModalMesas() {
-            extrairTodosConfirmados();
+            extrairTodosConvidados();
             renderizarPaineisMesas();
             abrirModal('modal-mesas');
         }
 
-        function extrairTodosConfirmados() {
-            todosConfirmadosArray = [];
+        function extrairTodosConvidados() {
+            todosConvidadosArray = [];
+            let confirmadosMap = {};
             window.listaPresencasGlobais.forEach(p => {
                 if(p.jsonRaw && p.jsonRaw !== "[]") {
                     try {
                         let membros = JSON.parse(p.jsonRaw);
                         membros.forEach(m => {
-                            if(m.status) { todosConfirmadosArray.push({ idStr: p.grupo + "|||" + m.nome, grupo: p.grupo, nome: m.nome }); }
+                            if(m.status) confirmadosMap[p.grupo + "|||" + m.nome.trim().toLowerCase()] = true;
                         });
                     } catch(e) {}
+                } else {
+                    let confirmadosAntigos = p.confirmados.split("|").map(s => s.trim().split(" (")[0].toLowerCase());
+                    confirmadosAntigos.forEach(c => confirmadosMap[p.grupo + "|||" + c] = true);
                 }
+            });
+
+            let listaOficial = window.estatisticasGlobais.listaOficial || [];
+            listaOficial.forEach(g => {
+                let membrosLidos = [];
+                if (g.categoriasStr && g.categoriasStr.startsWith("[")) {
+                    try { membrosLidos = JSON.parse(g.categoriasStr); } catch(e) {}
+                } else {
+                    let nomes = g.membros.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0);
+                    membrosLidos = nomes.map(n => ({nome: n}));
+                }
+
+                membrosLidos.forEach(m => {
+                    let nomeKey = g.identificacao + "|||" + m.nome.trim().toLowerCase();
+                    let idStrOriginal = g.identificacao + "|||" + m.nome.trim();
+                    let isConf = confirmadosMap[nomeKey] === true;
+
+                    todosConvidadosArray.push({
+                        idStr: idStrOriginal,
+                        grupo: g.identificacao,
+                        nome: m.nome.trim(),
+                        confirmado: isConf
+                    });
+                });
             });
         }
 
         function renderizarPaineisMesas() {
             const painelEsq = document.getElementById('lista-arrastavel-convidados');
             const painelMap = document.getElementById('area-mapa-mesas');
+            if(!painelEsq || !painelMap) return;
+            
             painelEsq.innerHTML = ""; painelMap.innerHTML = "";
 
             let gruposDict = {};
-            todosConfirmadosArray.forEach(c => {
+            todosConvidadosArray.forEach(c => {
                 if(!gruposDict[c.grupo]) gruposDict[c.grupo] = [];
                 gruposDict[c.grupo].push(c);
             });
 
             for(const [nomeGrupo, listaPessoas] of Object.entries(gruposDict)) {
                 let countAlocados = 0; let htmlPessoas = "";
+                let grupoIdStr = "GRUPO|||" + nomeGrupo;
+                let membrosLivres = 0;
 
                 listaPessoas.forEach(pessoa => {
                     let taAlocado = pessoaEstaEmMesa(pessoa.idStr);
-                    if(taAlocado) countAlocados++;
+                    if(taAlocado) countAlocados++; else membrosLivres++;
+                    
                     let strAlocado = taAlocado ? "alocado" : "";
-                    let strCheck = taAlocado ? "✅" : "⣿"; 
-                    let dragAttr = taAlocado ? "" : `draggable="true" ondragstart="dragInicia(event, '${pessoa.idStr}')"`;
+                    let iconeConf = pessoa.confirmado ? '<span title="Confirmado">✅</span>' : '<span title="Pendente">⏳</span>';
+                    let dragAttr = taAlocado ? "" : `draggable="true" ondragstart="dragInicia(event, '${pessoa.idStr}', false)"`;
+                    let iconDrag = taAlocado ? "📌" : "⣿"; 
 
-                    htmlPessoas += `<div class="convidado-arrastavel ${strAlocado}" ${dragAttr}><span>${pessoa.nome}</span> <span>${strCheck}</span></div>`;
+                    htmlPessoas += `<div class="convidado-arrastavel ${strAlocado}" ${dragAttr}><span>${iconeConf} ${pessoa.nome}</span> <span>${iconDrag}</span></div>`;
                 });
 
                 let corGrupo = countAlocados === listaPessoas.length ? "#e8f5e9" : "#fff";
                 let btnTxtCor = countAlocados === listaPessoas.length ? "#2e7d32" : "#333";
-                
+                let dragAttrGrupo = membrosLivres > 0 ? `draggable="true" ondragstart="dragInicia(event, '${grupoIdStr}', true)"` : "";
+                let iconDragGrupo = membrosLivres > 0 ? " ⣿" : "";
+
                 const htmlGrupo = `
                 <div class="grupo-sanfona" style="background:${corGrupo}">
-                    <button class="grupo-sanfona-btn" onclick="this.nextElementSibling.classList.toggle('aberto')" style="color:${btnTxtCor}">
-                        ${nomeGrupo} (${countAlocados}/${listaPessoas.length}) <span>▼</span>
+                    <button class="grupo-sanfona-btn" ${dragAttrGrupo} onclick="this.nextElementSibling.classList.toggle('aberto')" style="color:${btnTxtCor}">
+                        ${nomeGrupo} (${countAlocados}/${listaPessoas.length})${iconDragGrupo} <span>▼</span>
                     </button>
                     <div class="grupo-sanfona-conteudo">${htmlPessoas}</div>
                 </div>`;
@@ -551,18 +587,48 @@
             }
 
             layoutMesas.forEach(mesa => {
-                let htmlMembrosDaMesa = "";
-                mesa.convidados.forEach(c => { htmlMembrosDaMesa += `<li>👤 ${c.nome} <span style="font-size:0.7em; color:#999">(${c.grupo})</span></li>`; });
+                let raio = 95; 
+                let htmlCadeiras = "";
+                
+                for (let i = 0; i < mesa.assentos; i++) {
+                    let angulo = (i / mesa.assentos) * (2 * Math.PI) - (Math.PI / 2); 
+                    let left = 140 + raio * Math.cos(angulo) - 37.5; 
+                    let top = 140 + raio * Math.sin(angulo) - 17.5;  
+                    
+                    if(i < mesa.convidados.length) {
+                        let c = mesa.convidados[i];
+                        let pReal = todosConvidadosArray.find(tc => tc.idStr === c.idStr);
+                        let iconeMesa = (pReal && pReal.confirmado) ? "✅ " : "⏳ ";
+                        let formatNome = c.nome.split(' ')[0]; 
+                        if(formatNome.length > 10) formatNome = formatNome.substring(0, 8) + '..';
 
-                let btnRemover = mesa.convidados.length === 0 ? `<button style="background:#d32f2f;" onclick="removerMesa(${mesa.id})">✖ Excluir</button>` : '';
+                        // O "X" para remover individual
+                        htmlCadeiras += `
+                        <div class="assento-mesa" draggable="true" ondragstart="dragInicia(event, '${c.idStr}', false, true)" style="left: ${left}px; top: ${top}px;" title="${c.nome} (${c.grupo})">
+                            <span style="font-size:0.65rem;">${iconeMesa}</span> ${formatNome}
+                            <span class="remover-assento" onclick="removerConvidadoDaMesa(${mesa.id}, '${c.idStr}', '${c.nome}')" title="Remover da mesa">✖</span>
+                        </div>`;
+                    } else {
+                        htmlCadeiras += `<div class="assento-mesa assento-vazio" style="left: ${left}px; top: ${top}px;">Vazio</div>`;
+                    }
+                }
+
+                // Botão de Excluir a Mesa
+                let btnRemover = `<button class="del" onclick="removerMesa(${mesa.id})" title="Excluir Mesa">✖ Apagar Mesa</button>`;
 
                 const htmlMesa = `
-                <div class="mesa-bloco" ondragover="dragSobre(event)" ondragleave="dragSai(event)" ondrop="dragSolta(event, ${mesa.id})">
-                    <h4>Mesa ${mesa.id}</h4>
-                    <div style="font-size:0.8rem; margin-bottom:5px; color:#666;">${mesa.convidados.length} / ${mesa.assentos} Assentos</div>
-                    <ul class="mesa-membros-lista">${htmlMembrosDaMesa}</ul>
+                <div class="mesa-wrapper">
+                    ${htmlCadeiras}
+                    <div class="mesa-centro" ondragover="dragSobre(event)" ondragleave="dragSai(event)" ondrop="dragSolta(event, ${mesa.id})">
+                        <h4>Mesa ${mesa.id}</h4>
+                        <div style="font-size:0.85rem; color:#666; display:flex; align-items:center; gap:8px; margin-top: 5px;">
+                            <button class="btn-lugar" onclick="alterarAssentosMesa(${mesa.id}, -1)" title="Remover assento">-</button>
+                            <strong>${mesa.convidados.length}/${mesa.assentos}</strong>
+                            <button class="btn-lugar" onclick="alterarAssentosMesa(${mesa.id}, 1)" title="Adicionar assento">+</button>
+                        </div>
+                    </div>
                     <div class="mesa-btn-acoes">
-                        <button onclick="abrirModalPreencherMesa(${mesa.id})">✏️ Preencher</button>
+                        <button class="edit" onclick="abrirModalPreencherMesa(${mesa.id})" title="Preencher por lista">✏️ Preencher</button>
                         ${btnRemover}
                     </div>
                 </div>`;
@@ -572,16 +638,50 @@
 
         function pessoaEstaEmMesa(idStr) { for(let m of layoutMesas) { if(m.convidados.find(c => c.idStr === idStr)) return true; } return false; }
         
-        function adicionarMesa() {
-            let assentos = parseInt(document.getElementById('qtd-assentos-nova-mesa').value);
+        function adicionarMesa(forcarAssentos = 0) {
+            let selectElem = document.getElementById('qtd-assentos-nova-mesa');
+            let assentos = forcarAssentos > 0 ? forcarAssentos : (selectElem ? parseInt(selectElem.value) : 8);
             let novoId = layoutMesas.length > 0 ? Math.max(...layoutMesas.map(m => m.id)) + 1 : 1;
             layoutMesas.push({ id: novoId, assentos: assentos, convidados: [] });
             renderizarPaineisMesas();
+            return novoId;
+        }
+
+        function limparTodasMesas() {
+            if(confirm("ATENÇÃO: Deseja apagar TODAS as mesas? Todos os convidados ficarão sem lugar.")) {
+                layoutMesas = [];
+                renderizarPaineisMesas();
+            }
         }
 
         function removerMesa(idMesa) {
-            if(confirm("Apagar esta mesa vazia?")) {
+            if(confirm("Deseja excluir esta mesa? Os convidados sentados nela perderão o lugar e voltarão para a lista.")) {
                 layoutMesas = layoutMesas.filter(m => m.id !== idMesa);
+                renderizarPaineisMesas();
+            }
+        }
+
+        function alterarAssentosMesa(idMesa, delta) {
+            let mesa = layoutMesas.find(m => m.id === idMesa);
+            if(mesa) {
+                let novo = mesa.assentos + delta;
+                if(novo >= mesa.convidados.length && novo >= 6 && novo <= 12) {
+                    mesa.assentos = novo;
+                    renderizarPaineisMesas();
+                } else if (novo > 12) {
+                    alert("O máximo de assentos por mesa é 12.");
+                } else if (novo < 6) {
+                    alert("O mínimo de assentos por mesa é 6.");
+                } else if (novo < mesa.convidados.length) {
+                    alert("Remova convidados da mesa antes de diminuir os assentos.");
+                }
+            }
+        }
+
+        function removerConvidadoDaMesa(idMesa, idStr, nome) {
+            let mesa = layoutMesas.find(m => m.id === idMesa);
+            if(mesa) {
+                mesa.convidados = mesa.convidados.filter(c => c.idStr !== idStr);
                 renderizarPaineisMesas();
             }
         }
@@ -593,31 +693,77 @@
             else { container.classList.remove('modo-lista-mesas'); btn.innerText = "Ver em Lista"; }
         }
 
-        function dragInicia(ev, idStr) { ev.dataTransfer.setData("textoIdStr", idStr); }
+        function dragInicia(ev, idStr, isGrupo = false, isDaMesa = false) { 
+            ev.dataTransfer.setData("textoIdStr", idStr);
+            ev.dataTransfer.setData("isGrupo", isGrupo); 
+            ev.dataTransfer.setData("isDaMesa", isDaMesa); 
+        }
         function dragSobre(ev) { ev.preventDefault(); ev.currentTarget.classList.add('arrastando-sobre'); }
         function dragSai(ev) { ev.currentTarget.classList.remove('arrastando-sobre'); }
+        
         function dragSolta(ev, idMesa) {
             ev.preventDefault(); ev.currentTarget.classList.remove('arrastando-sobre');
             let idStr = ev.dataTransfer.getData("textoIdStr");
-            if(idStr) processarAdicaoMesa(idMesa, idStr);
+            let isGrupo = ev.dataTransfer.getData("isGrupo") === "true";
+            let isDaMesa = ev.dataTransfer.getData("isDaMesa") === "true";
+
+            if(isGrupo) {
+                let nomeGrupoReal = idStr.split("|||")[1];
+                processarAdicaoGrupoMesa(idMesa, nomeGrupoReal);
+            } else {
+                if(isDaMesa) removerPessoaDeQualquerMesa(idStr); 
+                processarAdicaoMesaIndividual(idMesa, idStr);
+            }
         }
         
-        function processarAdicaoMesa(idMesa, idStr) {
+        function removerPessoaDeQualquerMesa(idStr) {
+            layoutMesas.forEach(m => { m.convidados = m.convidados.filter(c => c.idStr !== idStr); });
+        }
+
+        function processarAdicaoMesaIndividual(idMesa, idStr) {
             let mesa = layoutMesas.find(m => m.id === idMesa);
             if(mesa.convidados.length >= mesa.assentos) return alert("Mesa cheia!");
             if(pessoaEstaEmMesa(idStr)) return alert("Pessoa já está em uma mesa.");
-            let pessoa = todosConfirmadosArray.find(c => c.idStr === idStr);
+            let pessoa = todosConvidadosArray.find(c => c.idStr === idStr);
             if(pessoa) { mesa.convidados.push(pessoa); renderizarPaineisMesas(); }
+        }
+
+        function processarAdicaoGrupoMesa(idMesaAlvo, nomeGrupo) {
+            let mesa = layoutMesas.find(m => m.id === idMesaAlvo);
+            let pessoasLivresDoGrupo = todosConvidadosArray.filter(c => c.grupo === nomeGrupo && !pessoaEstaEmMesa(c.idStr));
+            if(pessoasLivresDoGrupo.length === 0) return alert("Todos do grupo já estão alocados.");
+
+            let assentosRestantes = mesa.assentos - mesa.convidados.length;
+            let transbordoCriado = false;
+
+            while(pessoasLivresDoGrupo.length > 0) {
+                if(assentosRestantes === 0) {
+                    let selObj = document.getElementById('qtd-assentos-nova-mesa');
+                    let assentosPadrao = selObj ? parseInt(selObj.value) : 8;
+                    let novoIdMesa = adicionarMesa(assentosPadrao);
+                    mesa = layoutMesas.find(m => m.id === novoIdMesa);
+                    assentosRestantes = mesa.assentos;
+                    transbordoCriado = true;
+                }
+                let pessoaAtual = pessoasLivresDoGrupo.shift(); 
+                mesa.convidados.push(pessoaAtual);
+                assentosRestantes--;
+            }
+
+            if(transbordoCriado) alert("O grupo era maior que a mesa! Novas mesas foram criadas automaticamente para acomodar todos.");
+            renderizarPaineisMesas();
         }
 
         function abrirModalPreencherMesa(idMesa) {
             idMesaSendoEditada = idMesa;
             let mesa = layoutMesas.find(m => m.id === idMesa);
-            document.getElementById('titulo-selecao-mesa').innerText = "Editando Mesa " + idMesa;
-            document.getElementById('vagas-restantes-mesa').innerText = (mesa.assentos - mesa.convidados.length);
-            const container = document.getElementById('lista-checkbox-mesas'); container.innerHTML = "";
+            setTextSafe('titulo-selecao-mesa', "Editando Mesa " + idMesa);
+            setTextSafe('vagas-restantes-mesa', (mesa.assentos - mesa.convidados.length));
+            const container = document.getElementById('lista-checkbox-mesas'); 
+            if(container) container.innerHTML = "";
+            
             let gruposDict = {};
-            todosConfirmadosArray.forEach(c => { if(!gruposDict[c.grupo]) gruposDict[c.grupo] = []; gruposDict[c.grupo].push(c); });
+            todosConvidadosArray.forEach(c => { if(!gruposDict[c.grupo]) gruposDict[c.grupo] = []; gruposDict[c.grupo].push(c); });
 
             for(const [nomeGrupo, listaPessoas] of Object.entries(gruposDict)) {
                 let htmlChecks = ""; let temAlguemLivre = false;
@@ -626,12 +772,15 @@
                     let taEmOutraMesa = pessoaEstaEmMesa(p.idStr) && !taNestaMesa;
                     if(!taEmOutraMesa) {
                         temAlguemLivre = true; let checkd = taNestaMesa ? "checked" : "";
-                        htmlChecks += `<label style="display:flex; gap:10px; padding:5px 0; margin-left:15px; cursor:pointer;"><input type="checkbox" class="cb-preencher-mesa" value="${p.idStr}" ${checkd} style="width:18px; height:18px;"> ${p.nome}</label>`;
+                        let iconeConf = p.confirmado ? "✅" : "⏳";
+                        htmlChecks += `<label style="display:flex; gap:10px; padding:5px 0; margin-left:15px; cursor:pointer;"><input type="checkbox" class="cb-preencher-mesa" value="${p.idStr}" ${checkd} style="width:18px; height:18px;"> ${iconeConf} ${p.nome}</label>`;
                     }
                 });
-                if(temAlguemLivre) container.insertAdjacentHTML('beforeend', `<div style="margin-bottom:10px; background:#f9f9f9; padding:10px; border-radius:4px;"><strong style="color:#8c7b65;">${nomeGrupo}</strong>${htmlChecks}</div>`);
+                if(temAlguemLivre && container) container.insertAdjacentHTML('beforeend', `<div style="margin-bottom:10px; background:#f9f9f9; padding:10px; border-radius:4px;"><strong style="color:#8c7b65;">${nomeGrupo}</strong>${htmlChecks}</div>`);
             }
-            if(container.innerHTML === "") container.innerHTML = "<p>Não há convidados livres.</p>";
+            if(container && container.innerHTML === "") container.innerHTML = "<p>Não há convidados livres.</p>";
+            
+            fecharModal('modal-mesas');
             abrirModal('modal-selecionar-convidados-mesa');
         }
 
@@ -641,8 +790,11 @@
             checks.forEach(cb => { if(cb.checked) selecionadosIdStr.push(cb.value); });
             if(selecionadosIdStr.length > mesa.assentos) return alert("Selecionou mais pessoas do que a mesa suporta!");
             mesa.convidados = [];
-            selecionadosIdStr.forEach(idStr => { let p = todosConfirmadosArray.find(c => c.idStr === idStr); if(p) mesa.convidados.push(p); });
-            fecharModal('modal-selecionar-convidados-mesa'); renderizarPaineisMesas();
+            selecionadosIdStr.forEach(idStr => { let p = todosConvidadosArray.find(c => c.idStr === idStr); if(p) mesa.convidados.push(p); });
+            
+            fecharModal('modal-selecionar-convidados-mesa'); 
+            renderizarPaineisMesas();
+            abrirModal('modal-mesas');
         }
 
         function salvarMapaMesasNuvem() {
@@ -652,663 +804,160 @@
         }
 
 
-        // --- SISTEMA ADMIN: GERENCIAR LISTA DE CONVIDADOS ---
+        // --- GERENCIAR LISTA DE CONVIDADOS ---
         function abrirModalListaConvidados() {
-            const container = document.getElementById('conteudo-lista-convidados');
-            container.innerHTML = "";
-
-            if(!window.estatisticasGlobais.listaOficial || window.estatisticasGlobais.listaOficial.length === 0) {
-                container.innerHTML = "<p style='text-align:center; color:#888;'>A sua lista oficial de convidados está vazia.</p>";
-            } else {
+            const container = document.getElementById('conteudo-lista-convidados'); 
+            if(container) container.innerHTML = "";
+            if(!window.estatisticasGlobais.listaOficial || window.estatisticasGlobais.listaOficial.length === 0) { if(container) container.innerHTML = "<p style='text-align:center; color:#888;'>A sua lista está vazia.</p>"; } 
+            else {
                 window.estatisticasGlobais.listaOficial.forEach((g, indexOriginalArray) => {
-                    let membrosLidos = [];
-                    if (g.categoriasStr && g.categoriasStr.startsWith("[")) { try { membrosLidos = JSON.parse(g.categoriasStr); } catch(e) {} }
-                    
+                    let membrosLidos = []; if (g.categoriasStr && g.categoriasStr.startsWith("[")) { try { membrosLidos = JSON.parse(g.categoriasStr); } catch(e) {} }
                     let membrosHtml = "";
                     if(membrosLidos.length > 0) {
-                        membrosLidos.forEach(m => {
-                            let tag = m.categoria !== "Convidado" ? `<span class="tag-categoria">${m.categoria}</span>` : "";
-                            let tagIdade = m.tipo === "Criança" ? `<span style="font-size:0.75rem; color:#1976d2;">(👶 ${m.idade||'0'} a.)</span>` : "";
-                            membrosHtml += `<span style="display:inline-block; margin-right:10px; margin-bottom:5px;">${m.nome} ${tag} ${tagIdade}</span>`;
-                        });
+                        membrosLidos.forEach(m => { let tag = m.categoria !== "Convidado" ? `<span class="tag-categoria">${m.categoria}</span>` : ""; let tagIdade = m.tipo === "Criança" ? `<span style="font-size:0.75rem; color:#1976d2;">(👶 ${m.idade||'0'} a.)</span>` : ""; membrosHtml += `<span style="display:inline-block; margin-right:10px; margin-bottom:5px;">${m.nome} ${tag} ${tagIdade}</span>`; });
                     } else { membrosHtml = g.membros; }
-
-                    const html = `
-                    <div style="border: 1px solid #e0e0e0; padding: 15px; border-radius: 6px; margin-bottom: 15px; position: relative; background: #fff;">
-                        <h4 style="color: #333; margin-bottom: 8px; font-size: 1.1rem;">${g.identificacao}</h4>
-                        <div style="font-size: 0.95rem; color:#555;">${membrosHtml}</div>
-                        <button onclick="prepararEdicaoGrupo(${indexOriginalArray})" style="position: absolute; top: 15px; right: 90px; background: #1976d2; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition:0.3s;">✏️ Editar</button>
-                        <button onclick="excluirGrupoDaLista(${g.linha}, this)" style="position: absolute; top: 15px; right: 15px; background: #d32f2f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition:0.3s;">🗑️ Apagar</button>
-                    </div>`;
-                    container.insertAdjacentHTML('beforeend', html);
+                    
+                    if(container) container.insertAdjacentHTML('beforeend', `
+                    <div style="border: 1px solid #e0e0e0; padding: 15px; border-radius: 6px; margin-bottom: 15px; background: #fff; display: flex; justify-content: space-between; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <h4 style="color: #333; margin-bottom: 8px; font-size: 1.1rem;">${g.identificacao}</h4>
+                            <div style="font-size: 0.95rem; color:#555;">${membrosHtml}</div>
+                        </div>
+                        <div style="display: flex; gap: 5px;">
+                            <button onclick="prepararEdicaoGrupo(${indexOriginalArray})" style="background: #1976d2; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition:0.3s; height: fit-content;">✏️ Editar</button>
+                            <button onclick="excluirGrupoDaLista(${g.linha}, this)" style="background: #d32f2f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition:0.3s; height: fit-content;">🗑️ Apagar</button>
+                        </div>
+                    </div>`);
                 });
             }
             abrirModal('modal-lista-convidados');
         }
-
-        function excluirGrupoDaLista(linha, btn) {
-            if(confirm("ATENÇÃO: Deseja apagar este grupo permanentemente da sua lista oficial?")) {
-                const card = btn.parentElement;
-                btn.innerText = "..."; btn.disabled = true;
-                fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "excluirGrupoConvidado", linha: linha }) })
-                .then(() => { 
-                    card.remove(); 
-                    fetch(API_URL).then(r => r.json()).then(dados => processarDadosPlanilha(dados)); 
-                })
-                .catch(() => { alert("Erro."); btn.disabled = false; btn.innerText = "🗑️ Apagar"; });
-            }
-        }
-
-        function toggleIdadeAdmin(sel) {
-            const inputIdade = sel.parentElement.querySelector('.input-idade-membro');
-            if(sel.value === 'Criança') { inputIdade.style.display = 'block'; } else { inputIdade.style.display = 'none'; inputIdade.value = ''; }
-        }
-
-        function adicionarLinhaMembro() {
-            const html = `<div class="linha-novo-membro" style="display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;"><input type="text" class="input-nome-membro" placeholder="Nome" style="flex: 2; min-width: 120px; padding: 8px;"><select class="select-cat-membro" style="flex: 1.5; padding: 8px; min-width: 100px;"><option value="Convidado">Convidado</option><option value="Padrinho">Padrinho</option><option value="Madrinha">Madrinha</option><option value="Noivinho">Noivinho</option><option value="Noivinha">Noivinha</option><option value="Florista">Florista</option><option value="Pajem">Pajem</option></select><select class="select-tipo-membro" onchange="toggleIdadeAdmin(this)" style="flex: 1; padding: 8px; min-width: 90px;"><option value="Adulto">Adulto</option><option value="Criança">Criança</option></select><input type="number" class="input-idade-membro" placeholder="Idade" min="0" max="17" style="display: none; flex: 0.8; padding: 8px; min-width: 60px;"><button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button></div>`;
-            document.getElementById('container-novos-membros').insertAdjacentHTML('beforeend', html);
-        }
-
-        function adicionarLinhaMembroEdit() {
-            const html = `<div class="linha-edit-membro" style="display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;"><input type="text" class="input-nome-membro" placeholder="Nome" style="flex: 2; min-width: 120px; padding: 8px;"><select class="select-cat-membro" style="flex: 1.5; padding: 8px; min-width: 100px;"><option value="Convidado">Convidado</option><option value="Padrinho">Padrinho</option><option value="Madrinha">Madrinha</option><option value="Noivinho">Noivinho</option><option value="Noivinha">Noivinha</option><option value="Florista">Florista</option><option value="Pajem">Pajem</option></select><select class="select-tipo-membro" onchange="toggleIdadeAdmin(this)" style="flex: 1; padding: 8px; min-width: 90px;"><option value="Adulto">Adulto</option><option value="Criança">Criança</option></select><input type="number" class="input-idade-membro" placeholder="Idade" min="0" max="17" style="display: none; flex: 0.8; padding: 8px; min-width: 60px;"><button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button></div>`;
-            document.getElementById('container-edit-membros').insertAdjacentHTML('beforeend', html);
-        }
+        function excluirGrupoDaLista(linha, btn) { if(confirm("Apagar permanentemente da sua lista oficial?")) { const card = btn.parentElement.parentElement; btn.innerText = "..."; btn.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "excluirGrupoConvidado", linha: linha }) }).then(() => { card.remove(); fetch(API_URL).then(r => r.json()).then(dados => processarDadosPlanilha(dados)); }).catch(() => { alert("Erro."); btn.disabled = false; btn.innerText = "🗑️ Apagar"; }); } }
+        function toggleIdadeAdmin(sel) { const inputIdade = sel.parentElement.querySelector('.input-idade-membro'); if(sel.value === 'Criança') { inputIdade.style.display = 'block'; } else { inputIdade.style.display = 'none'; inputIdade.value = ''; } }
+        function adicionarLinhaMembro() { const c = document.getElementById('container-novos-membros'); if(c) c.insertAdjacentHTML('beforeend', `<div class="linha-novo-membro" style="display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;"><input type="text" class="input-nome-membro" placeholder="Nome" style="flex: 2; min-width: 120px; padding: 8px;"><select class="select-cat-membro" style="flex: 1.5; padding: 8px; min-width: 100px;"><option value="Convidado">Convidado</option><option value="Padrinho">Padrinho</option><option value="Madrinha">Madrinha</option><option value="Noivinho">Noivinho</option><option value="Noivinha">Noivinha</option><option value="Florista">Florista</option><option value="Pajem">Pajem</option></select><select class="select-tipo-membro" onchange="toggleIdadeAdmin(this)" style="flex: 1; padding: 8px; min-width: 90px;"><option value="Adulto">Adulto</option><option value="Criança">Criança</option></select><input type="number" class="input-idade-membro" placeholder="Idade" min="0" max="17" style="display: none; flex: 0.8; padding: 8px; min-width: 60px;"><button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button></div>`); }
+        function adicionarLinhaMembroEdit() { const c = document.getElementById('container-edit-membros'); if(c) c.insertAdjacentHTML('beforeend', `<div class="linha-edit-membro" style="display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;"><input type="text" class="input-nome-membro" placeholder="Nome" style="flex: 2; min-width: 120px; padding: 8px;"><select class="select-cat-membro" style="flex: 1.5; padding: 8px; min-width: 100px;"><option value="Convidado">Convidado</option><option value="Padrinho">Padrinho</option><option value="Madrinha">Madrinha</option><option value="Noivinho">Noivinho</option><option value="Noivinha">Noivinha</option><option value="Florista">Florista</option><option value="Pajem">Pajem</option></select><select class="select-tipo-membro" onchange="toggleIdadeAdmin(this)" style="flex: 1; padding: 8px; min-width: 90px;"><option value="Adulto">Adulto</option><option value="Criança">Criança</option></select><input type="number" class="input-idade-membro" placeholder="Idade" min="0" max="17" style="display: none; flex: 0.8; padding: 8px; min-width: 60px;"><button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button></div>`); }
         function removerLinhaMembro(btn) { btn.parentElement.remove(); }
-
-        function salvarNovoConvidado() {
-            const grupo = document.getElementById('novo-grupo-nome').value.trim();
-            if(!grupo) return alert("Digite o nome do grupo!");
-            const linhas = document.querySelectorAll('.linha-novo-membro');
-            let membros = []; let temErro = false;
-            linhas.forEach(l => {
-                const n = l.querySelector('.input-nome-membro').value.trim(); 
-                const c = l.querySelector('.select-cat-membro').value;
-                const t = l.querySelector('.select-tipo-membro').value;
-                const i = l.querySelector('.input-idade-membro').value;
-                if(!n || (t === 'Criança' && !i)) temErro = true; 
-                else membros.push({ nome: n, categoria: c, tipo: t, idade: i });
-            });
-            if(temErro || membros.length === 0) return alert("Preencha o nome e idade (se criança) de todos!");
-            
-            const btn = document.getElementById('btn-salvar-novo-convidado'); btn.innerText = "Salvando..."; btn.disabled = true;
-            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "adicionarConvidado", grupo: grupo, membros: membros }) })
-            .then(() => fetch(API_URL)).then(r => r.json())
-            .then(dados => { 
-                processarDadosPlanilha(dados);
-                alert("Grupo adicionado!"); fecharModal('modal-adicionar-convidado'); 
-                document.getElementById('novo-grupo-nome').value = ""; document.getElementById('container-novos-membros').innerHTML = ""; 
-                abrirModalListaConvidados();
-            }).catch(() => alert("Erro.")).finally(() => { btn.innerText = "Salvar na Planilha Oficial"; btn.disabled = false; });
-        }
-
-        function prepararEdicaoGrupo(index) {
-            const grupo = window.estatisticasGlobais.listaOficial[index];
-            linhaGrupoEditando = grupo.linha;
-            document.getElementById('edit-lista-grupo-nome').value = grupo.identificacao;
-            
-            const container = document.getElementById('container-edit-membros');
-            container.innerHTML = "";
-
-            let membrosLidos = [];
-            if (grupo.categoriasStr && grupo.categoriasStr.startsWith("[")) {
-                try { membrosLidos = JSON.parse(grupo.categoriasStr); } catch(e) {}
-            } else {
-                let nomes = grupo.membros.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0);
-                membrosLidos = nomes.map(n => ({nome: n, categoria: "Convidado", tipo: "Adulto", idade: ""}));
-            }
-
-            membrosLidos.forEach(m => {
-                let isCri = m.tipo === "Criança";
-                let selAd = !isCri ? "selected" : "";
-                let selCr = isCri ? "selected" : "";
-                let dispId = isCri ? "block" : "none";
-                let valIdade = m.idade || "";
-
-                const html = `
-                <div class="linha-edit-membro" style="display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;">
-                    <input type="text" class="input-nome-membro" value="${m.nome}" style="flex: 2; min-width: 120px; padding: 8px;">
-                    <select class="select-cat-membro" style="flex: 1.5; padding: 8px; min-width: 100px;">
-                        <option value="Convidado" ${m.categoria==='Convidado'?'selected':''}>Convidado</option>
-                        <option value="Padrinho" ${m.categoria==='Padrinho'?'selected':''}>Padrinho</option>
-                        <option value="Madrinha" ${m.categoria==='Madrinha'?'selected':''}>Madrinha</option>
-                        <option value="Noivinho" ${m.categoria==='Noivinho'?'selected':''}>Noivinho</option>
-                        <option value="Noivinha" ${m.categoria==='Noivinha'?'selected':''}>Noivinha</option>
-                        <option value="Florista" ${m.categoria==='Florista'?'selected':''}>Florista</option>
-                        <option value="Pajem" ${m.categoria==='Pajem'?'selected':''}>Pajem</option>
-                    </select>
-                    <select class="select-tipo-membro" onchange="toggleIdadeAdmin(this)" style="flex: 1; padding: 8px; min-width: 90px;">
-                        <option value="Adulto" ${selAd}>Adulto</option>
-                        <option value="Criança" ${selCr}>Criança</option>
-                    </select>
-                    <input type="number" class="input-idade-membro" placeholder="Idade" min="0" max="17" value="${valIdade}" style="display: ${dispId}; flex: 0.8; padding: 8px; min-width: 60px;">
-                    <button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button>
-                </div>`;
-                container.insertAdjacentHTML('beforeend', html);
-            });
-            fecharModal('modal-lista-convidados');
-            abrirModal('modal-editar-grupo');
-        }
-
-        function salvarEdicaoGrupo() {
-            const grupo = document.getElementById('edit-lista-grupo-nome').value.trim();
-            if(!grupo) return alert("Digite o nome do grupo!");
-            const linhas = document.querySelectorAll('.linha-edit-membro');
-            let membros = []; let temErro = false;
-            linhas.forEach(l => {
-                const n = l.querySelector('.input-nome-membro').value.trim(); 
-                const c = l.querySelector('.select-cat-membro').value;
-                const t = l.querySelector('.select-tipo-membro').value;
-                const i = l.querySelector('.input-idade-membro').value;
-                if(!n || (t === 'Criança' && !i)) temErro = true; 
-                else membros.push({ nome: n, categoria: c, tipo: t, idade: i });
-            });
-            if(temErro || membros.length === 0) return alert("Preencha o nome e idade de todos!");
-            
-            const btn = document.getElementById('btn-salvar-edicao-grupo'); 
-            btn.innerText = "Atualizando..."; btn.disabled = true;
-            document.getElementById('btn-voltar-grupo').disabled = true;
-
-            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "editarGrupoConvidado", linha: linhaGrupoEditando, grupo: grupo, membros: membros }) })
-            .then(() => fetch(API_URL)).then(r => r.json())
-            .then(dados => {
-                processarDadosPlanilha(dados);
-                alert("Grupo atualizado com sucesso!"); 
-            })
-            .catch(() => alert("Erro ao salvar."))
-            .finally(() => { 
-                btn.innerText = "Salvar Alterações"; btn.disabled = false; 
-                document.getElementById('btn-voltar-grupo').disabled = false;
-            });
-        }
-
+        function salvarNovoConvidado() { const grupo = document.getElementById('novo-grupo-nome').value.trim(); if(!grupo) return alert("Digite o nome do grupo!"); const linhas = document.querySelectorAll('.linha-novo-membro'); let membros = []; let temErro = false; linhas.forEach(l => { const n = l.querySelector('.input-nome-membro').value.trim(); const c = l.querySelector('.select-cat-membro').value; const t = l.querySelector('.select-tipo-membro').value; const i = l.querySelector('.input-idade-membro').value; if(!n || (t === 'Criança' && !i)) temErro = true; else membros.push({ nome: n, categoria: c, tipo: t, idade: i }); }); if(temErro || membros.length === 0) return alert("Preencha o nome e idade de todos!"); const btn = document.getElementById('btn-salvar-novo-convidado'); btn.innerText = "Salvando..."; btn.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "adicionarConvidado", grupo: grupo, membros: membros }) }).then(() => fetch(API_URL)).then(r => r.json()).then(dados => { processarDadosPlanilha(dados); alert("Grupo adicionado!"); fecharModal('modal-adicionar-convidado'); document.getElementById('novo-grupo-nome').value = ""; document.getElementById('container-novos-membros').innerHTML = ""; abrirModalListaConvidados(); }).catch(() => alert("Erro.")).finally(() => { btn.innerText = "Salvar na Planilha Oficial"; btn.disabled = false; }); }
+        function prepararEdicaoGrupo(index) { const grupo = window.estatisticasGlobais.listaOficial[index]; linhaGrupoEditando = grupo.linha; document.getElementById('edit-lista-grupo-nome').value = grupo.identificacao; const container = document.getElementById('container-edit-membros'); if(container) container.innerHTML = ""; let membrosLidos = []; if (grupo.categoriasStr && grupo.categoriasStr.startsWith("[")) { try { membrosLidos = JSON.parse(grupo.categoriasStr); } catch(e) {} } else { let nomes = grupo.membros.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0); membrosLidos = nomes.map(n => ({nome: n, categoria: "Convidado", tipo: "Adulto", idade: ""})); } membrosLidos.forEach(m => { let isCri = m.tipo === "Criança"; let selAd = !isCri ? "selected" : ""; let selCr = isCri ? "selected" : ""; let dispId = isCri ? "block" : "none"; let valIdade = m.idade || ""; const html = `<div class="linha-edit-membro" style="display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;"><input type="text" class="input-nome-membro" value="${m.nome}" style="flex: 2; min-width: 120px; padding: 8px;"><select class="select-cat-membro" style="flex: 1.5; padding: 8px; min-width: 100px;"><option value="Convidado" ${m.categoria==='Convidado'?'selected':''}>Convidado</option><option value="Padrinho" ${m.categoria==='Padrinho'?'selected':''}>Padrinho</option><option value="Madrinha" ${m.categoria==='Madrinha'?'selected':''}>Madrinha</option><option value="Noivinho" ${m.categoria==='Noivinho'?'selected':''}>Noivinho</option><option value="Noivinha" ${m.categoria==='Noivinha'?'selected':''}>Noivinha</option><option value="Florista" ${m.categoria==='Florista'?'selected':''}>Florista</option><option value="Pajem" ${m.categoria==='Pajem'?'selected':''}>Pajem</option></select><select class="select-tipo-membro" onchange="toggleIdadeAdmin(this)" style="flex: 1; padding: 8px; min-width: 90px;"><option value="Adulto" ${selAd}>Adulto</option><option value="Criança" ${selCr}>Criança</option></select><input type="number" class="input-idade-membro" placeholder="Idade" min="0" max="17" value="${valIdade}" style="display: ${dispId}; flex: 0.8; padding: 8px; min-width: 60px;"><button onclick="removerLinhaMembro(this)" style="background:none; border:none; color:#d32f2f; font-size:1.2rem; cursor:pointer;">✖</button></div>`; if(container) container.insertAdjacentHTML('beforeend', html); }); fecharModal('modal-lista-convidados'); abrirModal('modal-editar-grupo'); }
+        function salvarEdicaoGrupo() { const grupo = document.getElementById('edit-lista-grupo-nome').value.trim(); if(!grupo) return alert("Digite o nome do grupo!"); const linhas = document.querySelectorAll('.linha-edit-membro'); let membros = []; let temErro = false; linhas.forEach(l => { const n = l.querySelector('.input-nome-membro').value.trim(); const c = l.querySelector('.select-cat-membro').value; const t = l.querySelector('.select-tipo-membro').value; const i = l.querySelector('.input-idade-membro').value; if(!n || (t === 'Criança' && !i)) temErro = true; else membros.push({ nome: n, categoria: c, tipo: t, idade: i }); }); if(temErro || membros.length === 0) return alert("Preencha o nome e idade de todos!"); const btn = document.getElementById('btn-salvar-edicao-grupo'); btn.innerText = "Atualizando..."; btn.disabled = true; document.getElementById('btn-voltar-grupo').disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "editarGrupoConvidado", linha: linhaGrupoEditando, grupo: grupo, membros: membros }) }).then(() => fetch(API_URL)).then(r => r.json()).then(dados => { processarDadosPlanilha(dados); alert("Grupo atualizado!"); }).catch(() => alert("Erro ao salvar.")).finally(() => { btn.innerText = "Salvar Alterações"; btn.disabled = false; document.getElementById('btn-voltar-grupo').disabled = false; }); }
+        
 
         // --- SISTEMA DE RELATÓRIO E CONTAS (DASHBOARD) ---
-        function mudarAbaDash(abaId, btnSelecionado) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('ativo'));
-            if(btnSelecionado) btnSelecionado.classList.add('ativo');
-            const aba = document.getElementById(abaId);
-            if(aba) aba.classList.add('ativo');
+        function mudarAbaDash(abaId, btnSelecionado) { document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo')); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('ativo')); if(btnSelecionado) btnSelecionado.classList.add('ativo'); const aba = document.getElementById(abaId); if(aba) aba.classList.add('ativo'); }
+        
+        function abrirDetalhesDash(titulo, chaveCategoria) { 
+            setTextSafe('titulo-detalhe-dash', titulo); 
+            const container = document.getElementById('conteudo-detalhe-dash'); 
+            if(!container) return;
+            container.innerHTML = ""; 
+            const gruposObj = window.dadosDetalhesDash[chaveCategoria] || {}; const chavesGrupos = Object.keys(gruposObj); 
+            if(chavesGrupos.length === 0) { container.innerHTML = "<p style='color:#888;'>Nenhum registro encontrado nesta categoria.</p>"; } 
+            else { chavesGrupos.forEach(grupoNome => { let membrosHtml = ""; if(Array.isArray(gruposObj[grupoNome])) { membrosHtml = gruposObj[grupoNome].join(", "); } else { membrosHtml = gruposObj[grupoNome]; } const html = `<div class="bloco-detalhe-grupo"><div class="bloco-detalhe-titulo">${grupoNome}</div><div class="bloco-detalhe-membros">${membrosHtml}</div></div>`; container.innerHTML += html; }); } 
+            fecharModal('modal-relatorio'); abrirModal('modal-detalhes-dash'); 
         }
 
-        function abrirDetalhesDash(titulo, chaveCategoria) {
-            document.getElementById('titulo-detalhe-dash').innerText = titulo;
-            const container = document.getElementById('conteudo-detalhe-dash');
-            container.innerHTML = "";
+        // Função à prova de falhas para contar objetos no Dash
+        function contaMembrosSeguro(catObj) { let total = 0; if(!catObj) return 0; for(let key in catObj) { if(Array.isArray(catObj[key])) total += catObj[key].length; } return total; }
+
+        function abrirModalRelatorio() { 
+            const tabBtn = document.querySelector('.tab-btn'); if(tabBtn) mudarAbaDash('dash-confirmados', tabBtn); 
+            let totalAdultos = 0; let totalCriancas = 0; let isentosTotal = 0; let contagemIdades = {}; let arrayGruposConfirmados = []; 
+            window.dadosDetalhesDash = { "Padrinhos & Madrinhas": {}, "Noivinhos(as)": {}, "Pajens": {}, "Floristas": {}, "Crianças": {}, "gruposLista": {}, "pendentes": {}, "Adultos Lista": {}, "Crianças Lista": {}, "Isentos Lista": {} }; 
             
-            const gruposObj = window.dadosDetalhesDash[chaveCategoria] || {};
-            const chavesGrupos = Object.keys(gruposObj);
-            
-            if(chavesGrupos.length === 0) {
-                container.innerHTML = "<p style='color:#888;'>Nenhum registro encontrado nesta categoria.</p>";
-            } else {
-                chavesGrupos.forEach(grupoNome => {
-                    let membrosHtml = "";
-                    if(Array.isArray(gruposObj[grupoNome])) {
-                        membrosHtml = gruposObj[grupoNome].join(", ");
-                    } else {
-                        membrosHtml = gruposObj[grupoNome]; 
-                    }
-
-                    const html = `
-                    <div class="bloco-detalhe-grupo">
-                        <div class="bloco-detalhe-titulo">${grupoNome}</div>
-                        <div class="bloco-detalhe-membros">${membrosHtml}</div>
-                    </div>`;
-                    container.innerHTML += html;
-                });
-            }
-            
-            fecharModal('modal-relatorio');
-            abrirModal('modal-detalhes-dash');
-        }
-
-        // FUNÇÃO SEGURA PARA CONTAR (NÃO TRAVA NO CELULAR)
-        function contaMembrosSeguro(catObj) { 
-            let total = 0; 
-            if(!catObj) return 0;
-            for(let key in catObj) { 
-                if(Array.isArray(catObj[key])) total += catObj[key].length; 
-            } 
-            return total; 
-        }
-
-        function abrirModalRelatorio() {
-            const tabBtn = document.querySelector('.tab-btn');
-            if(tabBtn) mudarAbaDash('dash-confirmados', tabBtn);
-
-            let totalAdultos = 0; let totalCriancas = 0; let isentosTotal = 0;
-            let contagemIdades = {}; 
-            let arrayGruposConfirmados = [];
-
-            window.dadosDetalhesDash = {
-                "Padrinhos & Madrinhas": {}, "Noivinhos(as)": {}, "Pajens": {}, "Floristas": {},
-                "Crianças": {}, "gruposLista": {}, "pendentes": {},
-                "Adultos Lista": {}, "Crianças Lista": {}, "Isentos Lista": {}
-            };
-
-            window.listaPresencasGlobais.forEach(p => {
+            window.listaPresencasGlobais.forEach(p => { 
                 arrayGruposConfirmados.push(p.grupo); 
-                
-                if(p.jsonRaw && p.jsonRaw !== "[]") {
-                    try {
-                        let objMembros = JSON.parse(p.jsonRaw);
-                        objMembros.forEach(m => {
-                            if(m.status) {
-                                if(m.tipo === 'Criança') {
-                                    let numIdade = parseInt(m.idade);
-                                    if(!isNaN(numIdade)) {
-                                        if(numIdade > 9) totalAdultos++; else { totalCriancas++; if(numIdade <= 5) isentosTotal++; }
-                                        let label = `${numIdade} anos`; contagemIdades[label] = (contagemIdades[label] || 0) + 1;
-                                    } else { totalCriancas++; }
-                                    
-                                    if(!window.dadosDetalhesDash["Crianças"][p.grupo]) window.dadosDetalhesDash["Crianças"][p.grupo] = [];
-                                    let txIdade = m.idade ? `${m.idade} a.` : "Idade ñ info.";
-                                    window.dadosDetalhesDash["Crianças"][p.grupo].push(`${m.nome} <span style="color:#1976d2; font-size:0.85em;">(${txIdade})</span>`);
-
-                                } else { totalAdultos++; }
-                            }
-                        });
-                    } catch(e) { }
-                } else {
-                    totalAdultos += Number(p.adultos) || 0; totalCriancas += Number(p.criancas) || 0;
-                }
-            });
-
-            let listaConvidadosTotal = 0;
-            let listaConvidadosIsentos = 0;
-            let listaConvidadosAdultos = 0;
-            let listaConvidadosCriancas = 0;
-
-            let listaOficial = window.estatisticasGlobais.listaOficial || [];
-
-            listaOficial.forEach(g => {
+                if(p.jsonRaw && p.jsonRaw !== "[]") { 
+                    try { 
+                        let objMembros = JSON.parse(p.jsonRaw); 
+                        objMembros.forEach(m => { 
+                            if(m.status) { 
+                                if(m.tipo === 'Criança') { 
+                                    let numIdade = parseInt(m.idade); 
+                                    if(!isNaN(numIdade)) { 
+                                        if(numIdade > 9) totalAdultos++; else { totalCriancas++; if(numIdade <= 5) isentosTotal++; } 
+                                        let label = `${numIdade} anos`; contagemIdades[label] = (contagemIdades[label] || 0) + 1; 
+                                    } else { totalCriancas++; } 
+                                    if(!window.dadosDetalhesDash["Crianças"][p.grupo]) window.dadosDetalhesDash["Crianças"][p.grupo] = []; 
+                                    let txIdade = m.idade ? `${m.idade} a.` : "Idade ñ info."; 
+                                    window.dadosDetalhesDash["Crianças"][p.grupo].push(`${m.nome} <span style="color:#1976d2; font-size:0.85em;">(${txIdade})</span>`); 
+                                } else { totalAdultos++; } 
+                            } 
+                        }); 
+                    } catch(e) { } 
+                } else { totalAdultos += Number(p.adultos) || 0; totalCriancas += Number(p.criancas) || 0; } 
+            }); 
+            
+            let listaConvidadosTotal = 0; let listaConvidadosIsentos = 0; let listaConvidadosAdultos = 0; let listaConvidadosCriancas = 0; 
+            let listaOficial = window.estatisticasGlobais.listaOficial || []; 
+            
+            listaOficial.forEach(g => { 
                 let htmlMembrosGeral = ""; 
-
-                if (g.categoriasStr && g.categoriasStr.startsWith("[")) {
-                    try {
-                        let membros = JSON.parse(g.categoriasStr);
-                        membros.forEach(m => {
-                            listaConvidadosTotal++;
-                            let cat = m.categoria || "Convidado";
-                            htmlMembrosGeral += `${m.nome} (${cat}), `;
-
-                            let targetCat = null;
-                            if(cat === "Padrinho" || cat === "Madrinha") targetCat = "Padrinhos & Madrinhas";
-                            else if(cat === "Noivinho" || cat === "Noivinha") targetCat = "Noivinhos(as)";
-                            else if(cat === "Pajem") targetCat = "Pajens";
-                            else if(cat === "Florista") targetCat = "Floristas";
-
-                            if(targetCat) {
-                                if(!window.dadosDetalhesDash[targetCat][g.identificacao]) window.dadosDetalhesDash[targetCat][g.identificacao] = [];
-                                window.dadosDetalhesDash[targetCat][g.identificacao].push(m.nome);
-                            }
-
-                            if(m.tipo === 'Criança') {
-                                let idNum = parseInt(m.idade);
-                                let txIdade = m.idade ? `${m.idade} a.` : "Idade ñ info.";
-                                let strMembro = `${m.nome} <span style="color:#1976d2; font-size:0.85em;">(${txIdade})</span>`;
-
-                                if(!isNaN(idNum)) {
-                                    if(idNum > 9) {
-                                        listaConvidadosAdultos++;
-                                        if(!window.dadosDetalhesDash["Adultos Lista"][g.identificacao]) window.dadosDetalhesDash["Adultos Lista"][g.identificacao] = [];
-                                        window.dadosDetalhesDash["Adultos Lista"][g.identificacao].push(`${m.nome} <span style="font-size:0.85em; color:#888;">(${txIdade} - Cont. Adulto)</span>`);
-                                    } else {
-                                        listaConvidadosCriancas++;
-                                        if(!window.dadosDetalhesDash["Crianças Lista"][g.identificacao]) window.dadosDetalhesDash["Crianças Lista"][g.identificacao] = [];
-                                        window.dadosDetalhesDash["Crianças Lista"][g.identificacao].push(strMembro);
-                                        
-                                        if(idNum <= 5) {
-                                            listaConvidadosIsentos++;
-                                            if(!window.dadosDetalhesDash["Isentos Lista"][g.identificacao]) window.dadosDetalhesDash["Isentos Lista"][g.identificacao] = [];
-                                            window.dadosDetalhesDash["Isentos Lista"][g.identificacao].push(strMembro);
-                                        }
-                                    }
-                                } else {
-                                    listaConvidadosCriancas++;
-                                    if(!window.dadosDetalhesDash["Crianças Lista"][g.identificacao]) window.dadosDetalhesDash["Crianças Lista"][g.identificacao] = [];
-                                    window.dadosDetalhesDash["Crianças Lista"][g.identificacao].push(strMembro);
-                                }
-                            } else {
-                                listaConvidadosAdultos++;
-                                if(!window.dadosDetalhesDash["Adultos Lista"][g.identificacao]) window.dadosDetalhesDash["Adultos Lista"][g.identificacao] = [];
-                                window.dadosDetalhesDash["Adultos Lista"][g.identificacao].push(m.nome);
-                            }
-                        });
-                    } catch(e) {}
-                } else {
-                    let nomes = g.membros.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0);
-                    listaConvidadosTotal += nomes.length;
-                    htmlMembrosGeral = g.membros;
-
-                    listaConvidadosAdultos += nomes.length;
-                    if(!window.dadosDetalhesDash["Adultos Lista"][g.identificacao]) window.dadosDetalhesDash["Adultos Lista"][g.identificacao] = [];
-                    nomes.forEach(n => window.dadosDetalhesDash["Adultos Lista"][g.identificacao].push(n));
-                }
-
-                htmlMembrosGeral = htmlMembrosGeral.replace(/, $/, ""); 
-                window.dadosDetalhesDash["gruposLista"][g.identificacao] = htmlMembrosGeral;
-            });
-
-            let totalConfirmadosGeral = totalAdultos + totalCriancas;
-            let confirmadosPagantes = totalConfirmadosGeral - isentosTotal;
-            let pagantesEstimadoLista = listaConvidadosTotal - listaConvidadosIsentos; 
-
-            const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; };
-            setVal('dash-total-confirmados', totalConfirmadosGeral);
-            setVal('dash-pagantes-confirmados', confirmadosPagantes);
-            setVal('dash-isentos', isentosTotal);
-            setVal('dash-adultos', totalAdultos);
-            setVal('dash-criancas', totalCriancas);
+                if (g.categoriasStr && g.categoriasStr.startsWith("[")) { 
+                    try { 
+                        let membros = JSON.parse(g.categoriasStr); 
+                        membros.forEach(m => { 
+                            listaConvidadosTotal++; let cat = m.categoria || "Convidado"; htmlMembrosGeral += `${m.nome} (${cat}), `; 
+                            let targetCat = null; if(cat === "Padrinho" || cat === "Madrinha") targetCat = "Padrinhos & Madrinhas"; else if(cat === "Noivinho" || cat === "Noivinha") targetCat = "Noivinhos(as)"; else if(cat === "Pajem") targetCat = "Pajens"; else if(cat === "Florista") targetCat = "Floristas"; 
+                            if(targetCat) { if(!window.dadosDetalhesDash[targetCat][g.identificacao]) window.dadosDetalhesDash[targetCat][g.identificacao] = []; window.dadosDetalhesDash[targetCat][g.identificacao].push(m.nome); } 
+                            if(m.tipo === 'Criança') { 
+                                let idNum = parseInt(m.idade); let txIdade = m.idade ? `${m.idade} a.` : "Idade ñ info."; let strMembro = `${m.nome} <span style="color:#1976d2; font-size:0.85em;">(${txIdade})</span>`; 
+                                if(!isNaN(idNum)) { 
+                                    if(idNum > 9) { 
+                                        listaConvidadosAdultos++; if(!window.dadosDetalhesDash["Adultos Lista"][g.identificacao]) window.dadosDetalhesDash["Adultos Lista"][g.identificacao] = []; window.dadosDetalhesDash["Adultos Lista"][g.identificacao].push(`${m.nome} <span style="font-size:0.85em; color:#888;">(${txIdade} - Cont. Adulto)</span>`); 
+                                    } else { 
+                                        listaConvidadosCriancas++; if(!window.dadosDetalhesDash["Crianças Lista"][g.identificacao]) window.dadosDetalhesDash["Crianças Lista"][g.identificacao] = []; window.dadosDetalhesDash["Crianças Lista"][g.identificacao].push(strMembro); 
+                                        if(idNum <= 5) { listaConvidadosIsentos++; if(!window.dadosDetalhesDash["Isentos Lista"][g.identificacao]) window.dadosDetalhesDash["Isentos Lista"][g.identificacao] = []; window.dadosDetalhesDash["Isentos Lista"][g.identificacao].push(strMembro); } 
+                                    } 
+                                } else { 
+                                    listaConvidadosCriancas++; if(!window.dadosDetalhesDash["Crianças Lista"][g.identificacao]) window.dadosDetalhesDash["Crianças Lista"][g.identificacao] = []; window.dadosDetalhesDash["Crianças Lista"][g.identificacao].push(strMembro); 
+                                } 
+                            } else { 
+                                listaConvidadosAdultos++; if(!window.dadosDetalhesDash["Adultos Lista"][g.identificacao]) window.dadosDetalhesDash["Adultos Lista"][g.identificacao] = []; window.dadosDetalhesDash["Adultos Lista"][g.identificacao].push(m.nome); 
+                            } 
+                        }); 
+                    } catch(e) {} 
+                } else { 
+                    let nomes = g.membros.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0); listaConvidadosTotal += nomes.length; htmlMembrosGeral = g.membros; listaConvidadosAdultos += nomes.length; 
+                    if(!window.dadosDetalhesDash["Adultos Lista"][g.identificacao]) window.dadosDetalhesDash["Adultos Lista"][g.identificacao] = []; nomes.forEach(n => window.dadosDetalhesDash["Adultos Lista"][g.identificacao].push(n)); 
+                } 
+                htmlMembrosGeral = htmlMembrosGeral.replace(/, $/, ""); window.dadosDetalhesDash["gruposLista"][g.identificacao] = htmlMembrosGeral; 
+            }); 
             
-            setVal('dash-geral-total', listaConvidadosTotal);
-            setVal('dash-total-pagantes-lista', pagantesEstimadoLista);
-            setVal('dash-geral-grupos', listaOficial.length);
-
-            setVal('dash-geral-adultos', listaConvidadosAdultos);
-            setVal('dash-geral-criancas', listaConvidadosCriancas);
-            setVal('dash-geral-isentos', listaConvidadosIsentos);
+            let totalConfirmadosGeral = totalAdultos + totalCriancas; let confirmadosPagantes = totalConfirmadosGeral - isentosTotal; let pagantesEstimadoLista = listaConvidadosTotal - listaConvidadosIsentos; 
+            const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; }; 
+            setVal('dash-total-confirmados', totalConfirmadosGeral); setVal('dash-pagantes-confirmados', confirmadosPagantes); setVal('dash-isentos', isentosTotal); setVal('dash-adultos', totalAdultos); setVal('dash-criancas', totalCriancas); setVal('dash-geral-total', listaConvidadosTotal); setVal('dash-total-pagantes-lista', pagantesEstimadoLista); setVal('dash-geral-grupos', listaOficial.length); setVal('dash-geral-adultos', listaConvidadosAdultos); setVal('dash-geral-criancas', listaConvidadosCriancas); setVal('dash-geral-isentos', listaConvidadosIsentos); 
             
-            // Usando a função segura para não dar erro
-            setVal('dash-cat-padrinhos', contaMembrosSeguro(window.dadosDetalhesDash["Padrinhos & Madrinhas"]));
-            setVal('dash-cat-noivinhos', contaMembrosSeguro(window.dadosDetalhesDash["Noivinhos(as)"]));
-            setVal('dash-cat-pajens', contaMembrosSeguro(window.dadosDetalhesDash["Pajens"]));
-            setVal('dash-cat-floristas', contaMembrosSeguro(window.dadosDetalhesDash["Floristas"]));
-
-            let listaPendentes = [];
-            listaOficial.forEach(g => {
-                if(!arrayGruposConfirmados.includes(g.identificacao)) {
-                    listaPendentes.push(g);
-                    window.dadosDetalhesDash["pendentes"][g.identificacao] = g.membros;
-                }
-            });
-            setVal('dash-grupos-pendentes', listaPendentes.length);
-
-            let pendentesHtml = "";
-            if(listaPendentes.length === 0) { pendentesHtml = "<p style='color:#388e3c;'>Todos confirmaram!</p>"; } 
-            else {
-                listaPendentes.forEach(p => {
-                    pendentesHtml += `<div style="padding: 10px; border-bottom: 1px solid #f0d8d8;"><strong style="color:#555;">${p.identificacao}</strong><br><span style="font-size:0.85rem; color:#888;">${p.membros}</span></div>`;
-                });
-            }
+            setVal('dash-cat-padrinhos', contaMembrosSeguro(window.dadosDetalhesDash["Padrinhos & Madrinhas"])); 
+            setVal('dash-cat-noivinhos', contaMembrosSeguro(window.dadosDetalhesDash["Noivinhos(as)"])); 
+            setVal('dash-cat-pajens', contaMembrosSeguro(window.dadosDetalhesDash["Pajens"])); 
+            setVal('dash-cat-floristas', contaMembrosSeguro(window.dadosDetalhesDash["Floristas"])); 
             
-            const elP = document.getElementById('lista-grupos-pendentes');
-            if(elP) elP.innerHTML = pendentesHtml;
-            const arP = document.getElementById('area-pendentes');
-            if(arP) arP.style.display = "none";
-
-            let ulIdades = document.getElementById('lista-idades-criancas');
-            if(ulIdades) {
-                ulIdades.innerHTML = "";
-                if(Object.keys(contagemIdades).length === 0) { ulIdades.innerHTML = "<li>Nenhuma criança confirmada.</li>"; } 
-                else { for (const [idade, qtd] of Object.entries(contagemIdades)) { ulIdades.innerHTML += `<li>👶 ${idade}: <strong>${qtd}</strong></li>`; } }
-            }
-
-            abrirModal('modal-relatorio');
-        }
-
-        function togglePendentes() {
-            let area = document.getElementById('area-pendentes');
-            if(area) area.style.display = area.style.display === "none" ? "block" : "none";
-        }
-
-
-        // --- SISTEMA ADMIN DE PRESENÇAS (Ver e Cancelar) ---
-        function abrirModalPresenca() {
-            const container = document.getElementById('conteudo-lista-presenca');
-            container.innerHTML = "";
-
-            if(!window.listaPresencasGlobais || window.listaPresencasGlobais.length === 0) {
-                container.innerHTML = "<p style='text-align:center; color:#888;'>Nenhuma presença foi confirmada ainda.</p>";
-            } else {
-                window.listaPresencasGlobais.forEach((p, indexOriginalArray) => {
-                    const naoViraoHtml = p.naoConfirmados ? `<p style="color:#d32f2f; font-size:0.9rem; margin-bottom:5px;"><strong>❌ Não virão:</strong> ${p.naoConfirmados}</p>` : '';
-                    
-                    let btnEditar = "";
-                    if(p.jsonRaw && p.jsonRaw !== "[]") {
-                        btnEditar = `<button onclick="prepararEdicaoRsvp(${indexOriginalArray})" style="position: absolute; top: 15px; right: 90px; background: #1976d2; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition:0.3s;">✏️ Editar</button>`;
-                    }
-
-                    const html = `
-                    <div style="border: 1px solid #e0e0e0; padding: 15px; border-radius: 6px; margin-bottom: 15px; position: relative; background: #f9f9f9;">
-                        <h4 style="color: #8c7b65; margin-bottom: 8px; font-family: 'Playfair Display', serif; font-size: 1.2rem;">${p.grupo || "Convite Avulso"}</h4>
-                        <p style="font-size: 0.95rem; margin-bottom: 5px; color:#2e7d32;"><strong>✅ Confirmados:</strong> ${p.confirmados}</p>
-                        ${naoViraoHtml}
-                        <div style="margin-top: 10px; font-size: 0.85rem; color: #555; background: #fff; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
-                            📞 ${p.telefone}
-                        </div>
-                        ${btnEditar}
-                        <button onclick="cancelarConfirmacao(${p.linha}, this)" style="position: absolute; top: 15px; right: 15px; background: #d32f2f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition:0.3s;">🗑️ Apagar</button>
-                    </div>`;
-                    container.insertAdjacentHTML('beforeend', html);
-                });
-            }
-            abrirModal('modal-lista-presenca');
-        }
-
-        function cancelarConfirmacao(linha, btn) {
-            if(confirm("Tem certeza que deseja apagar essa confirmação da planilha?")) {
-                const card = btn.parentElement;
-                btn.innerText = "..."; btn.disabled = true;
-                fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "cancelarRSVP", linha: linha }) })
-                .then(() => { 
-                    card.remove(); 
-                    fetch(API_URL).then(r => r.json()).then(dados => processarDadosPlanilha(dados)); 
-                })
-                .catch(() => { alert("Erro."); btn.innerText = "🗑️ Apagar"; btn.disabled = false; });
-            }
-        }
-
-        function prepararEdicaoRsvp(indexArrayGlobal) {
-            const rsvp = window.listaPresencasGlobais[indexArrayGlobal];
-            linhaRsvpEditando = rsvp.linha;
-            document.getElementById('edit-rsvp-grupo').innerText = "Grupo: " + rsvp.grupo;
+            let listaPendentes = []; listaOficial.forEach(g => { if(!arrayGruposConfirmados.includes(g.identificacao)) { listaPendentes.push(g); window.dadosDetalhesDash["pendentes"][g.identificacao] = g.membros; } }); 
+            setTextSafe('dash-grupos-pendentes', listaPendentes.length); 
             
-            const containerMembros = document.getElementById('edit-rsvp-membros');
-            containerMembros.innerHTML = "";
+            let pendentesHtml = ""; if(listaPendentes.length === 0) { pendentesHtml = "<p style='color:#388e3c;'>Todos confirmaram!</p>"; } else { listaPendentes.forEach(p => { pendentesHtml += `<div style="padding: 10px; border-bottom: 1px solid #f0d8d8;"><strong style="color:#555;">${p.identificacao}</strong><br><span style="font-size:0.85rem; color:#888;">${p.membros}</span></div>`; }); } 
+            setHtmlSafe('lista-grupos-pendentes', pendentesHtml); 
+            const arP = document.getElementById('area-pendentes'); if(arP) arP.style.display = "none"; 
 
-            try {
-                let membrosArray = JSON.parse(rsvp.jsonRaw);
-                membrosArray.forEach((m, idx) => {
-                    const checkedStr = m.status ? "checked" : "";
-                    const inativoCls = m.status ? "" : "inativo";
-                    const isCrianca = m.tipo === "Criança";
-                    const selectAdulto = isCrianca ? "" : "selected";
-                    const selectCrianca = isCrianca ? "selected" : "";
-                    const displayIdade = isCrianca ? "block" : "none";
-
-                    const html = `
-                    <div class="membro-rsvp-item ${inativoCls}" id="edit-bloco-membro-${idx}">
-                        <label style="display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: #333;">
-                            <input type="checkbox" class="edit-cb-membro" value="${m.nome}" ${checkedStr} onchange="toggleMembroEdit(this, ${idx})" style="width: 20px; height: 20px; accent-color: #1976d2;"> 
-                            ${m.nome}
-                        </label>
-                        <div id="edit-opcoes-membro-${idx}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; opacity: ${m.status ? '1' : '0.3'}; pointer-events: ${m.status ? 'auto' : 'none'};">
-                            <select class="edit-tipo-membro" onchange="toggleIdadeEdit(this, ${idx})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-                                <option value="Adulto" ${selectAdulto}>É Adulto</option>
-                                <option value="Criança" ${selectCrianca}>É Criança (até 9 anos)</option>
-                            </select>
-                            <input type="number" id="edit-idade-crianca-${idx}" class="edit-idade-membro" placeholder="Idade" min="0" max="17" value="${m.idade}" style="display: ${displayIdade}; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;">
-                        </div>
-                    </div>`;
-                    containerMembros.insertAdjacentHTML('beforeend', html);
-                });
-                fecharModal('modal-lista-presenca');
-                abrirModal('modal-editar-presenca');
-            } catch(e) { alert("Não é possível editar este registro antigo."); }
+            let ulIdadesHtml = ""; if(Object.keys(contagemIdades).length === 0) { ulIdadesHtml = "<li>Nenhuma criança confirmada.</li>"; } else { for (const [idade, qtd] of Object.entries(contagemIdades)) { ulIdadesHtml += `<li>👶 ${idade}: <strong>${qtd}</strong></li>`; } } 
+            setHtmlSafe('lista-idades-criancas', ulIdadesHtml);
+            
+            abrirModal('modal-relatorio'); 
         }
 
-        function toggleMembroEdit(cb, idx) {
-            const b = document.getElementById(`edit-bloco-membro-${idx}`); const o = document.getElementById(`edit-opcoes-membro-${idx}`);
-            if(cb.checked) { b.classList.remove('inativo'); o.style.opacity = "1"; o.style.pointerEvents = "auto"; } 
-            else { b.classList.add('inativo'); o.style.opacity = "0.3"; o.style.pointerEvents = "none"; }
-        }
-        function toggleIdadeEdit(sel, idx) {
-            const c = document.getElementById(`edit-idade-crianca-${idx}`);
-            if(sel.value === "Criança") { c.style.display = "block"; } else { c.style.display = "none"; c.value = ""; }
-        }
+        function togglePendentes() { let area = document.getElementById('area-pendentes'); if(area) area.style.display = area.style.display === "none" ? "block" : "none"; }
+        function abrirModalPresenca() { const container = document.getElementById('conteudo-lista-presenca'); if(!container) return; container.innerHTML = ""; if(!window.listaPresencasGlobais || window.listaPresencasGlobais.length === 0) { container.innerHTML = "<p style='text-align:center; color:#888;'>Nenhuma presença confirmada ainda.</p>"; } else { window.listaPresencasGlobais.forEach((p, indexOriginalArray) => { const naoViraoHtml = p.naoConfirmados ? `<p style="color:#d32f2f; font-size:0.9rem; margin-bottom:5px;"><strong>❌ Não virão:</strong> ${p.naoConfirmados}</p>` : ''; let btnEditar = ""; if(p.jsonRaw && p.jsonRaw !== "[]") { btnEditar = `<button onclick="prepararEdicaoRsvp(${indexOriginalArray})" style="background: #1976d2; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition:0.3s; height: fit-content;">✏️ Editar</button>`; } const html = `<div style="border: 1px solid #e0e0e0; padding: 15px; border-radius: 6px; margin-bottom: 15px; background: #f9f9f9; display: flex; justify-content: space-between; gap: 15px; align-items: flex-start; flex-wrap: wrap;"><div style="flex: 1; min-width: 200px;"><h4 style="color: #8c7b65; margin-bottom: 8px; font-family: 'Playfair Display', serif; font-size: 1.2rem;">${p.grupo || "Convite Avulso"}</h4><p style="font-size: 0.95rem; margin-bottom: 5px; color:#2e7d32;"><strong>✅ Confirmados:</strong> ${p.confirmados}</p>${naoViraoHtml}<div style="margin-top: 10px; font-size: 0.85rem; color: #555; background: #fff; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">📞 ${p.telefone}</div></div><div style="display: flex; gap: 5px;">${btnEditar}<button onclick="cancelarConfirmacao(${p.linha}, this)" style="background: #d32f2f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition:0.3s; height: fit-content;">🗑️ Apagar</button></div></div>`; container.insertAdjacentHTML('beforeend', html); }); } abrirModal('modal-lista-presenca'); }
+        function cancelarConfirmacao(linha, btn) { if(confirm("Apagar essa confirmação da planilha?")) { const card = btn.parentElement.parentElement; btn.innerText = "..."; btn.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "cancelarRSVP", linha: linha }) }).then(() => { card.remove(); fetch(API_URL).then(r => r.json()).then(dados => processarDadosPlanilha(dados)); }).catch(() => { alert("Erro."); btn.innerText = "🗑️ Apagar"; btn.disabled = false; }); } }
+        function prepararEdicaoRsvp(indexArrayGlobal) { const rsvp = window.listaPresencasGlobais[indexArrayGlobal]; linhaRsvpEditando = rsvp.linha; document.getElementById('edit-rsvp-grupo').innerText = "Grupo: " + rsvp.grupo; const containerMembros = document.getElementById('edit-rsvp-membros'); if(!containerMembros) return; containerMembros.innerHTML = ""; try { let membrosArray = JSON.parse(rsvp.jsonRaw); membrosArray.forEach((m, idx) => { const checkedStr = m.status ? "checked" : ""; const inativoCls = m.status ? "" : "inativo"; const isCrianca = m.tipo === "Criança"; const selectAdulto = isCrianca ? "" : "selected"; const selectCrianca = isCrianca ? "selected" : ""; const displayIdade = isCrianca ? "block" : "none"; const html = `<div class="membro-rsvp-item ${inativoCls}" id="edit-bloco-membro-${idx}"><label style="display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: #333;"><input type="checkbox" class="edit-cb-membro" value="${m.nome}" ${checkedStr} onchange="toggleMembroEdit(this, ${idx})" style="width: 20px; height: 20px; accent-color: #1976d2;"> ${m.nome}</label><div id="edit-opcoes-membro-${idx}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; opacity: ${m.status ? '1' : '0.3'}; pointer-events: ${m.status ? 'auto' : 'none'};"><select class="edit-tipo-membro" onchange="toggleIdadeEdit(this, ${idx})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;"><option value="Adulto" ${selectAdulto}>É Adulto</option><option value="Criança" ${selectCrianca}>É Criança (até 9 anos)</option></select><input type="number" id="edit-idade-crianca-${idx}" class="edit-idade-membro" placeholder="Idade" min="0" max="17" value="${m.idade}" style="display: ${displayIdade}; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"></div></div>`; containerMembros.insertAdjacentHTML('beforeend', html); }); fecharModal('modal-lista-presenca'); abrirModal('modal-editar-presenca'); } catch(e) { alert("Não editável."); } }
+        function toggleMembroEdit(cb, idx) { const b = document.getElementById(`edit-bloco-membro-${idx}`); const o = document.getElementById(`edit-opcoes-membro-${idx}`); if(cb.checked) { b.classList.remove('inativo'); o.style.opacity = "1"; o.style.pointerEvents = "auto"; } else { b.classList.add('inativo'); o.style.opacity = "0.3"; o.style.pointerEvents = "none"; } }
+        function toggleIdadeEdit(sel, idx) { const c = document.getElementById(`edit-idade-crianca-${idx}`); if(sel.value === "Criança") { c.style.display = "block"; } else { c.style.display = "none"; c.value = ""; } }
+        function salvarEdicaoRSVP() { let totalA = 0; let totalC = 0; let confArray = []; let naoConfArray = []; let temErro = false; let novaMemoriaJson = []; const blocos = document.querySelectorAll('#edit-rsvp-membros .membro-rsvp-item'); blocos.forEach(b => { const cb = b.querySelector('.edit-cb-membro'); const nome = cb.value; if(cb.checked) { const tipo = b.querySelector('.edit-tipo-membro').value; if(tipo === 'Adulto') { totalA++; confArray.push(`${nome} (Adulto)`); novaMemoriaJson.push({nome: nome, status: true, tipo: "Adulto", idade: ""}); } else { const idade = b.querySelector('.edit-idade-membro').value; if(idade === "") temErro = true; else { let idNum = parseInt(idade); if(idNum > 9) { totalA++; confArray.push(`${nome} (Criança: ${idade} anos - Cont. Adulto)`); } else { totalC++; confArray.push(`${nome} (Criança: ${idade} anos)`); } novaMemoriaJson.push({nome: nome, status: true, tipo: "Criança", idade: idade}); } } } else { naoConfArray.push(nome); novaMemoriaJson.push({nome: nome, status: false, tipo: "", idade: ""}); } }); if(temErro) return alert("Preencha a idade das crianças!"); if(totalA === 0 && totalC === 0) return alert("Se ninguém vai, use o botão de Apagar no painel anterior."); const btn = document.getElementById('btn-salvar-edicao-rsvp'); btn.innerText = "Atualizando..."; btn.disabled = true; document.getElementById('btn-voltar-rsvp').disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "editarRSVP", linha: linhaRsvpEditando, confirmados: confArray.join(" | "), naoConfirmados: naoConfArray.join(" | "), adultos: totalA, criancas: totalC, jsonRaw: JSON.stringify(novaMemoriaJson) }) }).then(() => fetch(API_URL)).then(r => r.json()).then(dados => { processarDadosPlanilha(dados); alert("Salvo!"); }).finally(() => { btn.innerText = "Salvar Alterações"; btn.disabled = false; document.getElementById('btn-voltar-rsvp').disabled = false; }); }
+        
+        function buscarConvidado() { const nomeDigitado = document.getElementById('rsvp-busca').value; const btn = document.getElementById('btn-buscar-convite'); const msg = document.getElementById('msg-busca'); if(!nomeDigitado || nomeDigitado.length < 3) return alert("Digite pelo menos 3 letras."); btn.innerText = "⏳"; btn.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "verificarNome", nome: nomeDigitado }) }).then(res => res.json()).then(dados => { if(dados.encontrado) { grupoRSVP = dados.grupo; document.getElementById('bloco-busca').style.display = "none"; document.getElementById('caixa-grupo').style.display = "block"; document.getElementById('bloco-formulario').style.display = "block"; setTextSafe('rsvp-identificacao', grupoRSVP.identificacao ? "Grupo: " + grupoRSVP.identificacao : "Convite Localizado"); let containerCheckboxes = document.getElementById('lista-checkbox-membros'); if(containerCheckboxes) containerCheckboxes.innerHTML = ""; let membrosLidos = []; if (grupoRSVP.categoriasStr && grupoRSVP.categoriasStr.startsWith("[")) { try { membrosLidos = JSON.parse(grupoRSVP.categoriasStr); } catch(e) {} } if(membrosLidos.length > 0) { membrosLidos.forEach((m, index) => { let tagHtml = m.categoria !== "Convidado" ? `<span class="tag-categoria">${m.categoria}</span>` : ""; let isCri = m.tipo === "Criança"; let selAd = !isCri ? "selected" : ""; let selCr = isCri ? "selected" : ""; let dispId = isCri ? "block" : "none"; let valIdade = m.idade || ""; const html = `<div class="membro-rsvp-item" id="bloco-membro-${index}"><label style="display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: #333;"><input type="checkbox" class="cb-membro" value="${m.nome.trim()}" checked onchange="toggleMembro(this, ${index})" style="width: 20px; height: 20px; accent-color: #8c7b65;"> ${m.nome.trim()} ${tagHtml}</label><div id="opcoes-membro-${index}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;"><select class="tipo-membro" onchange="toggleIdade(this, ${index})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: #fff;"><option value="Adulto" ${selAd}>É Adulto</option><option value="Criança" ${selCr}>É Criança (até 9 anos)</option></select><input type="number" id="idade-crianca-${index}" class="idade-membro" placeholder="Idade" min="0" max="17" value="${valIdade}" style="display: ${dispId}; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"></div></div>`; if(containerCheckboxes) containerCheckboxes.insertAdjacentHTML('beforeend', html); }); } else { let arrayNomes = grupoRSVP.nomes.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0); arrayNomes.forEach((nomeMembro, index) => { const html = `<div class="membro-rsvp-item" id="bloco-membro-${index}"><label style="display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: #333;"><input type="checkbox" class="cb-membro" value="${nomeMembro.trim()}" checked onchange="toggleMembro(this, ${index})" style="width: 20px; height: 20px; accent-color: #8c7b65;"> ${nomeMembro.trim()}</label><div id="opcoes-membro-${index}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;"><select class="tipo-membro" onchange="toggleIdade(this, ${index})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: #fff;"><option value="Adulto">É Adulto</option><option value="Criança">É Criança (até 9 anos)</option></select><input type="number" id="idade-crianca-${index}" class="idade-membro" placeholder="Idade" min="0" max="17" style="display: none; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"></div></div>`; if(containerCheckboxes) containerCheckboxes.insertAdjacentHTML('beforeend', html); }); } } else { msg.innerText = "❌ Nome não localizado."; msg.style.color = "#d32f2f"; } }).catch(() => msg.innerText = "Erro na busca.").finally(() => { btn.innerText = "Buscar"; btn.disabled = false; }); }
+        function toggleMembro(cb, idx) { const b = document.getElementById(`bloco-membro-${idx}`); const o = document.getElementById(`opcoes-membro-${idx}`); if(cb.checked) { b.classList.remove('inativo'); o.style.opacity = "1"; o.style.pointerEvents = "auto"; } else { b.classList.add('inativo'); o.style.opacity = "0.3"; o.style.pointerEvents = "none"; } }
+        function toggleIdade(sel, idx) { const c = document.getElementById(`idade-crianca-${idx}`); if(sel.value === "Criança") { c.style.display = "block"; } else { c.style.display = "none"; c.value = ""; } }
+        function enviarRSVP() { const tel = document.getElementById('rsvp-telefone').value; if(!tel) return alert("Por favor, informe o telefone de contato principal do grupo!"); let totalA = 0; let totalC = 0; let confArray = []; let naoConfArray = []; let temErro = false; let memoriaJson = []; const blocos = document.querySelectorAll('#caixa-grupo .membro-rsvp-item'); blocos.forEach(b => { const cb = b.querySelector('.cb-membro'); const nome = cb.value; if(cb.checked) { const tipo = b.querySelector('.tipo-membro').value; if(tipo === 'Adulto') { totalA++; confArray.push(`${nome} (Adulto)`); memoriaJson.push({nome: nome, status: true, tipo: "Adulto", idade: ""}); } else { const idade = b.querySelector('.idade-membro').value; if(idade === "") temErro = true; else { let idNum = parseInt(idade); if(idNum > 9) { totalA++; confArray.push(`${nome} (Criança: ${idade} anos - Cont. Adulto)`); } else { totalC++; confArray.push(`${nome} (Criança: ${idade} anos)`); } memoriaJson.push({nome: nome, status: true, tipo: "Criança", idade: idade}); } } } else { naoConfArray.push(nome); memoriaJson.push({nome: nome, status: false, tipo: "", idade: ""}); } }); if(temErro) return alert("Preencha a idade das crianças."); if(totalA === 0 && totalC === 0) return alert("Selecione pelo menos uma pessoa."); const btn = document.getElementById('btn-enviar-rsvp'); btn.innerText = "Enviando..."; btn.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "rsvp", grupo: grupoRSVP.identificacao, confirmados: confArray.join(" | "), naoConfirmados: naoConfArray.join(" | "), telefone: tel, adultos: totalA, criancas: totalC, jsonRaw: JSON.stringify(memoriaJson) }) }).then(() => { alert("Presença confirmada!"); location.reload(); }).catch(() => alert("Erro.")).finally(() => { btn.innerText = "Confirmar Nossa Presença"; btn.disabled = false; }); }
 
-        function salvarEdicaoRSVP() {
-            let totalA = 0; let totalC = 0; let confArray = []; let naoConfArray = []; let temErro = false; let novaMemoriaJson = [];
-            const blocos = document.querySelectorAll('#edit-rsvp-membros .membro-rsvp-item');
-            blocos.forEach(b => {
-                const cb = b.querySelector('.edit-cb-membro'); const nome = cb.value;
-                if(cb.checked) {
-                    const tipo = b.querySelector('.edit-tipo-membro').value;
-                    if(tipo === 'Adulto') {
-                        totalA++; confArray.push(`${nome} (Adulto)`); novaMemoriaJson.push({nome: nome, status: true, tipo: "Adulto", idade: ""});
-                    } else {
-                        const idade = b.querySelector('.edit-idade-membro').value;
-                        if(idade === "") temErro = true; 
-                        else {
-                            let idNum = parseInt(idade);
-                            if(idNum > 9) { totalA++; confArray.push(`${nome} (Criança: ${idade} anos - Cont. Adulto)`); } 
-                            else { totalC++; confArray.push(`${nome} (Criança: ${idade} anos)`); }
-                            novaMemoriaJson.push({nome: nome, status: true, tipo: "Criança", idade: idade}); 
-                        }
-                    }
-                } else {
-                    naoConfArray.push(nome); novaMemoriaJson.push({nome: nome, status: false, tipo: "", idade: ""});
-                }
-            });
-
-            if(temErro) return alert("Preencha a idade das crianças!");
-            if(totalA === 0 && totalC === 0) return alert("Se ninguém vai, use o botão de Apagar no painel anterior.");
-
-            const btn = document.getElementById('btn-salvar-edicao-rsvp'); btn.innerText = "Atualizando..."; btn.disabled = true;
-            document.getElementById('btn-voltar-rsvp').disabled = true;
-
-            fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ 
-                    action: "editarRSVP", linha: linhaRsvpEditando, confirmados: confArray.join(" | "), naoConfirmados: naoConfArray.join(" | "), 
-                    adultos: totalA, criancas: totalC, jsonRaw: JSON.stringify(novaMemoriaJson)
-                })
-            }).then(() => fetch(API_URL)).then(r => r.json())
-            .then(dados => {
-                processarDadosPlanilha(dados);
-                alert("Alteração salva na nuvem!"); 
-            }).finally(() => { 
-                btn.innerText = "Salvar Alterações"; btn.disabled = false; 
-                document.getElementById('btn-voltar-rsvp').disabled = false;
-            });
-        }
-
-        // --- SISTEMA DE RSVP PÚBLICO ---
-        function buscarConvidado() {
-            const nomeDigitado = document.getElementById('rsvp-busca').value; const btn = document.getElementById('btn-buscar-convite'); const msg = document.getElementById('msg-busca');
-            if(!nomeDigitado || nomeDigitado.length < 3) return alert("Digite pelo menos 3 letras.");
-            btn.innerText = "⏳"; btn.disabled = true;
-
-            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "verificarNome", nome: nomeDigitado }) })
-            .then(res => res.json()).then(dados => {
-                if(dados.encontrado) {
-                    grupoRSVP = dados.grupo;
-                    document.getElementById('bloco-busca').style.display = "none"; document.getElementById('caixa-grupo').style.display = "block"; document.getElementById('bloco-formulario').style.display = "block"; 
-                    document.getElementById('rsvp-identificacao').innerText = grupoRSVP.identificacao ? "Grupo: " + grupoRSVP.identificacao : "Convite Localizado";
-                    
-                    let containerCheckboxes = document.getElementById('lista-checkbox-membros'); containerCheckboxes.innerHTML = ""; 
-                    
-                    let membrosLidos = [];
-                    if (grupoRSVP.categoriasStr && grupoRSVP.categoriasStr.startsWith("[")) {
-                        try { membrosLidos = JSON.parse(grupoRSVP.categoriasStr); } catch(e) {}
-                    }
-
-                    if(membrosLidos.length > 0) {
-                        membrosLidos.forEach((m, index) => {
-                            let tagHtml = m.categoria !== "Convidado" ? `<span class="tag-categoria">${m.categoria}</span>` : "";
-                            let isCri = m.tipo === "Criança";
-                            let selAd = !isCri ? "selected" : "";
-                            let selCr = isCri ? "selected" : "";
-                            let dispId = isCri ? "block" : "none";
-                            let valIdade = m.idade || "";
-
-                            const html = `
-                            <div class="membro-rsvp-item" id="bloco-membro-${index}">
-                                <label style="display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: #333;">
-                                    <input type="checkbox" class="cb-membro" value="${m.nome.trim()}" checked onchange="toggleMembro(this, ${index})" style="width: 20px; height: 20px; accent-color: #8c7b65;"> 
-                                    ${m.nome.trim()} ${tagHtml}
-                                </label>
-                                <div id="opcoes-membro-${index}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                    <select class="tipo-membro" onchange="toggleIdade(this, ${index})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: #fff;">
-                                        <option value="Adulto" ${selAd}>É Adulto</option>
-                                        <option value="Criança" ${selCr}>É Criança (até 9 anos)</option>
-                                    </select>
-                                    <input type="number" id="idade-crianca-${index}" class="idade-membro" placeholder="Idade" min="0" max="17" value="${valIdade}" style="display: ${dispId}; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;">
-                                </div>
-                            </div>`;
-                            containerCheckboxes.insertAdjacentHTML('beforeend', html);
-                        });
-                    } else {
-                        let arrayNomes = grupoRSVP.nomes.split(/,\s*|\s+e\s+/i).filter(n => n.trim().length > 0);
-                        arrayNomes.forEach((nomeMembro, index) => {
-                            const html = `
-                            <div class="membro-rsvp-item" id="bloco-membro-${index}">
-                                <label style="display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: #333;"><input type="checkbox" class="cb-membro" value="${nomeMembro.trim()}" checked onchange="toggleMembro(this, ${index})" style="width: 20px; height: 20px; accent-color: #8c7b65;"> ${nomeMembro.trim()}</label>
-                                <div id="opcoes-membro-${index}" style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                    <select class="tipo-membro" onchange="toggleIdade(this, ${index})" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; background: #fff;"><option value="Adulto">É Adulto</option><option value="Criança">É Criança (até 9 anos)</option></select>
-                                    <input type="number" id="idade-crianca-${index}" class="idade-membro" placeholder="Idade" min="0" max="17" style="display: none; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px;">
-                                </div>
-                            </div>`;
-                            containerCheckboxes.insertAdjacentHTML('beforeend', html);
-                        });
-                    }
-                } else { msg.innerText = "❌ Nome não localizado."; msg.style.color = "#d32f2f"; }
-            }).catch(() => msg.innerText = "Erro na busca.").finally(() => { btn.innerText = "Buscar"; btn.disabled = false; });
-        }
-
-        function toggleMembro(cb, idx) {
-            const b = document.getElementById(`bloco-membro-${idx}`); const o = document.getElementById(`opcoes-membro-${idx}`);
-            if(cb.checked) { b.classList.remove('inativo'); o.style.opacity = "1"; o.style.pointerEvents = "auto"; } else { b.classList.add('inativo'); o.style.opacity = "0.3"; o.style.pointerEvents = "none"; }
-        }
-        function toggleIdade(sel, idx) {
-            const c = document.getElementById(`idade-crianca-${idx}`);
-            if(sel.value === "Criança") { c.style.display = "block"; } else { c.style.display = "none"; c.value = ""; }
-        }
-
-        function enviarRSVP() {
-            const tel = document.getElementById('rsvp-telefone').value;
-            if(!tel) return alert("Por favor, informe o telefone de contato principal do grupo!");
-
-            let totalA = 0; let totalC = 0; let confArray = []; let naoConfArray = []; let temErro = false; let memoriaJson = []; 
-
-            const blocos = document.querySelectorAll('#caixa-grupo .membro-rsvp-item');
-            blocos.forEach(b => {
-                const cb = b.querySelector('.cb-membro'); const nome = cb.value;
-                if(cb.checked) {
-                    const tipo = b.querySelector('.tipo-membro').value;
-                    if(tipo === 'Adulto') {
-                        totalA++; confArray.push(`${nome} (Adulto)`); memoriaJson.push({nome: nome, status: true, tipo: "Adulto", idade: ""});
-                    } else {
-                        const idade = b.querySelector('.idade-membro').value;
-                        if(idade === "") temErro = true; 
-                        else { 
-                            let idNum = parseInt(idade);
-                            if(idNum > 9) {
-                                totalA++; confArray.push(`${nome} (Criança: ${idade} anos - Cont. Adulto)`); 
-                            } else {
-                                totalC++; confArray.push(`${nome} (Criança: ${idade} anos)`); 
-                            }
-                            memoriaJson.push({nome: nome, status: true, tipo: "Criança", idade: idade}); 
-                        }
-                    }
-                } else { naoConfArray.push(nome); memoriaJson.push({nome: nome, status: false, tipo: "", idade: ""}); }
-            });
-
-            if(temErro) return alert("Preencha a idade das crianças.");
-            if(totalA === 0 && totalC === 0) return alert("Selecione pelo menos uma pessoa.");
-
-            const btn = document.getElementById('btn-enviar-rsvp'); btn.innerText = "Enviando..."; btn.disabled = true;
-
-            fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: "rsvp", grupo: grupoRSVP.identificacao, confirmados: confArray.join(" | "), naoConfirmados: naoConfArray.join(" | "), telefone: tel, adultos: totalA, criancas: totalC, jsonRaw: JSON.stringify(memoriaJson) })
-            }).then(() => { alert("Presença confirmada!"); location.reload(); }).catch(() => alert("Erro."))
-            .finally(() => { btn.innerText = "Confirmar Nossa Presença"; btn.disabled = false; });
-        }
-
-        // --- GERAIS ---
         function mudarStatusPresente(id, e) { e.target.innerText = "⏳"; e.target.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "mudarStatus", id: id, novoStatus: "" }) }).then(() => carregarListaDaPlanilha()); }
         function abrirModalConfigPix() { document.getElementById('config-chave-pix').value = dadosPixNuvem.chave; document.getElementById('config-qr-pix').value = dadosPixNuvem.qr; abrirModal('modal-config-pix'); }
         function salvarConfigPix() { const k = document.getElementById('config-chave-pix').value; const q = document.getElementById('config-qr-pix').value; if (!k || !q) return alert("Preencha!"); const b = document.getElementById('btn-salvar-pix'); b.innerText = "⏳"; b.disabled = true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "configPix", chave: k, qr: q }) }).then(() => { dadosPixNuvem.chave = k; dadosPixNuvem.qr = q; alert("PIX atualizado!"); fecharModal('modal-config-pix'); }).finally(() => { b.innerText = "Salvar na Nuvem"; b.disabled = false; }); }
@@ -1316,7 +965,7 @@
         function abrirModalEditar(id, n, v, img) { idEditando = id; document.getElementById('edit-nome').value = n; document.getElementById('edit-valor').value = String(v).replace('R$','').trim(); document.getElementById('edit-imagem').value = img; abrirModal('modal-editar'); }
         function salvarEdicao() { const n = document.getElementById('edit-nome').value; let v = document.getElementById('edit-valor').value; let img = document.getElementById('edit-imagem').value; if(!img) img="https://via.placeholder.com/300"; const b = document.getElementById('btn-salvar-edicao'); b.innerText="⏳"; b.disabled=true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "editar", id: idEditando, nome: n, valor: v, imagem: img }) }).then(() => { fecharModal('modal-editar'); carregarListaDaPlanilha(); }).finally(() => { b.innerText="Atualizar"; b.disabled=false; }); }
         function excluirPresente(id, e) { if(confirm("Ocultar item?")) { e.target.innerText="⏳"; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "excluir", id: id }) }).then(() => carregarListaDaPlanilha()); } }
-        function abrirModalPix(id, n, v) { idComprando=id; nomeComprando=n; document.getElementById('modal-titulo').innerText=n; document.getElementById('modal-valor').innerText="R$ "+String(v).replace('R$','').trim(); document.getElementById('img-qr-pix-modal').src=dadosPixNuvem.qr; document.getElementById('codigo-pix').value=dadosPixNuvem.chave; document.getElementById('input-nome-pix').value=""; document.getElementById('input-mensagem-pix').value=""; abrirModal('modal-pix'); }
+        function abrirModalPix(id, n, v) { idComprando=id; nomeComprando=n; setTextSafe('modal-titulo', n); setTextSafe('modal-valor', "R$ "+String(v).replace('R$','').trim()); document.getElementById('img-qr-pix-modal').src=dadosPixNuvem.qr; document.getElementById('codigo-pix').value=dadosPixNuvem.chave; document.getElementById('input-nome-pix').value=""; document.getElementById('input-mensagem-pix').value=""; abrirModal('modal-pix'); }
         function confirmarPagamentoPix() { const n = document.getElementById('input-nome-pix').value; const m = document.getElementById('input-mensagem-pix').value; if(!n) return alert("Seu nome!"); const b = document.getElementById('btn-enviar-pix'); b.innerText="⏳"; b.disabled=true; fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "comprar", id: idComprando, nomePresente: nomeComprando, nomeConvidado: n, mensagemTexto: m }) }).then(() => { alert("Mensagem enviada!"); fecharModal('modal-pix'); carregarListaDaPlanilha(); }).finally(() => { b.innerText="Confirmar"; b.disabled=false; }); }
         function fazerLogin() { const u = document.getElementById('login-user').value; const p = document.getElementById('login-pass').value; const c = JSON.parse(localStorage.getItem('credenciaisAdmin')); if(u === c.user && p === c.pass) { sessionStorage.setItem('logadoComoAdmin', 'sim'); document.getElementById('corpo-site').classList.add('modo-admin-ativo'); fecharModal('modal-login'); carregarListaDaPlanilha(); } else alert("Senha incorreta!"); }
         function sairAdmin() { sessionStorage.removeItem('logadoComoAdmin'); document.getElementById('corpo-site').classList.remove('modo-admin-ativo'); carregarListaDaPlanilha(); }
